@@ -182,3 +182,6 @@ node_modules/*
 
 # Ingore the compiled source.
 web/backend/dist/*
+
+# Ignore IDE specific folders.
+.idea/*
