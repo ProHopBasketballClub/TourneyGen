@@ -17,7 +17,7 @@ What is TourneyGen? Simple, its a webapp you can go to
 if you want to create a tournament bracket for a game.
 But that's not it, you can also go here to set up a 
 skill-tracked league where each match will update
-the skill rating of any teams. Furthr, you can 
+the skill rating of any teams. Further, you can 
 organize as many tournaments as you would like
 within that league! sounds fun
 
@@ -29,4 +29,38 @@ compute framework can be further fleshed out.
 Building off a group project from SENG-321, a web-app
 for managing shifts at a bakery could be implemented based
 off a 130 page spec.
+
+# Development Instructions
+Warning: All who pass this point must disuade themselves from
+the illusion that we haven't already picked our project.
+
+Please note, these instructions are still a work-in-progress
+and as such are very volatile.
+
+## First time setup
+Upon cloning the repo, you first need to install the
+requirements, and setup pre-commit on your machine.
+
+### Requirements
+This project uses npm for package management, and as
+such, running 
+``` commandline
+npm install
+```
+will automatically install your requirements.
+
+### Precommit tools
+These are yet to have been properly setup.
+
+## Building the project
+Thanks to the magic of npm, building the project is easy!
+
+In order to build the frontend, simply run
+``` commandline
+npm run build:frontent
+```
+and to build the backend, simply run
+``` commandline
+npm run build:backend
+```
 
