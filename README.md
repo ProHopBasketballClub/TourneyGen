@@ -2,7 +2,7 @@
 Hello, we're team 3-9. We're not really sure what the
 requirement to include 'you team's name' means, so 
 we will from now on be known as 'Panznir',
-a portmanteu of Mjolnir and Panzer, the only
+a portmanteau of Mjolnir and Panzer, the only
 ideas we had for a team name.
 
 Ignore all the other code and Jenkins stuff you see here
