@@ -4,8 +4,8 @@
   "description": "Tournament Website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
-    "build": "echo \"DOne\" && webpack"
+    "build:frontend": "webpack",
+    "build:backend": "tsc"
   },
   "repository": {
     "type": "git",
