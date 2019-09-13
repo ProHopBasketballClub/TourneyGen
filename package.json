@@ -38,4 +38,6 @@
     "ejs": "^2.7.1",
     "systemjs": "^6.1.0"
   }
+  "build:frontend": "webpack"
+  "build:backend": "tsc"
 }
