@@ -2,12 +2,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "sourceMap": false,
+    "sourceMap": true,
+    "outDir": "dist",
   },
   "include": [
-    "src/frontend/**/*"
+    "src/**/*.ts"
   ],
-  "exclude": [
-    "node_modules/**/*"
-  ]
 }
