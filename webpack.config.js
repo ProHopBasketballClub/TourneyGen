@@ -2,7 +2,7 @@ module.exports = {
     mode: "development",
 
     entry: {
-        main: "./src/frontend/index.ts",
+        main: "./web/frontend/src/index.ts",
     },
 
     output: {
