@@ -21,7 +21,8 @@ pipeline {
         expression { env.BRANCH_NAME == 'master' }
       }
       steps {
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/frontend/src/ tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
+        sh 'mv /web/frontent/src /web/frontend/html'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/frontend/html tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
       }
     }
