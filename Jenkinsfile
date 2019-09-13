@@ -6,7 +6,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'tsc'
+        sh 'npm install'
+        sh 'npm run build:frontend'
+        sh 'npm run build:backend'
       }
     }
     stage('Test') {
@@ -19,8 +21,9 @@ pipeline {
         expression { env.BRANCH_NAME == 'master' }
       }
       steps {
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/dist/ tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStringHostKeyChecking=no $WORKSPACE/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
+        sh 'mv /web/frontent/src /web/frontend/html'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/frontend/html tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
       }
     }
   }

@@ -5,9 +5,6 @@
     "sourceMap": false,
   },
   "include": [
-    "src/frontend/**/*"
+    "src/**/*"
   ],
-  "exclude": [
-    "node_modules/**/*"
-  ]
 }
