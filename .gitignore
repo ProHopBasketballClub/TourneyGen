@@ -181,4 +181,4 @@ build/Release
 node_modules
 
 # Ingore the compiled source.
-dist/*
+web/backend/dist/*
