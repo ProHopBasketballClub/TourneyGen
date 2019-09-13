@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build:frontend": "(cd web/frontend && tsc)",
-    "build:backend": "(cd web/backend && tsc)"
+    "build:backend": "(cd web/backend && tsc)",
+    "build": "npm run build:frontend && npm run build:backend",
+    "test:frontend": "echo Testing the frontend",
+    "test:backend": "echo Testing the backend",
+    "test": "npm run test:frontend && npm run test:backend"
   },
   "repository": {
     "type": "git",
