@@ -1,19 +1,26 @@
 pipeline {
   agent any
+  environment {
+    CI = 'true'
+  }
   stages {
     stage('Build') {
       steps {
-        echo 'It\'s happening!!'
+        sh 'tsc'
       }
     }
     stage('Test') {
       steps {
-        echo 'We probably won\'t have time for these'
+        echo 'Test'
       }
     }
-    stage('Deploy') {
+    stage('Master-Deploy') {
+      when {
+        expression { env.BRANCH_NAME == 'master' }
+      }
       steps {
-        echo 'Woah, wait, what? this thing exists?'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/dist/ tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStringHostKeyChecking=no $WORKSPACE/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
       }
     }
   }

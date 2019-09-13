@@ -180,5 +180,5 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-#ignore the sit folder
-dist/* 
+# Ingore the compiled source.
+dist/*
