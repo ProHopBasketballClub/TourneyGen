@@ -6,7 +6,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'tsc'
+        sh 'npm run build:frontend'
+        sh 'npm run build:backend'
       }
     }
     stage('Test') {
