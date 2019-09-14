@@ -185,3 +185,6 @@ web/backend/dist/*
 
 # Ignore IDE specific folders.
 .idea/*
+
+# Ingnore Mongo Data mount for docker
+data/*

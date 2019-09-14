@@ -1,14 +1,21 @@
 import * as express from 'express'
+import * as bodyParser from 'body-parser'
 
 class App {
-    public express
+    public express: express.Application
 
-    constructor () {
+    constructor() {
         this.express = express()
+        this.config()
         this.mountRoutes()
     }
 
-    private mountRoutes (): void {
+    private config(): void {
+        this.express.use(bodyParser.json());
+        this.express.use(bodyParser.urlencoded({extended: false}));
+    }
+    //this can be moved to a separate fine
+    private mountRoutes(): void {
         const router = express.Router()
         router.get('/', (req, res) => {
             res.json({
