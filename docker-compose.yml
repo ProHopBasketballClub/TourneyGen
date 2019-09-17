@@ -3,7 +3,10 @@ services:
   app:
     container_name: touney_backend
     restart: always
-    build: .
+    build:
+      context: .
+      args:
+        dbConnectionString: 'mongodb://mongo'
     ports:
       - "3000:3000"
     links:

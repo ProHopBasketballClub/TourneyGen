@@ -1,7 +1,7 @@
 FROM node:latest
-
+ARG dbConnectionString=undefined
 ENV PORT 3001
-
+ENV DB_CONNECTION_STRING ${dbConnectionString}}
 EXPOSE 3001
 
 COPY package.json package.json
