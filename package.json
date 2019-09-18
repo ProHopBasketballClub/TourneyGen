@@ -4,7 +4,7 @@
   "description": "Tournament Website",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint './**/*.{ts,tsx}' --max-warnings 0"
+    "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/seng350/seng350f19-project-team-3-9#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.2.0",
-    "@typescript-eslint/parser": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
     "eslint": "^6.4.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.14.3",
@@ -39,16 +39,9 @@
     "mongodb": "^3.3.2",
     "systemjs": "^6.1.0"
   },
-  "scripts": {
-    "lint:ts": "tslint --project tsconfig.json --config tslint.json",
-  },
-  "lint-staged": {
-    "*.ts": "npm lint:ts",
-    "*.tsx": "npm lint:ts",
-  },
-"husky": { 
-   "hooks": {
-      "pre-commit": "lint-staged"
-   }
- }
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pretest"
+    }
+  }
 }
