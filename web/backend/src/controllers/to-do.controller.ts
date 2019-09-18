@@ -26,6 +26,9 @@ export class ToDoController  {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
+        var collection = db.collection('todo');
+        var document = {name:"David", title:"About MongoDB"};
+        collection.insert(document);
         db.collection('todo', (error, collection) => {
             if (error) {
                 res.json(error);
