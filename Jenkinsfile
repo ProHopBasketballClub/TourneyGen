@@ -26,9 +26,9 @@ pipeline {
         sh 'rm -r web/frontend/src'
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/frontend/html tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/web/backend'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/Dockerfile tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/docker-compose.yml tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/package.json tourneygen@$SERVER:$TOURNEYGENBACKLOCATION'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/Dockerfile tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/docker-compose.yml tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/package.json tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
       }
     }
   }
