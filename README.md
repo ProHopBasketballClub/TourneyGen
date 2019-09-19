@@ -64,3 +64,14 @@ and to build the backend, simply run
 npm run build:backend
 ```
 
+## Starting the Server
+In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile
+```commandline
+docker-compose build
+```
+In order to start the Server run. The output will be the port the backend is running on.
+```commandline
+docker-compose up
+```
+
+
