@@ -9,7 +9,9 @@
     "build": "npm run build:frontend && npm run build:backend",
     "test:frontend": "echo Testing the frontend",
     "test:backend": "echo Testing the backend",
-    "test": "npm run test:frontend && npm run test:backend"
+    "test": "npm run test:frontend && npm run test:backend",
+    "clean:frontend": "rm -r web/frontend/**/*.js",
+    "clean:backend": "rm -r web/backend/dist/"
   },
   "repository": {
     "type": "git",
