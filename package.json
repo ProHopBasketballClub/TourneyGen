@@ -4,14 +4,15 @@
   "description": "Tournament Website",
   "main": "index.js",
   "scripts": {
-    "build:frontend": "(cd web/frontend && tsc)",
-    "build:backend": "(cd web/backend && tsc)",
     "build": "npm run build:frontend && npm run build:backend",
-    "test:frontend": "echo Testing the frontend",
-    "test:backend": "echo Testing the backend",
-    "test": "npm run test:frontend && npm run test:backend",
-    "clean:frontend": "rm -r web/frontend/**/*.js",
+    "build:backend": "(cd web/backend && tsc)",
+    "build:frontend": "(cd web/frontend && tsc)",
     "clean:backend": "rm -r web/backend/dist/"
+    "clean:frontend": "rm -r web/frontend/**/*.js",
+    "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix"
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:backend": "echo Testing the backend",
+    "test:frontend": "echo Testing the frontend",
   },
   "repository": {
     "type": "git",
@@ -24,9 +25,9 @@
   },
   "homepage": "https://github.com/seng350/seng350f19-project-team-3-9#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.2.0",
-    "@typescript-eslint/parser": "^2.2.0",
-    "eslint": "^6.3.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "eslint": "^6.4.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.14.3",
     "source-map-loader": "^0.2.4",
@@ -40,6 +41,15 @@
     "commonjs": "0.0.1",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
+    "http-status-codes": "^1.3.2",
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5",
+    "mongodb": "^3.3.2",
     "systemjs": "^6.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pretest"
+    }
   }
 }
