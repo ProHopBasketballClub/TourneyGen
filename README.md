@@ -50,7 +50,7 @@ npm install
 will automatically install your requirements.
 
 ### Precommit tools
-These are yet to have been properly setup.
+A linter has been added to the repository. It will fix any formatting issue in Typescript when a commit is made.
 
 ## Building the project
 Thanks to the magic of npm, building the project is easy!
