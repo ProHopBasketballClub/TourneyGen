@@ -2,7 +2,7 @@ version: "2"
 services:
   app:
     container_name: touney_backend
-    restart: always
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -13,6 +13,7 @@ services:
       - mongo
   mongo:
     container_name: mongo
+    restart: unless-stopped
     image: mongo
     volumes:
       - ./data:/data/db
