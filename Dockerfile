@@ -1,8 +1,9 @@
 FROM node:latest
 ARG dbConnectionString=undefined
-ENV PORT 3001
+ARG port=undefined
+ENV PORT ${port}
 ENV DB_CONNECTION_STRING ${dbConnectionString}}
-EXPOSE 3001
+EXPOSE ${port}
 
 COPY package.json package.json
 RUN npm install
