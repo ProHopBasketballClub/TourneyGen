@@ -57,7 +57,7 @@ Thanks to the magic of npm, building the project is easy!
 
 In order to build the frontend, simply run
 ``` commandline
-npm run build:frontent
+npm run build:frontend
 ```
 and to build the backend, simply run
 ``` commandline
