@@ -28,58 +28,34 @@ export class MongoDb {
         mongo.close()
     }
 
-    public static async getOne(col: String, id: String) {
+    public static async getById(col: String, id: String) {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
-        db.collection(col, (error, collection) => {
-            if (error) {
-                throw new Error(error)
-            }
-            var out = collection
-                .findOne({_id: id});
-            mongo.close();
-            return out;
-        });
+        const collection = db.collection(col);
+        const out =  collection.findOne({_id:id}).toArray();
+        await mongo.close();
+        return out;
     }
 
-    public static async getBy(table: String, col: String, param: String,) {
+    public static async getByDisplayname(col: String, name: String) {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
-        db.collection(table, (error, collection) => {
-            if (error) {
-                throw new Error(error)
-            }
-            collection.find({col: param})
-                .toArray((arrayError, result) => {
-                    if (arrayError) {
-                        throw new Error('Array Error Encountered')
-                    }
-                    return result;
-                });
-        });
+        const collection = db.collection(col);
+        const out =  collection.findOne({displayName:name}).toArray();
+        await mongo.close();
+        return out;
     }
 
-    public static async getAll(col: String) {
+
+    public static async getAll(col: String): Promise<string> {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
-        var out;
-        db.collection(col, (error, collection) => {
-            if (error) {
-                return;
-            }
-
-            collection
-                .find()
-                .toArray((arrayError, result) => {
-                    if (arrayError) {
-                    }
-                    out = JSON.stringify(result);
-                });
-        });
-        console.log(out + "funct")
+        const collection = db.collection(col);
+        const out =  collection.find().toArray();
+        await mongo.close();
         return out;
     }
 

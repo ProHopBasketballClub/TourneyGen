@@ -23,15 +23,12 @@ export class ToDoController {
      *
      */
     public async get(req: Request, res: Response) {
-        const mongo = new MongoDb();
-        await mongo.connect();
-        var document = {name: "David", title: "About MongoDB"};
+        const document = {name: "David", title: "About MongoDB"};
         await MongoDb.save('todo', document);
-        var out;
+        let out;
         out = await MongoDb.getAll('todo');
         console.log(out);
         res.json(out);
-        mongo.close();
     }
 
     /**

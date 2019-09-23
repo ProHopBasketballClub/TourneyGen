@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
+import {User} from "../models";
 
 import {MongoDb} from '../db/mongo.db';
 
@@ -10,14 +11,22 @@ import {MongoDb} from '../db/mongo.db';
  */
 export class UserController {
     private table: String = 'todo';
+    private emailEx: RegExp = /[\w\d]+@\w+\.\w{2,3}/g;
 
     public async get(req: Request, res: Response) {
-        if (req.params.id == '-1') {
+        console.log(req.query);
+        if (req.query.id.length < 1) {
             res.json(MongoDb.getAll(this.table));
             res.statusCode = HttpStatus.OK;
             return;
-        } else {
-            res.json(MongoDb.getOne(this.table, req.params.id));
+        } else if (req.query.id.length > 1) {
+            const out = await MongoDb.getById(this.table, req.params.id);
+            res.json(out);
+            res.statusCode = HttpStatus.OK;
+            return;
+        } else if (req.query.displayName.length > 0) {
+            const out = await MongoDb.getByDisplayname('user', req.params.displayName);
+            res.json(out);
             res.statusCode = HttpStatus.OK;
             return;
         }
@@ -25,13 +34,25 @@ export class UserController {
 
     //post creates new objects
     public async post(req: Request, res: Response) {
-        const mongo = new MongoDb();
-        await mongo.connect();
-        const db = mongo.getDb();
-        const document = {name: "Ethan", title: "About MongoDB"};
-        await MongoDb.save('todo',document);
-        var out = MongoDb.getAll('todo');
-        res.json(out)
+        console.log('post');
+        const user: User = req.body;
+        console.log(user);
+        if (!this.validUser(user)) {
+            res.json({error: 'The request body is invalid'});
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            return;
+        }
+        await MongoDb.save('user', user);
+        res.json(user);
         res.statusCode = HttpStatus.OK;
+    }
+
+
+    private validUser(user: User): boolean {
+        if (user.displayName == null || user.displayName.length < 4) {
+            return false;
+        }
+
+        return this.emailEx.test(user.email);
     }
 }
