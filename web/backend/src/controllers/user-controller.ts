@@ -10,12 +10,12 @@ import {MongoDb} from '../db/mongo.db';
  * @export
  */
 export class UserController {
-    private table: String = 'user';
+    private table: string = 'user';
     private emailEx: RegExp = /[\w\d]+@\w+\.\w{2,3}/g;
 
     public async get(req: Request, res: Response) {
-        console.log(req.query);
-        if (req.query.id != null) {
+        console.log(req.query.id);
+        if (req.query.id !== undefined) {
             if (req.query.id.length < 1) {
                 const out = await MongoDb.getAll(this.table);
                 res.json(out);
@@ -27,7 +27,7 @@ export class UserController {
                 res.statusCode = HttpStatus.OK;
                 return;
             }
-        } else if (req.query.displayName != null && req.query.displayName.length > 0) {
+        } else if (req.query.displayName !== undefined && req.query.displayName.length > 0) {
             const out = await MongoDb.getByDisplayname('user', req.query.displayName);
             res.json(out);
             res.statusCode = HttpStatus.OK;
@@ -55,6 +55,20 @@ export class UserController {
         res.statusCode = HttpStatus.OK;
     }
 
+    public async put(req: Request, res: Response) {
+        const user: User = req.body;
+        if (!this.validUser(user) || req.query.id === undefined) {
+            res.json({error: 'The request body is invalid'});
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            return;
+        }
+        await MongoDb.updateById(this.table,user,req.query.id);
+        user._id = req.query.id;
+        res.json(user);
+        res.statusCode = HttpStatus.OK;
+        return ;
+    }
+
 
     private validUser(user: User): boolean {
         if (user.displayName == null || user.displayName.length < 4) {
@@ -62,5 +76,9 @@ export class UserController {
         }
 
         return this.emailEx.test(user.email);
+    }
+
+    public async delete(req: Request, res: Response) {
+
     }
 }

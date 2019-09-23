@@ -1,5 +1,6 @@
-import {Db, MongoClient,ObjectId} from 'mongodb';
+import {Db, MongoClient,ObjectId,Collection} from 'mongodb';
 import * as HttpStatus from "http-status-codes";
+import {User} from "../models";
 
 
 export class MongoDb {
@@ -22,9 +23,28 @@ export class MongoDb {
     public static async save(col: String, record) {
         const mongo = new MongoDb();
         await mongo.connect();
+        const db:Db = mongo.getDb();
+        const collection:Collection = db.collection(col);
+        try {
+            await collection.insertOne(record);
+        }
+        catch (e) {
+            console.log(e)
+        }
+        mongo.close()
+    }
+
+    public static async updateById(table:string,record,id:string) {
+        const mongo = new MongoDb();
+        await mongo.connect();
         const db = mongo.getDb();
-        const collection = db.collection(col);
-        await collection.insertOne(record);
+        const collection = db.collection(table);
+        try {
+            await collection.updateOne({_id: new ObjectId(id)}, {$set:record}, {upsert: false});
+        }
+        catch (e) {
+            console.log(e);
+        }
         mongo.close()
     }
 
@@ -63,11 +83,18 @@ export class MongoDb {
 
 
     public static async getAll(col: String): Promise<string> {
+        console.log('getall');
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
         const collection = db.collection(col);
-        const out =  collection.find().toArray();
+        var out;
+        try {
+             out = collection.find().toArray();
+        }
+        catch (e) {
+            console.log(e);
+        }
         await mongo.close();
         return out;
     }

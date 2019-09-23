@@ -31,4 +31,23 @@ export function mountUserRoutes(router: Router, route: string) {
             });
     });
 
+    router.put(route, (req, res) => {
+        controller.put(req, res)
+            .then(() => {
+                // do nothing
+            })
+            .catch(error => {
+                // log error
+            });
+    });
+
+    router.delete(route, (req, res) => {
+        controller.delete(req, res)
+            .then(() => {
+                // do nothing
+            })
+            .catch(error => {
+                // log error
+            });
+    });
 }
