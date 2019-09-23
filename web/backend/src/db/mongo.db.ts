@@ -33,7 +33,13 @@ export class MongoDb {
         await mongo.connect();
         const db = mongo.getDb();
         const collection = db.collection(col);
-        const out =  collection.findOne({_id:id}).toArray();
+        var out;
+        try {
+            out = collection.findOne({_id: id});
+        }
+        catch (e) {
+            console.log(e);
+        }
         await mongo.close();
         return out;
     }
@@ -43,7 +49,14 @@ export class MongoDb {
         await mongo.connect();
         const db = mongo.getDb();
         const collection = db.collection(col);
-        const out =  collection.findOne({displayName:name}).toArray();
+        var out;
+        try {
+             out = collection.findOne({displayName: name});
+        }
+        catch (e) {
+            console.log(e);
+            out = e;
+        }
         await mongo.close();
         return out;
     }

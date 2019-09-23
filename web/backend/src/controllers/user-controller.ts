@@ -15,17 +15,25 @@ export class UserController {
 
     public async get(req: Request, res: Response) {
         console.log(req.query);
-        if (req.query.id.length < 1) {
-            res.json(MongoDb.getAll(this.table));
-            res.statusCode = HttpStatus.OK;
-            return;
-        } else if (req.query.id.length > 1) {
-            const out = await MongoDb.getById(this.table, req.params.id);
+        if (req.query.id != null) {
+            if (req.query.id.length < 1) {
+                const out = await MongoDb.getAll(this.table);
+                res.json(out);
+                res.statusCode = HttpStatus.OK;
+                return;
+            } else if (req.query.id.length > 1) {
+                const out = await MongoDb.getById(this.table, req.query.id);
+                res.json(out);
+                res.statusCode = HttpStatus.OK;
+                return;
+            }
+        } else if (req.query.displayName != null && req.query.displayName.length > 0) {
+            const out = await MongoDb.getByDisplayname('user', req.query.displayName);
             res.json(out);
             res.statusCode = HttpStatus.OK;
             return;
-        } else if (req.query.displayName.length > 0) {
-            const out = await MongoDb.getByDisplayname('user', req.params.displayName);
+        } else {
+            const out = await MongoDb.getAll('user');
             res.json(out);
             res.statusCode = HttpStatus.OK;
             return;
