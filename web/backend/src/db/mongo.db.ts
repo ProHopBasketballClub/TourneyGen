@@ -1,4 +1,4 @@
-import {Db, MongoClient} from 'mongodb';
+import {Db, MongoClient,ObjectId} from 'mongodb';
 import * as HttpStatus from "http-status-codes";
 
 
@@ -35,7 +35,7 @@ export class MongoDb {
         const collection = db.collection(col);
         var out;
         try {
-            out = collection.findOne({_id: id});
+            out = collection.findOne({_id: new ObjectId(id)});
         }
         catch (e) {
             console.log(e);

@@ -10,7 +10,7 @@ import {MongoDb} from '../db/mongo.db';
  * @export
  */
 export class UserController {
-    private table: String = 'todo';
+    private table: String = 'user';
     private emailEx: RegExp = /[\w\d]+@\w+\.\w{2,3}/g;
 
     public async get(req: Request, res: Response) {
