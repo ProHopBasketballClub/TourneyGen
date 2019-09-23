@@ -1,14 +1,14 @@
-import { Request, Response} from 'express';
+import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 
-import { MongoDb } from '../db/mongo.db';
+import {MongoDb} from '../db/mongo.db';
 
 /**
  * Controller defining the CRUD methods for to do
  *
  * @export
  */
-export class ToDoController  {
+export class ToDoController {
 
     /**
      * deletes a single todo
@@ -25,31 +25,12 @@ export class ToDoController  {
     public async get(req: Request, res: Response) {
         const mongo = new MongoDb();
         await mongo.connect();
-        const db = mongo.getDb();
-        var collection = db.collection('todo');
-        var document = {name:"David", title:"About MongoDB"};
-        collection.insert(document);
-        db.collection('todo', (error, collection) => {
-            if (error) {
-                res.json(error);
-                res.statusCode = HttpStatus.BAD_REQUEST;
-
-                return;
-            }
-
-            collection
-                .find()
-                .toArray((arrayError, result) => {
-                    if (arrayError) {
-                        res.json(arrayError);
-                        res.statusCode = HttpStatus.BAD_REQUEST;
-                    }
-
-                    res.json(result);
-                    res.statusCode = HttpStatus.OK;
-                });
-        });
-
+        var document = {name: "David", title: "About MongoDB"};
+        await MongoDb.save('todo', document);
+        var out;
+        out = await MongoDb.getAll('todo');
+        console.log(out);
+        res.json(out);
         mongo.close();
     }
 

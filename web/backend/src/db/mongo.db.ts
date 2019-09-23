@@ -1,4 +1,5 @@
 import {Db, MongoClient} from 'mongodb';
+import * as HttpStatus from "http-status-codes";
 
 
 export class MongoDb {
@@ -16,6 +17,70 @@ export class MongoDb {
         } else {
             console.error('close: client is undefined');
         }
+    }
+
+    public static async save(col: String, record) {
+        const mongo = new MongoDb();
+        await mongo.connect();
+        const db = mongo.getDb();
+        const collection = db.collection(col);
+        await collection.insertOne(record);
+        mongo.close()
+    }
+
+    public static async getOne(col: String, id: String) {
+        const mongo = new MongoDb();
+        await mongo.connect();
+        const db = mongo.getDb();
+        db.collection(col, (error, collection) => {
+            if (error) {
+                throw new Error(error)
+            }
+            var out = collection
+                .findOne({_id: id});
+            mongo.close();
+            return out;
+        });
+    }
+
+    public static async getBy(table: String, col: String, param: String,) {
+        const mongo = new MongoDb();
+        await mongo.connect();
+        const db = mongo.getDb();
+        db.collection(table, (error, collection) => {
+            if (error) {
+                throw new Error(error)
+            }
+            collection.find({col: param})
+                .toArray((arrayError, result) => {
+                    if (arrayError) {
+                        throw new Error('Array Error Encountered')
+                    }
+                    return result;
+                });
+        });
+    }
+
+    public static async getAll(col: String) {
+        const mongo = new MongoDb();
+        await mongo.connect();
+        const db = mongo.getDb();
+        var out;
+        db.collection(col, (error, collection) => {
+            if (error) {
+                return;
+            }
+
+            collection
+                .find()
+                .toArray((arrayError, result) => {
+                    if (arrayError) {
+                    }
+                    out = JSON.stringify(result);
+                });
+        });
+        console.log(out + "funct")
+        return out;
     }
 
 
