@@ -5,35 +5,22 @@ we will from now on be known as 'Panznir',
 a portmanteau of Mjolnir and Panzer, the only
 ideas we had for a team name.
 
-Ignore all the other code and Jenkins stuff you see here
-we *promise* we haven't already started development.
+# INSERT-PROJECT-NAME-HERE
+We are... not the most creative bunch (could you guess from the team name?)
+We're actively searching for a name for our project...
 
-# Project ideas
-If you ignore the source code, you can also live with the
-idea that we haven't already selected out idea.
+What is INSERT-PROJECT-NAME-HERE? It is primarily a sports leage
+management website. What does that mean? Well basically, if you are
+in charge of a leage (sports, e-sports, etc), then you can use our
+website to effectively manage the teams and tournaments hosted within
+your league! Sign up at [INSERT-PROJECT-NAME-HERE's website](http://tourneygen.theserverproject.com/)
 
-## Idea I - TourneyGen
-What is TourneyGen? Simple, its a webapp you can go to 
-if you want to create a tournament bracket for a game.
-But that's not it, you can also go here to set up a 
-skill-tracked league where each match will update
-the skill rating of any teams. Further, you can 
-organize as many tournaments as you would like
-within that league! sounds fun
-
-## Idea II - Cloud Compute Framework
-Building off a group project from SENG-371, a cloud
-compute framework can be further fleshed out. 
-
-## Idea III - Scheduling web-app
-Building off a group project from SENG-321, a web-app
-for managing shifts at a bakery could be implemented based
-off a 130 page spec.
+# Course info
+To avoid disrupting this file as well as seperatinng course 
+requirements from actual project, please go to the "milestones" 
+folder's base readme file to see course requirements.
 
 # Development Instructions
-Warning: All who pass this point must disuade themselves from
-the illusion that we haven't already picked our project.
-
 Please note, these instructions are still a work-in-progress
 and as such are very volatile.
 
