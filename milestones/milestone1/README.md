@@ -22,11 +22,16 @@ Each of these user stories are captured in relating projects (linked). These pro
 
 The quality attributes of this system are caputres in 7 tickets (GH-1, GH-2, GH-3, GH-4, GH-5, GH-6, and GH-7.) Three of these tickets (GH-3, GH-5, and GH-6) all expain how testing for them should be implemented in the actual system. Others are simpy there as a course requirements, and will be considered in implementation. For easy reference, the 7 quality attributes are included here: 
 
-Attribute: Accessibility
+####Attribute: Accessibility
+<br>
 Goal: The system should be made to be as accommodate as many people as possible.
-Stimulus: When the build pipeline is run every view is checked with achecker.ca.
+<br>
+Stimulus: When the build pipeline is run every view is checked with achecker.ca
+<br>
 Stimulus source: A front end code is pushed to the remote.
+<br>
 Response: If the any of the views in the system dont achieve at-least a score of 80% from achecker.ca the build fails.
+<br>
 Response Measure: Score from achecker.ca converted to a perentage
 
 Attribute: Fault tolerance
