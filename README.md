@@ -1,6 +1,8 @@
 [![Build Status](http://jenkins.theserverproject.com/buildStatus/icon?job=seng350f19-project-team-3-9%2Fmaster)](http://jenkins.theserverproject.com/job/seng350f19-project-team-3-9/job/master/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Code Quality Score](https://www.code-inspector.com/project/658/score/svg)](https://www.code-inspector.com/project/preferences/658)
+[![Code Grade](https://www.code-inspector.com/project/658/status/svg)](https://www.code-inspector.com/project/preferences/658)
 
 # Team 3-9  -  SENG-350
 Hello, we're team 3-9. We're not really sure what the
