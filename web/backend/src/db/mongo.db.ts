@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
 
 export class MongoDb {
@@ -98,8 +97,9 @@ export class MongoDb {
         }
         return true;
     }
+
     private client: MongoClient;
-    private connectionstring: string = process.env.DB_CONNECTION_string || 'mongodb://localhost:27017';
+    private connectionstring: string = process.env.DB_CONNECTION_STRING;
     private dbName = 'test';
 
     public close() {
@@ -118,7 +118,10 @@ export class MongoDb {
         try {
             if (!this.client) {
                 console.info(`Connectiong to ${this.connectionstring}`);
-                this.client = await MongoClient.connect(this.connectionstring, {useNewUrlParser: true});
+                this.client = await MongoClient.connect(this.connectionstring, {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                });
             }
         } catch (error) {
             console.error(error);

@@ -12,18 +12,20 @@ export class UserController {
     private table: string = 'user';
 
     public async get(req: Request, res: Response) {
-        if (req.query.id !== undefined) {
+        if (req.query.id !== undefined && req.query.id !== null) {
             if (req.query.id.length > 1) {
                 const out = await MongoDb.getById(this.table, req.query.id);
                 res.json(out);
                 res.statusCode = HttpStatus.OK;
                 return;
             }
-        } else if (req.query.displayName !== undefined && req.query.displayName.length > 0) {
-            const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
-            res.json(out);
-            res.statusCode = HttpStatus.OK;
-            return;
+        } else if (req.query.displayName !== undefined && req.query.displayName != null) {
+            if (req.query.displayName.length > 0) {
+                const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
+                res.json(out);
+                res.statusCode = HttpStatus.OK;
+                return;
+            }
         } else {
             const out = await MongoDb.getAll(this.table);
             res.json(out);
