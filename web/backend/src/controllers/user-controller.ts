@@ -20,11 +20,14 @@ export class UserController {
                 return;
             }
         } else if (req.query.displayName !== undefined && req.query.displayName != null) {
-            if (req.query.displayName.length > 0) {
+            if (req.query.displayName.length === 24) {
                 const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
                 res.json(out);
                 res.statusCode = HttpStatus.OK;
                 return;
+            } else {
+                res.json({error: 'The id specified is malformed'});
+                res.statusCode = HttpStatus.BAD_REQUEST;
             }
         } else {
             const out = await MongoDb.getAll(this.table);

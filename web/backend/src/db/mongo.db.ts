@@ -120,7 +120,7 @@ export class MongoDb {
                 console.info(`Connectiong to ${this.connectionstring}`);
                 this.client = await MongoClient.connect(this.connectionstring, {
                     useNewUrlParser: true,
-                    useUnifiedTopology: true
+                    useUnifiedTopology: true,
                 });
             }
         } catch (error) {
