@@ -9,6 +9,6 @@ import { mountToDoRoutes } from './todo.routes';
  * @export
  */
 export function mountRoutes(router: Router) {
-    const todoRoute = process.env.TODO_ROUTE || '/api/todo';
+    const todoRoute = '/api/todo';
     mountToDoRoutes(router, todoRoute);
 }
