@@ -30,7 +30,7 @@ pipeline {
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/docker-compose.yml tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/package.json tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
         sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENBACKLOCATION/ && docker-compose down)"'
-        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(whoami && cd $TOURNEYGENBACKLOCATION/ && docker-compose build && docker-compose up)"'
+        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENBACKLOCATION/ && docker-compose build && docker-compose up -d)"'
       }
     }
   }

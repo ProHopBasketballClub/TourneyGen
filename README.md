@@ -1,3 +1,7 @@
+[![Build Status](http://jenkins.theserverproject.com/buildStatus/icon?job=seng350f19-project-team-3-9%2Fmaster&build=49)](http://jenkins.theserverproject.com/job/seng350f19-project-team-3-9/job/master/49/)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 # Team 3-9  -  SENG-350
 Hello, we're team 3-9. We're not really sure what the
 requirement to include 'you team's name' means, so 
