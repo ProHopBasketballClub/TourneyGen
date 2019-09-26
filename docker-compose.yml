@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     build:
       context: .
+      dockerfile: DockerfileApp
       args:
         dbConnectionString: 'mongodb://mongo'
         port: 34345
@@ -18,9 +19,9 @@ services:
   mongo:
     container_name: mongo
     restart: unless-stopped
-    image: mongo
-    volumes:
-      - ./data:/data/db
+    build:
+      context: .
+      dockerfile: DockerfileMongo
     ports:
       - "27017:27017"
     networks:
