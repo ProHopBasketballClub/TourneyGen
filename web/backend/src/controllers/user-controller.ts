@@ -1,7 +1,7 @@
-import {Request, Response} from "express";
-import * as HttpStatus from "http-status-codes";
-import {MongoDb} from "../db/mongo.db";
-import {User} from "../models";
+import {Request, Response} from 'express';
+import * as HttpStatus from 'http-status-codes';
+import {MongoDb} from '../db/mongo.db';
+import {User} from '../models';
 
 /**
  * Controller defining the CRUD methods for user
@@ -9,7 +9,7 @@ import {User} from "../models";
  * @export
  */
 export class UserController {
-    private table: string = "user";
+    private table: string = 'user';
 
     public async get(req: Request, res: Response) {
         if (req.query.id !== undefined) {
@@ -36,12 +36,12 @@ export class UserController {
     public async post(req: Request, res: Response) {
         const user: User = req.body;
         if (!User.validUser(user)) {
-            res.json({error: "The request body is invalid"});
+            res.json({error: 'The request body is invalid'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
         if (await MongoDb.getByDisplayName(this.table, user.displayName) !== null) {
-            res.json({error: "A user already has this user name please choose a different one"});
+            res.json({error: 'A user already has this user name please choose a different one'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
@@ -56,12 +56,12 @@ export class UserController {
     public async put(req: Request, res: Response) {
         const user: User = req.body;
         if (!User.validUser(user) || req.query.id === undefined) {
-            res.json({error: "The request body is invalid"});
+            res.json({error: 'The request body is invalid'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
         if (await MongoDb.getById(this.table, req.query.id) === null) {
-            res.json({error: "You cannot update a user that does not exist"});
+            res.json({error: 'You cannot update a user that does not exist'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
@@ -71,7 +71,7 @@ export class UserController {
             res.statusCode = HttpStatus.OK;
             return;
         } else {
-            res.json({error: "Internal Server Error update failed"});
+            res.json({error: 'Internal Server Error update failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
@@ -80,20 +80,20 @@ export class UserController {
     // deletes a user by id in the params
     public async delete(req: Request, res: Response) {
         if (req.query.id === undefined) {
-            res.json({error: "id must be specified as a param of this request"});
+            res.json({error: 'id must be specified as a param of this request'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
         if (await MongoDb.getById(this.table, req.query.id) === null) {
-            res.json({error: "You cannot update a user that does not exist"});
+            res.json({error: 'You cannot update a user that does not exist'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
         if (await MongoDb.deleteById(this.table, req.query.id)) {
-            res.json({Msg: "Successfully Deleted User with id" + req.query.id});
+            res.json({Msg: 'Successfully Deleted User with id' + req.query.id});
             res.statusCode = HttpStatus.OK;
         } else {
-            res.json({error: "Internal Server Error delete failed"});
+            res.json({error: 'Internal Server Error delete failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

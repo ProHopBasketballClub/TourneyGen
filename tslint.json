@@ -11,6 +11,7 @@
         "no-magic-numbers": true,
         "whitespace": true,
         "no-console": false,
+      "quotemark": [true,"single"],
       "variable-name": {
         "options": ["allow-leading-underscore","allow-pascal-case","allow-snake-case","check-format"]
       }

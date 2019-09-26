@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import {Collection, Db, MongoClient, ObjectId} from "mongodb";
+import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
 
 export class MongoDb {
 
@@ -99,8 +99,8 @@ export class MongoDb {
         return true;
     }
     private client: MongoClient;
-    private connectionstring: string = process.env.DB_CONNECTION_string || "mongodb://localhost:27017";
-    private dbName = "test";
+    private connectionstring: string = process.env.DB_CONNECTION_string || 'mongodb://localhost:27017';
+    private dbName = 'test';
 
     public close() {
         if (this.client) {
@@ -110,7 +110,7 @@ export class MongoDb {
                     console.error(error);
                 });
         } else {
-            console.error("close: client is undefined");
+            console.error('close: client is undefined');
         }
     }
 
@@ -135,7 +135,7 @@ export class MongoDb {
 
             return this.client.db(this.dbName);
         } else {
-            console.error("no db found");
+            console.error('no db found');
 
             return undefined;
         }

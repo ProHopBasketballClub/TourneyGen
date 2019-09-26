@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 
-import {mountUserRoutes} from "./user.routes";
+import {mountUserRoutes} from './user.routes';
 
 /**
  * Mounts all routes for the app

@@ -1,4 +1,4 @@
-import { App } from "./app";
+import { App } from './app';
 
 const DEFAULT_PORT = 3000;
 const port = process.env.PORT || DEFAULT_PORT;
