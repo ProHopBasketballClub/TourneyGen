@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import {Db, MongoClient, ObjectId, Collection} from 'mongodb';
+import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
 
 
 export class MongoDb {

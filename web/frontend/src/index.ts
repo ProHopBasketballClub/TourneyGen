@@ -12,4 +12,4 @@ app.listen(port, (err) => {
 })
 */
 
-document.body.innerHTML = "<p>Team 3-9  -  Ross, Landon, Jordon, and Ethan.</p>"
+document.body.innerHTML = "<p>Team 3-9  -  Ross, Landon, Jordon, and Ethan.</p>";

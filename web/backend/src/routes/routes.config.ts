@@ -1,7 +1,10 @@
 
 import { Router } from 'express';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Did some linting
 import {mountUserRoutes} from "./user.routes";
 
 /**
@@ -10,5 +13,9 @@ import {mountUserRoutes} from "./user.routes";
  * @export
  */
 export function mountRoutes(router: Router) {
+<<<<<<< HEAD
     mountUserRoutes(router,'/api/user')
+=======
+    mountUserRoutes(router,'/api/user');
+>>>>>>> Did some linting
 }

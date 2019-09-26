@@ -1,10 +1,8 @@
-// eslint-disable-next-line no-unused-vars
-import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
-// eslint-disable-next-line no-unused-vars
+import {Request, Response} from 'express';
+import {MongoDb} from '../db/mongo.db';
 import {User} from "../models";
 
-import {MongoDb} from '../db/mongo.db';
 
 /**
  * Controller defining the CRUD methods for user
@@ -73,7 +71,7 @@ export class UserController {
             res.json(user);
             res.statusCode = HttpStatus.OK;
             return;
-        } else{
+        } else {
             res.json({error: 'Internal Server Error update failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -94,7 +92,7 @@ export class UserController {
         }
         if (await MongoDb.deleteById(this.table, req.query.id)) {
             res.json({Msg: 'Successfully Deleted User with id' + req.query.id});
-            res.statusCode = HttpStatus.OK
+            res.statusCode = HttpStatus.OK;
         } else {
             res.json({error: 'Internal Server Error delete failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
