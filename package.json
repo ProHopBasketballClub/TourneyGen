@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:frontend && npm run build:backend",
     "build:backend": "(cd web/backend && tsc)",
-    "build:frontend": "(cd web/frontend && tsc && pug web/frontend/src)",
+    "build:frontend": "(cd web/frontend && tsc && pug src)",
     "clean:backend": "rm -r web/backend/dist/",
     "clean:frontend": "rm -r web/frontend/**/*.js",
     "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
