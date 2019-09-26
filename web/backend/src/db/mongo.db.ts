@@ -1,26 +1,10 @@
 // eslint-disable-next-line no-unused-vars
-import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
-
+import {Collection, Db, MongoClient, ObjectId} from "mongodb";
 
 export class MongoDb {
-    private client: MongoClient;
-    private connectionString: String = process.env.DB_CONNECTION_STRING || 'mongodb://localhost:27017';
-    private dbName = 'test';
 
-    public close() {
-        if (this.client) {
-            this.client.close()
-                .then()
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            console.error('close: client is undefined');
-        }
-    }
-
-    //saves a single record of any type into a specified table/collection
-    public static async save(col: String, record: any): Promise<boolean> {
+    // saves a single record of any type into a specified table/collection
+    public static async save(col: string, record: any): Promise<boolean> {
         const mongo: MongoDb = new MongoDb();
         await mongo.connect();
         const db: Db = mongo.getDb();
@@ -35,7 +19,7 @@ export class MongoDb {
         return true;
     }
 
-    //updates a single record identified by id in a specified table
+    // updates a single record identified by id in a specified table
     public static async updateById(table: string, record, id: string): Promise<boolean> {
         const mongo: MongoDb = new MongoDb();
         await mongo.connect();
@@ -51,13 +35,13 @@ export class MongoDb {
         return true;
     }
 
-    //returns a single record that has been found in a specified table identified by an id
-    public static async getById(col: String, id: string): Promise<any> {
+    // returns a single record that has been found in a specified table identified by an id
+    public static async getById(col: string, id: string): Promise<any> {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
         const collection = db.collection(col);
-        var out;
+        let out;
         try {
             out = collection.findOne({_id: new ObjectId(id)});
         } catch (e) {
@@ -67,13 +51,13 @@ export class MongoDb {
         return out;
     }
 
-    //user specific query for getting users identified by displayName
+    // user specific query for getting users identified by displayName
     public static async getByDisplayName(col: string, name: string) {
         const mongo = new MongoDb();
         await mongo.connect();
         const db = mongo.getDb();
         const collection = db.collection(col);
-        var out;
+        let out;
         try {
             out = collection.findOne({displayName: name});
         } catch (e) {
@@ -84,13 +68,13 @@ export class MongoDb {
         return out;
     }
 
-    //returns all of the documents saved to a table/collection
+    // returns all of the documents saved to a table/collection
     public static async getAll(col: string): Promise<any> {
         const mongo: MongoDb = new MongoDb();
         await mongo.connect();
         const db: Db = mongo.getDb();
         const collection: Collection = db.collection(col);
-        var out;
+        let out;
         try {
             out = collection.find().toArray();
         } catch (e) {
@@ -100,7 +84,7 @@ export class MongoDb {
         return out;
     }
 
-    //deletes a single object identified by an id
+    // deletes a single object identified by an id
     public static async deleteById(table: string, id: string): Promise<boolean> {
         const mongo: MongoDb = new MongoDb();
         await mongo.connect();
@@ -114,12 +98,27 @@ export class MongoDb {
         }
         return true;
     }
+    private client: MongoClient;
+    private connectionstring: string = process.env.DB_CONNECTION_string || "mongodb://localhost:27017";
+    private dbName = "test";
+
+    public close() {
+        if (this.client) {
+            this.client.close()
+                .then()
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            console.error("close: client is undefined");
+        }
+    }
 
     public async connect() {
         try {
             if (!this.client) {
-                console.info(`Connectiong to ${this.connectionString}`);
-                this.client = await MongoClient.connect(this.connectionString, {'useNewUrlParser': true});
+                console.info(`Connectiong to ${this.connectionstring}`);
+                this.client = await MongoClient.connect(this.connectionstring, {useNewUrlParser: true});
             }
         } catch (error) {
             console.error(error);
@@ -136,11 +135,10 @@ export class MongoDb {
 
             return this.client.db(this.dbName);
         } else {
-            console.error('no db found');
+            console.error("no db found");
 
             return undefined;
         }
     }
-
 
 }

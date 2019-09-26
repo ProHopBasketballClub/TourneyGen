@@ -1,6 +1,6 @@
-import {Router} from 'express';
+import {Router} from "express";
 
-import {UserController} from '../controllers';
+import {UserController} from "../controllers";
 
 /**
  * Mounts all routes for the ToDoController
@@ -16,7 +16,7 @@ export function mountUserRoutes(router: Router, route: string) {
             .then(() => {
                 // do nothing
             })
-            .catch(error => {
+            .catch((error) => {
                 // log error
             });
     });
@@ -26,7 +26,7 @@ export function mountUserRoutes(router: Router, route: string) {
             .then(() => {
                 // do nothing
             })
-            .catch(error => {
+            .catch((error) => {
                 // log error
             });
     });
@@ -36,7 +36,7 @@ export function mountUserRoutes(router: Router, route: string) {
             .then(() => {
                 // do nothing
             })
-            .catch(error => {
+            .catch((error) => {
                 // log error
             });
     });
@@ -46,7 +46,7 @@ export function mountUserRoutes(router: Router, route: string) {
             .then(() => {
                 // do nothing
             })
-            .catch(error => {
+            .catch((error) => {
                 // log error
             });
     });

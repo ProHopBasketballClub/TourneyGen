@@ -1,21 +1,22 @@
 
-
 export class User {
-    private static emailEx: RegExp = /[\w\d]+@\w+\.\w{2,3}/g;
-    public displayName:string;
-    public email:string;
-    public _id:string;
 
-    constructor(displayName:string,email:string){
-        this.displayName = displayName;
-        this.email = email;
-    }
+     public static MIN_DISPLAYNAME_LEN: number = 4;
 
-    //loosely validates email and displayName must be at least 4 characters
+    // loosely validates email and displayName must be at least 4 characters
     public static validUser(user: User): boolean {
-        if (user.displayName == null || user.displayName.length < 4) {
+        if (user.displayName == null || user.displayName.length < this.MIN_DISPLAYNAME_LEN) {
             return false;
         }
         return this.emailEx.test(user.email);
+    }
+    private static emailEx: RegExp = /[\w\d]+@\w+\.\w{2,3}/g;
+    public displayName: string;
+    public email: string;
+    public _id: string;
+
+    constructor(displayName: string,email: string) {
+        this.displayName = displayName;
+        this.email = email;
     }
 }
