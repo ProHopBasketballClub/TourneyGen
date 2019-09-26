@@ -9,6 +9,7 @@ import {User} from '../models';
  * @export
  */
 export class UserController {
+    private static MONGO_ID_LEN: number = 24;
     private table: string = 'user';
 
     public async get(req: Request, res: Response) {
@@ -20,7 +21,7 @@ export class UserController {
                 return;
             }
         } else if (req.query.displayName !== undefined && req.query.displayName != null) {
-            if (req.query.displayName.length === 24) {
+            if (req.query.displayName.length === MONGO_ID_LEN) {
                 const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
                 res.json(out);
                 res.statusCode = HttpStatus.OK;
