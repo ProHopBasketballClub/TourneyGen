@@ -9,25 +9,30 @@ import {User} from '../models';
  * @export
  */
 export class UserController {
-    private static MONGO_ID_LEN: number = 24;
+    private MONGO_ID_LEN: number = 24;
     private table: string = 'user';
 
     public async get(req: Request, res: Response) {
         if (req.query.id !== undefined && req.query.id !== null) {
-            if (req.query.id.length > 1) {
+            if (req.query.id.length === this.MONGO_ID_LEN) {
                 const out = await MongoDb.getById(this.table, req.query.id);
-                res.json(out);
-                res.statusCode = HttpStatus.OK;
-                return;
-            }
-        } else if (req.query.displayName !== undefined && req.query.displayName != null) {
-            if (req.query.displayName.length === MONGO_ID_LEN) {
-                const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
                 res.json(out);
                 res.statusCode = HttpStatus.OK;
                 return;
             } else {
                 res.json({error: 'The id specified is malformed'});
+                res.statusCode = HttpStatus.BAD_REQUEST;
+                return;
+            }
+
+        } else if (req.query.displayName !== undefined && req.query.displayName != null) {
+            if (req.query.displayName.length >= User.MIN_DISPLAYNAME_LEN) {
+                const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
+                res.json(out);
+                res.statusCode = HttpStatus.OK;
+                return;
+            } else {
+                res.json({error: 'The displayName must be at least 4 characters'});
                 res.statusCode = HttpStatus.BAD_REQUEST;
             }
         } else {
@@ -55,6 +60,10 @@ export class UserController {
             res.json(user);
             res.statusCode = HttpStatus.OK;
             return;
+        } else {
+            res.json({error: 'Internal Server Error update failed'});
+            res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            return;
         }
     }
 
@@ -79,6 +88,7 @@ export class UserController {
         } else {
             res.json({error: 'Internal Server Error update failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            return;
         }
 
     }
@@ -96,11 +106,13 @@ export class UserController {
             return;
         }
         if (await MongoDb.deleteById(this.table, req.query.id)) {
-            res.json({Msg: 'Successfully Deleted User with id' + req.query.id});
+            res.json({Msg: 'Successfully Deleted User with id ' + req.query.id});
             res.statusCode = HttpStatus.OK;
+            return;
         } else {
             res.json({error: 'Internal Server Error delete failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            return;
         }
     }
 }
