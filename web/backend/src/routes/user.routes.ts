@@ -2,12 +2,7 @@ import {Router} from 'express';
 
 import {UserController} from '../controllers';
 
-/**
- * Mounts all routes for the ToDoController
- *
- * @see ToDoController
- * @export
- */
+// This class mount's the user-controller routes. This means it matches requests type to the function we want called in the controller
 export function mountUserRoutes(router: Router, route: string) {
     const controller = new UserController();
 

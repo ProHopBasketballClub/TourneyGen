@@ -2,105 +2,105 @@ import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
 
 export class MongoDb {
 
-    // saves a single record of any type into a specified table/collection
-    public static async save(col: string, record: any): Promise<boolean> {
+    public static async save(table: string, record: any): Promise<boolean> {
+        return await this._boolean_operation(table, [record], this._save);
+    }
+
+    public static async updateById(table: string, id: string, record: any): Promise<boolean> {
+        return await this._boolean_operation(table, [record, id], this._updateById);
+    }
+
+    public static async getById(table: string, id: string) {
+        return await this._get_operation(table, [id], this._getById);
+    }
+
+    public static async getByDisplayName(table: string, name: string) {
+        return this._get_operation(table, [name], this._getByDisplayName);
+    }
+
+    public static async getAll(table: string) {
+        return this._get_operation(table, [], this._getAll);
+    }
+
+    public static async deleteById(table: string, id: string): Promise<boolean> {
+        return this._boolean_operation(table, [id], this._deleteById);
+    }
+
+    // Function for mongo connection that return a boolean and performs a task
+    private static async _boolean_operation(table: string, operation_args: any[], operation: (...args: any[]) => void): Promise<boolean> {
         const mongo: MongoDb = new MongoDb();
         await mongo.connect();
         const db: Db = mongo.getDb();
-        const collection: Collection = db.collection(col);
+        const collection: Collection = db.collection(table);
+        operation_args.push(collection);
         try {
-            await collection.insertOne(record);
+            await operation(...operation_args);
         } catch (e) {
             console.log(e);
             return false;
         }
         mongo.close();
         return true;
+    }
+
+    /// This function connect to mongo and performs a retrieves and return a dictionary of valid and data
+    // if the return is not valid the data contains the error
+    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[]) => void): Promise<any> {
+        const mongo: MongoDb = new MongoDb();
+        await mongo.connect();
+        const db: Db = mongo.getDb();
+        const collection: Collection = db.collection(table);
+        let out: any;
+        operation_args.push(collection);
+        try {
+            out = await operation(...operation_args);
+        } catch (e) {
+            console.log(e);
+            mongo.close();
+            return {valid: false, data: e};
+
+        }
+        mongo.close();
+        return {valid: true, data: out};
+    }
+
+    // saves a single record of any type into a specified table/collection
+    private static async _save(record: any, collection: Collection): Promise<void> {
+        await collection.insertOne(record);
     }
 
     // updates a single record identified by id in a specified table
-    public static async updateById(table: string, record, id: string): Promise<boolean> {
-        const mongo: MongoDb = new MongoDb();
-        await mongo.connect();
-        const db: Db = mongo.getDb();
-        const collection: Collection = db.collection(table);
-        try {
-            await collection.updateOne({_id: new ObjectId(id)}, {$set: record}, {upsert: false});
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-        mongo.close();
-        return true;
+    private static async _updateById(record: any, id: string, collection: Collection): Promise<void> {
+        await collection.updateOne({_id: new ObjectId(id)}, {$set: record}, {upsert: false});
     }
 
     // returns a single record that has been found in a specified table identified by an id
-    public static async getById(col: string, id: string): Promise<any> {
-        const mongo = new MongoDb();
-        await mongo.connect();
-        const db = mongo.getDb();
-        const collection = db.collection(col);
-        let out;
-        try {
-            out = collection.findOne({_id: new ObjectId(id)});
-        } catch (e) {
-            console.log(e);
-        }
-        await mongo.close();
-        return out;
+    private static async _getById(id: string, collection: Collection): Promise<any> {
+        return await collection.findOne({_id: new ObjectId(id)});
+
     }
 
     // user specific query for getting users identified by displayName
-    public static async getByDisplayName(col: string, name: string) {
-        const mongo = new MongoDb();
-        await mongo.connect();
-        const db = mongo.getDb();
-        const collection = db.collection(col);
-        let out;
-        try {
-            out = collection.findOne({displayName: name});
-        } catch (e) {
-            console.log(e);
-            out = e;
-        }
-        await mongo.close();
-        return out;
+    private static async _getByDisplayName(name: string, collection: Collection) {
+        return await collection.findOne({displayName: name});
     }
 
     // returns all of the documents saved to a table/collection
-    public static async getAll(col: string): Promise<any> {
-        const mongo: MongoDb = new MongoDb();
-        await mongo.connect();
-        const db: Db = mongo.getDb();
-        const collection: Collection = db.collection(col);
-        let out;
-        try {
-            out = collection.find().toArray();
-        } catch (e) {
-            console.log(e);
-        }
-        await mongo.close();
-        return out;
+    private static async _getAll(collection: Collection): Promise<any> {
+        return collection.find().toArray();
     }
 
     // deletes a single object identified by an id
-    public static async deleteById(table: string, id: string): Promise<boolean> {
-        const mongo: MongoDb = new MongoDb();
-        await mongo.connect();
-        const db: Db = mongo.getDb();
-        const collection: Collection = db.collection(table);
-        try {
-            await collection.remove({_id: new ObjectId(id)});
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-        return true;
+    private static async _deleteById(id: string, collection: Collection): Promise<void> {
+        await collection.remove({_id: new ObjectId(id)});
     }
 
+    // The mongo driver
     private client: MongoClient;
-    private connectionstring: string = process.env.DB_CONNECTION_STRING;
-    private dbName = 'test';
+    // This is passed in the compose file and should be the auto generated mongo URI
+    private connectionString: string = process.env.DB_CONNECTION_STRING;
+
+    private dbName = 'TourneyData.';
 
     public close() {
         if (this.client) {
@@ -117,8 +117,8 @@ export class MongoDb {
     public async connect() {
         try {
             if (!this.client) {
-                console.info(`Connectiong to ${this.connectionstring}`);
-                this.client = await MongoClient.connect(this.connectionstring, {
+                console.info(`Connecting to ${this.connectionString}`);
+                this.client = await MongoClient.connect(this.connectionString, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                 });
@@ -128,10 +128,6 @@ export class MongoDb {
         }
     }
 
-    /**
-     * gets the todo db from mongo
-     *
-     */
     public getDb(): Db {
         if (this.client) {
             console.info(`getting db ${this.dbName}`);

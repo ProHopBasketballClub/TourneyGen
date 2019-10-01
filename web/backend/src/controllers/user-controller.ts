@@ -16,30 +16,47 @@ export class UserController {
         if (req.query.id !== undefined && req.query.id !== null) {
             if (req.query.id.length === this.MONGO_ID_LEN) {
                 const out = await MongoDb.getById(this.table, req.query.id);
-                res.json(out);
-                res.statusCode = HttpStatus.OK;
-                return;
+                if (out.valid) {
+                    res.json(out.data);
+                    res.statusCode = HttpStatus.OK;
+                    return;
+                } else {
+                    res.json({error: out.data});
+                    res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                }
+
             } else {
                 res.json({error: 'The id specified is malformed'});
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 return;
             }
-
         } else if (req.query.displayName !== undefined && req.query.displayName != null) {
             if (req.query.displayName.length >= User.MIN_DISPLAYNAME_LEN) {
                 const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
-                res.json(out);
-                res.statusCode = HttpStatus.OK;
-                return;
+                if (out.valid) {
+                    res.json(out.data);
+                    res.statusCode = HttpStatus.OK;
+                    return;
+                } else {
+                    res.json(out.data);
+                    res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                    return;
+                }
             } else {
                 res.json({error: 'The displayName must be at least 4 characters'});
                 res.statusCode = HttpStatus.BAD_REQUEST;
             }
         } else {
             const out = await MongoDb.getAll(this.table);
-            res.json(out);
-            res.statusCode = HttpStatus.OK;
-            return;
+            if (out.valid) {
+                res.json(out.data);
+                res.statusCode = HttpStatus.OK;
+                return;
+            } else {
+                res.json({error: out.data});
+                res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                return;
+            }
         }
     }
 
@@ -51,7 +68,7 @@ export class UserController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if (await MongoDb.getByDisplayName(this.table, user.displayName) !== null) {
+        if ((await MongoDb.getByDisplayName(this.table, user.displayName)).data !== null) {
             res.json({error: 'A user already has this user name please choose a different one'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
@@ -75,12 +92,12 @@ export class UserController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if (await MongoDb.getById(this.table, req.query.id) === null) {
+        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
             res.json({error: 'You cannot update a user that does not exist'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if (await MongoDb.updateById(this.table, user, req.query.id)) {
+        if (await MongoDb.updateById(this.table, req.query.id, user)) {
             user._id = req.query.id;
             res.json(user);
             res.statusCode = HttpStatus.OK;
@@ -100,7 +117,7 @@ export class UserController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if (await MongoDb.getById(this.table, req.query.id) === null) {
+        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
             res.json({error: 'You cannot update a user that does not exist'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
