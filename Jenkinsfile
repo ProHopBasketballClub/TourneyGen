@@ -13,7 +13,8 @@ pipeline {
     }
     stage('Test') {
       steps {
-        echo 'Test'
+        sh 'npm run test:frontend'
+        sh 'npm run test:backend'
       }
     }
     stage('Master-Deploy') {

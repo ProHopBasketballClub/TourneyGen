@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:frontend && npm run build:backend",
     "build:backend": "(cd web/backend && tsc)",
-    "build:frontend": "(cd web/frontend && tsc)",
+    "build:frontend": "(cd web/frontend && tsc && pug src)",
     "clean:backend": "rm -r web/backend/dist/",
     "clean:frontend": "rm -r web/frontend/**/*.js",
     "pretest": "./node_modules/.bin/tslint -c tslint.json 'web/**/*.ts' --fix",
@@ -45,6 +45,8 @@
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
     "mongodb": "^3.3.2",
+    "pug": "^2.0.4",
+    "pug-cli": "^1.0.0-alpha6",
     "systemjs": "^6.1.0",
     "tslint": "^5.20.0"
   },

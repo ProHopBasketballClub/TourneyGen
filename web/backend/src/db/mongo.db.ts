@@ -21,8 +21,7 @@ export class MongoDb {
     public static async getAll(table: string) {
         try {
             return this._get_operation(table, [], this._getAll);
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
         }
     }
@@ -50,7 +49,7 @@ export class MongoDb {
 
     /// This function connect to mongo and performs a retrieves and return a dictionary of valid and data
     // if the return is not valid the data contains the error
-    private static async _get_operation(table: string, operation_args: any[], operation: (...args:any[])=>object): Promise<any> {
+    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[])=>object): Promise<any> {
         const mongo: MongoDb = new MongoDb();
         try {
             await mongo.connect();
@@ -98,7 +97,7 @@ export class MongoDb {
 
     // returns all of the documents saved to a table/collection
     private static async _getAll(collection: Collection): Promise<any> {
-        console.log("inner");
+        console.log('inner');
         return collection.find().toArray();
     }
 
