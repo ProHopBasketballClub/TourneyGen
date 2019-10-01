@@ -5,9 +5,6 @@ services:
     restart: unless-stopped
     build:
       context: .
-      args:
-        dbConnectionString: 'mongodb://mongo'
-        port: 34345
     ports:
       - "34345:34345"
     networks:

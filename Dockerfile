@@ -1,5 +1,5 @@
 FROM node:latest
-EXPOSE ${port}
+EXPOSE ${PORT}
 
 COPY package.json package.json
 RUN npm install
