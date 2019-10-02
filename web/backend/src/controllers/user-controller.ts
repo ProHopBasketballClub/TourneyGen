@@ -13,7 +13,7 @@ export class UserController {
     private table: string = 'user';
 
     public async get(req: Request, res: Response) {
-        if (req.query.id !== undefined && req.query.id !== null) {
+        if (req.query.id) {
             if (req.query.id.length === this.MONGO_ID_LEN) {
                 const out = await MongoDb.getById(this.table, req.query.id);
                 if (out.valid) {
@@ -30,7 +30,7 @@ export class UserController {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 return;
             }
-        } else if (req.query.displayName !== undefined && req.query.displayName != null) {
+        } else if (req.query.displayName) {
             if (req.query.displayName.length >= User.MIN_DISPLAYNAME_LEN) {
                 const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
                 if (out.valid) {
@@ -47,7 +47,7 @@ export class UserController {
                 res.statusCode = HttpStatus.BAD_REQUEST;
             }
         } else {
-            res.json({error: 'Invalid request'});
+            res.json({error: 'Invalid request id or displayName required'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
@@ -57,7 +57,7 @@ export class UserController {
     public async post(req: Request, res: Response) {
         const user: User = req.body;
         if (!User.validUser(user)) {
-            res.json({error: 'The request body is invalid'});
+            res.json({error: 'Display name must be at least ' + User.MIN_DISPLAYNAME_LEN + ' long'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
@@ -80,8 +80,8 @@ export class UserController {
     // put updates an existing object
     public async put(req: Request, res: Response) {
         const user: User = req.body;
-        if (!User.validUser(user) || req.query.id === undefined) {
-            res.json({error: 'The request body is invalid'});
+        if (!User.validUser(user) || !req.query.id) {
+            res.json({error: 'Display name must be at least ' + User.MIN_DISPLAYNAME_LEN + ' long and an id must be a param'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
@@ -118,8 +118,8 @@ export class UserController {
 
     // deletes a user by id in the params
     public async delete(req: Request, res: Response) {
-        if (req.query.id === undefined) {
-            res.json({error: 'id must be specified as a param of this request'});
+        if (!req.query.id) {
+            res.json({error: 'Id must be specified as a param of this request'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }

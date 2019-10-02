@@ -15,19 +15,19 @@ export class MongoDb {
     }
 
     public static async getByDisplayName(table: string, name: string) {
-        return this._get_operation(table, [name], this._getByDisplayName);
+        return await this._get_operation(table, [name], this._getByDisplayName);
     }
 
     public static async getAll(table: string) {
         try {
-            return this._get_operation(table, [], this._getAll);
+            return await this._get_operation(table, [], this._getAll);
         } catch (e) {
             console.log(e);
         }
     }
 
     public static async deleteById(table: string, id: string): Promise<boolean> {
-        return this._boolean_operation(table, [id], this._deleteById);
+        return await this._boolean_operation(table, [id], this._deleteById);
     }
 
     // Function for mongo connection that return a boolean and performs a task
