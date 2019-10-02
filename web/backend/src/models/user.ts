@@ -2,7 +2,7 @@ export class User {
 
     public static MIN_DISPLAYNAME_LEN: number = 4;
 
-    //displayName must be at least 4 characters
+    // displayName must be at least 4 characters
     public static validUser(user: User): boolean {
         return !(user.displayName === undefined || user.displayName === null || user.displayName.length < this.MIN_DISPLAYNAME_LEN);
 

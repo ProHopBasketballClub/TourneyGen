@@ -47,16 +47,9 @@ export class UserController {
                 res.statusCode = HttpStatus.BAD_REQUEST;
             }
         } else {
-            const out = await MongoDb.getAll(this.table);
-            if (out.valid) {
-                res.json(out.data);
-                res.statusCode = HttpStatus.OK;
-                return;
-            } else {
-                res.json({error: out.data});
-                res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-                return;
-            }
+            res.json({error: 'Invalid request'});
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            return;
         }
     }
 
@@ -104,6 +97,19 @@ export class UserController {
             return;
         } else {
             res.json({error: 'Internal Server Error update failed'});
+            res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            return;
+        }
+
+    }
+
+    public async getAll(req: Request, res: Response) {
+        const out = await MongoDb.getAll(this.table);
+        if (out.valid) {
+            res.json(out.data);
+            res.statusCode = HttpStatus.OK;
+        } else {
+            res.json(out.data);
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             return;
         }

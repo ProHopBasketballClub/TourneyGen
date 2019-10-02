@@ -97,7 +97,6 @@ export class MongoDb {
 
     // returns all of the documents saved to a table/collection
     private static async _getAll(collection: Collection): Promise<any> {
-        console.log('inner');
         return collection.find().toArray();
     }
 
