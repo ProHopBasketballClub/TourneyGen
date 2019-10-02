@@ -5,10 +5,6 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile
-      args:
-        dbConnectionString: 'mongodb://mongo'
-        port: 34345
     ports:
       - "34345:34345"
     networks:
@@ -16,6 +12,9 @@ services:
         ipv4_address: 172.28.1.1
     links:
       - mongo
+    environment:
+      DB_CONNECTION_STRING: 'mongodb://mongo'
+      PORT: 34345
   mongo:
     container_name: mongo
     restart: unless-stopped

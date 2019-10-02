@@ -5,7 +5,7 @@ const port = process.env.PORT || DEFAULT_PORT;
 
 const app = new App().express;
 
-app.listen(port, err => {
+app.listen(port, (err) => {
     if (err) {
         return console.error(err);
     }

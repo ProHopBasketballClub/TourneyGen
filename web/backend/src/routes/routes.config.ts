@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 
-import { mountToDoRoutes } from './todo.routes';
+import {mountUserRoutes} from './user.routes';
 
 /**
  * Mounts all routes for the app
@@ -9,6 +9,5 @@ import { mountToDoRoutes } from './todo.routes';
  * @export
  */
 export function mountRoutes(router: Router) {
-    const todoRoute = '/api/todo';
-    mountToDoRoutes(router, todoRoute);
+    mountUserRoutes(router,'/api/user');
 }
