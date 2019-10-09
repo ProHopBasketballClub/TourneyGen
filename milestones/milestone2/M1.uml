@@ -1,0 +1,172 @@
+@startuml
+
+class HttpRequest{
+  body:string
+  params:{}
+  }
+
+class Actor {
+  }
+
+
+class HttpResponse{
+  body:string
+  }
+
+package Models {
+  
+  class League {
+  League_Id:string
+  Owner:User
+  Name:string
+  Description:string
+  Logo:byte_array
+  Game_type:String
+  
+  +valid(League):boolean
+}
+
+class Tournament {
+  Tournament_Id:string
+  Nam:string
+  Description:string
+  Generated:boolean
+  +valid(Tournament):boolean
+}
+
+class Team {
+  Team_Id:string
+  Roster:[User]
+  Wins:int
+  Losses:int
+  Ties:int
+  Rating:float
+  Owner:User
+  Name:string
+  Description:string
+  Logo:byte_array
+  +valid():boolean
+  }
+  
+  class Match {
+    Match_Id:string
+    Match_Title:string
+    Home_Team:Team
+    Away_Team:Team
+    Victor:Team
+    Loser:Team
+    Victor_Score:float
+    Loser_Score:float
+    Confirmed:boolean
+    in_Conflict:boolean
+    
+    +valid(Match):boolean
+  }
+  
+  class User{
+    User_Id:string
+    DisplayName:string
+    Email:string
+    +valid(User):boolean
+  }
+}
+
+package Controllers {
+  class LeagueController {
+    table:string
+    +get(id,name):User
+    +getAll():[User]
+    +put(League):User
+    +post(League):User
+    +delete(id):string
+    
+  }
+  class MatchController {
+    table
+    +get(id,Match_Title):Match
+    +getAll():[Match]
+    +put(Match):Match
+    +post(Match):Match
+    +delete(id):string
+    +setMatchDetails(Match_Details):string
+    +setMatchConflict(id,status):string
+    +confirmMatch(id,team_id):string
+  }
+  class TournamentController {
+    table:string
+    +get(id,Name):Tournament
+    +getAll():[Tournament]
+    +put(Tournament):Tournament
+    +post(Tournament):Tournament
+    +delete(id):string
+
+    
+  }
+  class TeamController {
+    table:string
+    +get(id):team
+    +get(league_id,name):team
+    +getAll():[Team]
+    +put(Team):Team
+    +post(Team):Team
+    +delete(id):string
+  }
+  class UserController {
+    table:string
+    +get(id):User
+    +get(displayName):User
+    +getAll():[User]
+    +put(User):User
+    +post(User):User
+    +delete(id):string
+  }
+  
+}
+
+package Db {
+  
+  class mongodb {
+      MongoClient:MongoClient
+      dbName:string
+      connectionString:URI
+    
+      -_boolean_operation(table,args,function):boolean
+      -_get_operation(table,args,function):{valid:boolean,data:object}
+    +save(table,object):boolean
+    +update(table,id,object):boolean
+    +getById(table,id):object
+    +getAll(table):[object]
+    +deleteById(table,id):boolean
+    +connect():void
+    +close():void
+    +getDb():Db
+    }
+  
+  }
+
+class Express{
+  
+}
+
+class App{
+  router:Express.Router
+  +mountRoutes():void
+}
+
+HttpRequest -down-> App
+
+Models <-down-> Db
+
+App -right-> HttpResponse
+
+App <-down-> Express
+
+Express <-down-> Controllers
+
+Controllers <-down-> Models
+
+Actor -left-> HttpRequest
+
+HttpResponse -up-> Actor
+
+@enduml
