@@ -1,5 +1,9 @@
 @startuml
 
+class Legend{
+  1-X: GenerateTournament-Step
+  }
+
 class HttpRequest{
   body:string
   params:{}
@@ -144,6 +148,23 @@ package Db {
   
   }
 
+package Services {
+  class TournamentService{
+    sddfg
+  }
+  
+  class MatchService{
+    iudhf
+  }
+  
+  
+  class LeagueService{
+    sdfdsfs
+  }
+  
+  
+}
+
 class Express{
   
 }
@@ -168,5 +189,22 @@ Controllers <-down-> Models
 Actor -left-> HttpRequest
 
 HttpResponse -up-> Actor
+
+TournamentService -[#green]-> Tournament : 1-1 Get Tournament Object
+TournamentService -[#green]-> Team : 1-2 Get Team Objects
+TournamentService -[#green]-> Match: 1-3 Create and Save Match Objects
+TournamentService -[#green]-> Team : 1-4 Update Team Objects
+TournamentService -[#green]-> Team : 1-5 Update Tournament
+
+MatchService -[#blue]-> Match : 2-1 Get Match Object
+MatchService -[#blue]-> Team : 2-1 Get both Team Object
+MatchService -[#blue]-> MatchService : 2-3 Check for Result Conflict if conflict abbort
+MatchService -[#blue]-> Team : 2-4 Update both Team Objects
+MatchService -[#blue]-> Match : 2-4 Update Mact Object
+
+
+
+
+
 
 @enduml
