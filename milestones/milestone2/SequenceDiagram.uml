@@ -1,0 +1,200 @@
+// UML Code for generating Sequence Diagram at https://sequencediagram.org
+
+title generateTournament()
+actor User
+
+activate User
+User->Web-Frontend:Requests to view ungenerated tournament
+
+activate Web-Frontend
+Web-Frontend->Web-Frontend: Verifies user has permission to see\nungenerated tournament.
+
+alt User does not have permission to see ungenerated tournament
+Web-Frontend->User: User is shown 404 Not Found page.
+[<-User:Cannot continue
+deactivate User
+end
+activate User
+
+Web-Frontend->Web-Frontend: Verifies user has permission to\ngenerate this ungenerated\ntournament
+
+alt User does not own league tournament is for.
+Web-Frontend->User: Displays ungenerated tournament\nto user.
+[<-User:Cannot continue
+deactivate User
+end 
+activate User
+
+Web-Frontend->User: Displays ungenerated tournament with\nbutton to generate tournament to user.
+deactivate Web-Frontend
+
+User->Web-Frontend:User selects to generate tournament
+activate Web-Frontend
+
+alt backend is unavailable
+Web-Frontend-xBackend: Attempt to request backend.
+space 2
+Web-Frontend->Web-Frontend: Recognizes timeout
+Web-Frontend->User:Reports inability to generate tournament\nwith issue on TourneyGen's side
+deactivate Web-Frontend
+[<-User:Cannot continue
+deactivate User
+end
+activate Web-Frontend
+activate User
+
+Web-Frontend->Backend: Request to generate tournament with current\ninformation is sent to backend
+activate Backend
+
+database MongoDB
+alt database is unavailable
+Backend-xMongoDB:Attempt to request database.
+Backend->Backend: Recognizes timeout
+Backend->Web-Frontend: Reports 500 error as database is unavailable.
+deactivate Backend
+Web-Frontend->User:Reports inability to generate tournament\nwith issue on TourneyGen's side
+deactivate Web-Frontend
+[<-User:Cannot continue
+deactivate User
+end
+activate Backend
+activate Web-Frontend
+activate User
+
+note over Backend:Assume from here on that the database is up.\nIf at any point it becomes unreachable, follow\nthe above alternate case.
+
+Backend->MongoDB: Requests tournament object for tournament\nto be generated.
+activate MongoDB
+
+
+alt database cannot find tournament's object
+MongoDB->Backend: Response with error due to missing data.
+deactivate MongoDB
+Backend->Web-Frontend: Response with 400 error reporting\nmissing data.
+deactivate Backend
+Web-Frontend->User: Reports inability to generate tournament.
+deactivate Web-Frontend
+[<-User:Cannot continue
+deactivate User
+end
+activate MongoDB
+activate Backend
+activate Web-Frontend
+activate User
+space 3
+
+MongoDB->Backend: Response with tournament object for\ntournament to be generated
+deactivate MongoDB
+
+loop # of teams in tournament
+Backend->MongoDB: Requests object for team participating in\ntournament.
+activate MongoDB
+note over MongoDB: No need for team id existance\ncheck here as data-layer\nenforces teams to exist if they\nare in a tournament.
+space 2
+
+alt Database cannot find i-th team's object
+MongoDB->Backend: Response with error due to missing data.
+deactivate MongoDB
+Backend->Web-Frontend: Response with 400 error reporting\nmissing data.
+deactivate Backend
+Web-Frontend->User: Reports inability to generate tournament.
+deactivate Web-Frontend
+[<-User:Cannot continue
+deactivate User
+end
+activate MongoDB
+activate Backend
+activate Web-Frontend
+activate User
+space 3
+
+MongoDB->Backend: Response with team object for team\nparticipating in tournament.
+deactivate MongoDB
+end
+
+Backend->(2)Backend: Generate a sorted list\nof teams sorting off of\nteam rating.
+Backend->(2)Backend: Add each match in order\ncreated to the matches\nlist within the tournament\nobject.
+
+loop # of matches created
+Backend->MongoDB: Request to create i-th match object.
+activate MongoDB
+space 2
+
+alt Database cannot create i-th match object
+MongoDB->Backend: Response with error due to failed creation.
+deactivate MongoDB
+loop # of match objects sucessfully created
+note over Backend: We must loop here until we sucessfully\nremove all the matches so that the\ndatabase does not end up with invalid\nmatches.
+loop until sucess
+Backend->MongoDB: Requests to remove j-th match object
+activate MongoDB
+alt database cannot remove match
+MongoDB->Backend: Response with error removing match
+deactivate MongoDB
+end 
+activate MongoDB
+end
+MongoDB->Backend: Responds with sucessful deletion.
+deactivate MongoDB
+space 2
+end
+Backend->Web-Frontend: Response with 400 error reporting\nerror creating the a match object.
+deactivate Backend
+Web-Frontend->User: Reports inability to generate tournament.
+deactivate Web-Frontend
+[<-User:Cannot continue
+deactivate User
+end
+activate MongoDB
+activate Backend
+activate Web-Frontend
+activate User
+space 3
+
+MongoDB->Backend: Responds with match's id.
+deactivate MongoDB
+end 
+
+loop # of teams in tournament
+loop until sucess
+Backend->MongoDB: Request to update i-th team object to \nreflect added matches.
+activate MongoDB
+space 2
+alt database cannot update team object
+MongoDB->Backend: Reports error with updating team object
+deactivate MongoDB
+note over Backend: Team object must exist, so keep\nattempting to update it.
+Backend->MongoDB
+end
+activate MongoDB
+end
+MongoDB->Backend: Responds with sucessful creation.
+deactivate MongoDB 
+end 
+
+loop until sucess
+Backend->MongoDB: Request to create a new tournament object\nwith all the newly created matches.
+activate MongoDB
+space 2
+alt database cannot create tournament object
+note over Backend: Information must be valid as other database\nobjects accepted it,so there is a database\nerror, not a data error.
+MongoDB->Backend: Reports error with creating tournament\nobject.
+deactivate MongoDB
+end
+activate MongoDB
+end
+MongoDB->Backend: Response with the new tournament's id.
+deactivate MongoDB
+
+Backend->Web-Frontend: Reponse with sucess of tournament\ngeneration and with its object.
+deactivate Backend
+
+Web-Frontend->Web-Frontend: Run the display_tournament()\nalgorithm to generate a bracket\nfrom the tournament object.
+space 2
+
+Web-Frontend->User: Display the generated tournament\nbracket.
+deactivate Web-Frontend
+User->[: User has generated\nthe tournament.
+space 2
+deactivate User
+
