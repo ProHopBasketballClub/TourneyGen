@@ -176,21 +176,23 @@ class App{
   +mountRoutes():void
 }
 
-HttpRequest -down-> App
+HttpRequest -down-> App : Recive Request
 
-Models <-down-> Db
+Models <-down-> Db : CRUD Operation
 
-App -right-> HttpResponse
+App -right-> HttpResponse : Convert Object to JSON
 
-App <-down-> Express
+App <-down-> Express : Pass Request/Response Path to Router
 
-Express <-down-> Controllers
+Express <-down-> Controllers : Route request to Contrroller
 
-Controllers <-down-> Models
+Controllers <-down-> Models : Validate Request Objects
 
-Actor -left-> HttpRequest
+Actor -left-> HttpRequest : Send Request
 
-HttpResponse -up-> Actor
+HttpResponse -up-> Actor : Recive Response+
+
+Controllers --> Services : Process Data Operation
 
 TournamentService -[#green]-> Tournament : 1-1 Get Tournament Object
 TournamentService -[#green]-> Team : 1-2 Get Team Objects
@@ -211,6 +213,7 @@ LeagueService -[#cyan]-> LeagueService : 3-4 Ensure Match objects are empty if n
 LeagueService -[#cyan]-> League : 3-2 Update League Object
 LeagueService -[#cyan]-> Team : 3-1 Update Team Object
 
+Legend --|> Services
 
 
 
