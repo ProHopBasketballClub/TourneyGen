@@ -63,8 +63,5 @@ https://www.chaijs.com/. [Accessed: 10-Oct-2019].
 3. “Elo rating system,” Wikipedia, 04-Oct-2019. [Online]. Available: 
 https://en.wikipedia.org/wiki/Elo_rating_system. [Accessed: 10-Oct-2019].
 
-<<<<<<< HEAD
 4. “What is Jenkins?: Jenkins For Continuous Integration,” Edureka, 22-May-2019. [Online]. Available: https://www.edureka.co/blog/what-is-jenkins/. [Accessed: 13-Oct-2019].
-=======
-4. “What is Jenkins? | Jenkins For Continuous Integration | Edureka.” [Online]. Available: https://www.edureka.co/blog/what-is-jenkins/ . [Accessed: 13-Oct-2019].
->>>>>>> 0d6214b4be218556bf4bcb787bddb46e562d4270
+
