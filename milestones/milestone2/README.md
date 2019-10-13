@@ -18,17 +18,24 @@ The goal of TourneyGen is to allow leagues to organize and manage themselves. To
 
 
 # 2 Sequence Diagram
-Figure 1 displays the sequence diagram for TourneyGen. This diagram displays the communication between the user, the web-front, the backend, and the database. This diagram is useful for visualizing the interaction between the architecture on the front and backend of the application. 
+Figure 1 displays the sequence diagram for TourneyGen. This diagram displays the communication between the user, the web-front, the backend, and the database. This diagram is useful for visualizing the interaction between the architecture on the front and backend of the application. Since there are multiple technologies interacting on layer, it is useful to create a visualization for this process. 
+
+The architecture for TourneyGen must support a stateful server and a method for the user to access data from the database. TourneyGen uses HTTP to communicate with the front and backend of the application. This allows the user to create and store objects in the system.
+
+
+
+
 
 ![Sequence Diagram](./SequenceDiagram.png)
 Figure 1: Sequence Diagram
 
 # 3 Class Diagram
-![Class Diagram](./plantuml.png)
+![Class Diagram](./ClassDiagram.png)
 Figure 2: Class Diagram
 
 # 4 Top-Level Diagram 
 ![Top-Level Diagram](./tourneygen-tla.png)
+
 Figure 3: Top-Level Diagram
 
 # 5 Architecture Design
