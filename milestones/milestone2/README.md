@@ -16,7 +16,10 @@ Currently, there lacks an intuitive method for competitive leagues to organize t
 ## 1.2 Overview
 The goal of TourneyGen is to allow leagues to organize and manage themselves. TourneyGen will provide an overarching structure to leagues, allowing them to keep track of multiple competitive tournaments and matches within that league. The application will have four main components for users to interact with: leagues, teams, matches and tournaments.The app is laid out in a hierarchical structure with a league being at the top of the hierarchy and teams residing underneath a league. Once a league contains multiple teams, tournaments and matches can be held within that given league. The additional functionality of ranking is provided in the form of “Elo”. The Elo ranking system helps to rank teams appropriately. Every team in each league starts with the same amount of Elo, and Elo is adjusted based on the result of each match. If two teams with the same Elo play a game, the Elo gain/loss will be moderate. If two teams with a large difference in Elo play (which implies one team is better than the other), then if the team that has the higher Elo wins, the Elo gain/loss will be very small. However, if the lower Elo team wins, the Elo gain/loss will be significantly larger [3].
 
+# 2 Design Decisions
+This section will explain how the architectural design decisions will solve the problem TourneyGen is attempting to solve. 
 
+<!-- 
 # 2 Sequence Diagram
 Figure 1 displays the sequence diagram for TourneyGen. This diagram displays the communication between the user, the web-front, the backend, and the database. This diagram is useful for visualizing the interaction between the architecture on the front and backend of the application. Since there are multiple technologies interacting on layer, it is useful to create a visualization for this process. 
 
@@ -34,23 +37,23 @@ Figure 1: Sequence Diagram
 Figure 2: Class Diagram
 
 # 4 Top-Level Diagram 
-![Top-Level Diagram](./tourneygen-tla.png)
+![Top-Level Diagram](./tourneygen-tla.png) -->
 
-Figure 3: Top-Level Diagram
+<!-- Figure 3: Top-Level Diagram -->
 
-# 5 Architecture Design
+# 3 Architecture Design
 The following section will outline the CI architecture.
-## 5.1 Continuous Integration (CI)
+## 3.1 Continuous Integration (CI)
 
-### 5.1.1 Technologies Being Used
-### 5.1.2 Consequences and Constraints
-## 5.2 Testing
+### 3.1.1 Technologies Being Used
+### 3.1.2 Consequences and Constraints
+## 3.2 Testing
 The following section will outline the testing frameworks being used and how these frameworks will interact with the CI tools in place. 
 
-### 5.2.1 Technologies Being Used
+### 3.2.1 Technologies Being Used
 The application will use Mocha.js and Chai.js. Mocha.js is a testing framework which provides a simple interface for creating testing suites [1]. Ran alongside Mocha.js is Chai.js, which is an assertion library for Node.js applications. This library adds the ability to create assertions in the Mocha.js testing suites [2]. Used in conjunction, these libraries will have the full capability of testing both the front and back-end of the application. 
 
-### 5.2.2 Consequences and Constraints
+### 3.2.2 Consequences and Constraints
 The consequences of using Mocha.js and Chai.js are that the application must be written in JavaScript and the runtime environment must be Node.js. Mocha.js and Chai.js will only work for 
 
 # Resources 
