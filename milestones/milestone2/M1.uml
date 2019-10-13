@@ -198,20 +198,20 @@ TournamentService -[#green]-> Tournament : 1-1 Get Tournament Object
 TournamentService -[#green]-> Team : 1-2 Get Team Objects
 TournamentService -[#green]-> Match: 1-3 Create and Save Match Objects
 TournamentService -[#green]-> Team : 1-4 Update Team Objects
-TournamentService -[#green]-> Team : 1-5 Update Tournament
+TournamentService -[#green]-> Tournament : 1-5 Update Tournament
 
 MatchService -[#blue]-> Match : 2-1 Get Match Object
 MatchService -[#blue]-> Team : 2-2 Get both Team Object
 MatchService -[#blue]up-> MatchService : 2-3 Check for Result Conflict if conflict abbort
 MatchService -[#blue]-> Team : 2-4 Update both Team Objects
-MatchService -[#blue]-> Match : 2-4 Update Mact Object
+MatchService -[#blue]-> Match : 2-5 Update Mact Object
 
 LeagueService -[#cyan]-> Team : 3-1 Get Team Object
 LeagueService -[#cyan]-> League : 3-2 Get League Object
 LeagueService -[#cyan]-> Match : 3-3 Get Team's League Match Objects
 LeagueService -[#cyan]-> LeagueService : 3-4 Ensure Match objects are empty if not abort
-LeagueService -[#cyan]-> League : 3-2 Update League Object
-LeagueService -[#cyan]-> Team : 3-1 Update Team Object
+LeagueService -[#cyan]-> League : 3-5 Update League Object
+LeagueService -[#cyan]-> Team : 3-6 Update Team Object
 
 Legend --|> Services
 
