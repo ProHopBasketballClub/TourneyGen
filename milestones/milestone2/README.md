@@ -2,7 +2,7 @@
 ## Team 3-9: TourneyGen
 
 <h4>
-Jordan Snadberg V00871232 <br/>
+Jordan Sandberg V00871232 <br/>
 Landon Marshall V00843849 <br/>
 Ross Alexandra V00867152 <br/>
 Ethan Kwan V00
