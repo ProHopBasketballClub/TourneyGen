@@ -24,9 +24,14 @@ This section will explain how the architectural design decisions will solve the 
 # 3 Architecture Design
 The following section will outline the CI architecture.
 ## 3.1 Continuous Integration (CI)
+This section will explain the technologies being used for continuous integration (CI
 
 ### 3.1.1 Technologies Being Used
+Jenkins is a customizable open source automation tool. Jenkins can be used/customized to detect changes and automatically build and test the new version of the project. Jenkins is a free tool, and we are using it because it promotes collaboration within a team of developers. Using Jenkins allows all of us to work on the project at the same time, and if there are any conflicts in our changes, Jenkins should be able to catch it and notify us.
+
 ### 3.1.2 Consequences and Constraints
+The consequences of using Jenkins are relatively minimal, as it is all open source, and it runs on plugins so for most cases it will be able to do what you need it to do. In the event that it can’t one can always write their own plugin. Another consequence of Jenkins is that since it is so configurable, it is up to the developers to set it up properly. 
+
 ## 3.2 Testing
 The following section will outline the testing frameworks being used and how these frameworks will interact with the CI tools in place. 
 
