@@ -178,7 +178,7 @@ class App{
 
 HttpRequest -down-> App : Recive Request
 
-Models <-down-> Db : CRUD Operation
+Models <--> Db : CRUD Operation
 
 App -right-> HttpResponse : Convert Object to JSON
 
@@ -186,13 +186,25 @@ App <-down-> Express : Pass Request/Response Path to Router
 
 Express <-down-> Controllers : Route request to Contrroller
 
-Controllers <-down-> Models : Validate Request Objects
+Controllers <--> Models : Validate Request Objects
 
 Actor -left-> HttpRequest : Send Request
 
-HttpResponse -up-> Actor : Recive Response+
+HttpResponse -up-> Actor : Recive Response
 
 Controllers --> Services : Process Data Operation
+
+Team }-[#purple]-{ Match
+  
+Team }-[#purple]-{ User
+  
+Team }-[#purple]-{ Tournament
+  
+Tournament -[#purple]-{ Match
+
+League -[#purple]-{ Match
+  
+League -[#purple]-{ Tournament
 
 TournamentService -[#green]-> Tournament : 1-1 Get Tournament Object
 TournamentService -[#green]-> Team : 1-2 Get Team Objects
