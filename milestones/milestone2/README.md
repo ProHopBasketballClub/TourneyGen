@@ -4,7 +4,7 @@
 <h4>
 Jordan Sandberg V00871232 <br/>
 Landon Marshall V00843849 <br/>
-Ross Alexandra V00 <br/>
+Ross Alexandra V00867152 <br/>
 Ethan Kwan V00
 
 # 1 Introduction
@@ -35,6 +35,7 @@ The frontend of the application must provide an intuitive and consistent method 
 The following section will outline the CI architecture.
 
 ## 3.1 Continuous Integration (CI)
+This section will explain the technologies being used for continuous integration (CI
 
 ### 3.1.1 Technologies Being Used
 Jenkins is a customizable open source automation tool. Jenkins can be used/customized to detect changes and automatically build and test the new version of the project. Jenkins is a free tool, and we are using it because it promotes collaboration within a team of developers. Using Jenkins allows all of us to work on the project at the same time, and if there are any conflicts in our changes, Jenkins should be able to catch it and notify us.
@@ -62,4 +63,8 @@ https://www.chaijs.com/. [Accessed: 10-Oct-2019].
 3. “Elo rating system,” Wikipedia, 04-Oct-2019. [Online]. Available: 
 https://en.wikipedia.org/wiki/Elo_rating_system. [Accessed: 10-Oct-2019].
 
+<<<<<<< HEAD
 4. “What is Jenkins?: Jenkins For Continuous Integration,” Edureka, 22-May-2019. [Online]. Available: https://www.edureka.co/blog/what-is-jenkins/. [Accessed: 13-Oct-2019].
+=======
+4. “What is Jenkins? | Jenkins For Continuous Integration | Edureka.” [Online]. Available: https://www.edureka.co/blog/what-is-jenkins/ . [Accessed: 13-Oct-2019].
+>>>>>>> 0d6214b4be218556bf4bcb787bddb46e562d4270
