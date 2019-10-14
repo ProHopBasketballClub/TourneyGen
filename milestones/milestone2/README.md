@@ -5,7 +5,7 @@
 Jordan Sandberg V00871232 <br/>
 Landon Marshall V00843849 <br/>
 Ross Alexandra V00867152 <br/>
-Ethan Kwan V00
+Ethan Kwan V00862439
 
 # 1 Introduction
 This section will provide a problem statement, give an overview of the functionality of the application, and specify any constraints.
