@@ -23,4 +23,4 @@ Quality Attributes not implemented in CI => issues labeled with only "course"
 
 Good news for you, its easier than ever to mark milestone two! The milestone 2 directory's readme will walk you through the projected design of the system from a high level. This readme (doc) will explain how the larger portions of the system will interact with each other. For a more granular breakdown of how each peice will be implemented, take a look at our [projects](https://github.com/seng350/seng350f19-project-team-3-9/projects "Team 3-9 projects"). If you're looking for the stages of development, take a look at our [milestones](https://github.com/seng350/seng350f19-project-team-3-9/milestones "Team 3-9 milestones") They relate the project milestone to what we need to actually have done to be on schedule!
 
-Hope you're having a good day Mr.Marker. And remember, if you're not having a good day, you can always mark other teams until your are!
+Hope you're having a good day Mr.Marker. And remember, if you're not having a good day, you can always mark other teams until you are!
