@@ -40,7 +40,21 @@ This section will explain the technologies being used for continuous integration
 ### 3.1.1 Technologies Being Used
 Jenkins is a customizable open source automation tool. Jenkins can be used/customized to detect changes and automatically build and test the new version of the project. Jenkins is a free tool, and we are using it because it promotes collaboration within a team of developers. Using Jenkins allows all of us to work on the project at the same time, and if there are any conflicts in our changes, Jenkins should be able to catch it and notify us.
 
-### 3.1.2 Consequences and Constraints
+### 3.1.2 Integrations
+In order for the system to be easily upgradable and modifiable, many checks and balances should be built in to ensute that the system does not become more complex than it needs to be. These checks and balances will automatically be run by Jenkins to ensure that they are run on every build. Further, should any of the values fall below required levels, then Jenkins will automatically fail the build.
+
+#### 3.1.2.1 Testing Framework
+The tests that are written alongside the system are an intergral part of proving that new additions and bug fixes aren't creating new issues, or reviving old ones. As such, **no** builds with failing tests will be passed. Further, to ensure that the system is being affectively tested, a minumum coverage of 75% is required. In order to keep track of code coverage, this project will use [codecov](http://www.codecove.io "codecov"). Codecov allows Jenkins to automatically upload reports generated during the build process, which it will analyze to calculate the coverage.
+
+#### 3.1.2.2 Code Quality
+Beyond functionality, the quality of the code is an important to continual development. In order for the project to maintain code quality, a static analysis tool will be run on every build. In order to incorperate this, Jenkins will be setup to prompt a static analysis tool to run against the code base on every commit. Further, should the code quality drop below a maintainability score of a **B** or a code quality score of 75 then the build will automatically fail. This will force a developer to be conscious of their development choices to ensure that what they create is sustainable; otherwise their builds will fail and they will be unable to push their code to production.
+
+In order to further ensure that the team agrees on the quality of the code, no code can be pushed to production (the master branch) without approval from at least one other team member. To codify this, no PR made to this repo is accepted without at least one approval.
+
+#### 3.1.2.3 Frontend consistency
+Further to functionality and clean code, usability of the system is very important to the team. In order to make the system as usable as possible, Jenkins will push a report to [achecker](http://www. achecker.ca "achecker"). This tool will ensure that the frontend has a standardized look and feel. Similar to the other quality attributes, Jenkins will be set to automatically fail a build once the score reported by achecker falls too low. Unfortunately, the team is unfamiliar with this tool, so no set number will be set at this time for that value. This will be set once the team is more comfortable with the tool.
+
+### 3.1.3 Consequences and Constraints
 The consequences of using Jenkins are relatively minimal, as it is all open source, and it runs on plugins so for most cases it will be able to do what you need it to do. In the event that it can’t one can always write their own plugin. Another consequence of Jenkins is that since it is so configurable, it is up to the developers to set it up properly. 
 
 ## 3.2 Testing
