@@ -55,7 +55,7 @@ In order to further ensure that the team agrees on the quality of the code, no c
 Further to functionality and clean code, usability of the system is very important to the team. In order to make the system as usable as possible, Jenkins will push a report to [achecker](http://www. achecker.ca "achecker"). This tool will ensure that the frontend has a standardized look and feel. Similar to the other quality attributes, Jenkins will be set to automatically fail a build once the score reported by achecker falls too low. Unfortunately, the team is unfamiliar with this tool, so no set number will be set at this time for that value. This will be set once the team is more comfortable with the tool.
 
 ### 3.1.3 Consequences and Constraints
-The consequences of using Jenkins are relatively minimal, as it is all ohttp://.comusd.godabert-nap.com/zcredirect?visitid=fc7d1340-ee3a-11e9-b6f5-126a365ffc96&type=js&browserWidth=1920&browserHeight=952&iframeDetected=false open source, and it runs on plugins so for most cases it will be able to do what you need it to do. In the event that it can’t one can always write their own plugin. Another consequence of Jenkins is that since it is so configurable, it is up to the developers to set it up properly. 
+The consequences of using Jenkins are relatively minimal, as it is all open source, and it runs on plugins so for most cases it will be able to do what you need it to do. In the event that it can’t one can always write their own plugin. Another consequence of Jenkins is that since it is so configurable, it is up to the developers to set it up properly. 
 
 ## 3.2 Testing
 
