@@ -10,7 +10,7 @@
     "clean:backend": "rm -r web/backend/dist/",
     "clean:frontend": "rm -r web/frontend/**/*.js",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'web/**/*.ts' --fix",
-    "test": "npm run test:frontend && npm run test:backend",
+    "test": "mocha",
     "test:backend": "echo Testing the backend",
     "test:frontend": "echo Testing the frontend"
   },
