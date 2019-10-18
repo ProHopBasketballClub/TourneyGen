@@ -11,8 +11,8 @@
     "clean:frontend": "rm -r web/frontend/**/*.js",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'web/**/*.ts' --fix",
     "test": "mocha",
-    "test:backend": "echo Testing the backend",
-    "test:frontend": "echo Testing the frontend"
+    "test:backend": "mocha test/backend-tests/**/*.js",
+    "test:frontend": "mocha test/frontend-tests/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^6.4.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.14.3",
+    "mocha": "^6.2.1",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.1.0",
     "typescript": "^3.6.3"
