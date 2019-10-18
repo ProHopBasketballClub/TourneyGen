@@ -10,9 +10,9 @@
     "clean:backend": "rm -r web/backend/dist/",
     "clean:frontend": "rm -r web/frontend/**/*.js",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'web/**/*.ts' --fix",
-    "test": "mocha",
-    "test:backend": "mocha test/backend-tests/**/*.js",
-    "test:frontend": "mocha test/frontend-tests/**/*.js"
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "tsc test/backend-tests/*.ts && mocha test/backend-tests/**/*.js && rm -r test/backend-tests/*.js",
+    "test:frontend": "tsc test/frontend-tests/* && mocha test/frontend-tests/**/*.js && rm -r test/frontend-tests/*.js"
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "pug": "^2.0.4",
     "pug-cli": "^1.0.0-alpha6",
     "systemjs": "^6.1.0",
+    "ts-node": "^8.4.1",
     "tslint": "^5.20.0"
   },
   "husky": {
