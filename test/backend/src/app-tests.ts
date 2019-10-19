@@ -1,8 +1,7 @@
-var chai = require("chai");
-var assert = chai.assert;
-var expect = chai.expect;
-var should = chai.should();
+import { assert, expect, should } from "chai";
 
+// This unit test should be removed when actual ones
+// are written.
 describe('Backend Unit Tests', () => {
     it('should run a tests', () => {
         var tautology = true;
