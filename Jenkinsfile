@@ -4,6 +4,20 @@ pipeline {
     CI = 'true'
   }
   stages {
+    stage('Master-Build-Setup') {
+      when {
+        expression { env.BRANCH_NAME == 'master'}
+      }
+      steps { 
+        script {
+          env="ENVIRONMENT=PROD\r\n"
+          backend_location="BACKEND_LOCATION=tourneygen.api.theserverproject.com/Api/\r\n"
+        }
+        dir('web/frontend') {
+            writeFile file: '.env', text: env + backend_location
+        }
+      }
+    }
     stage('Build') {
       steps {
         sh 'npm install'
