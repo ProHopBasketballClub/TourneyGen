@@ -39,15 +39,31 @@ In order to even run the project, you must have both docker/docker-compose,
 and npm version 6.12.0 installed.
 
 To install docker
+
+on linux:
 ``` commandline
 sudo snap install docker
 ```
 
+on mac:
+``` commandline
+brew install docker
+brew install docker-compose
+```
+
 To install npm
+
+on linux:
 ``` commandline
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install npm -g
+```
+
+on mac:
+``` commandline
+brew install npm
+sudo npm install -g npm@latest
 ```
 
 ### Requirements
