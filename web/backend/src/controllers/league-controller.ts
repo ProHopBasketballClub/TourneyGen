@@ -4,6 +4,13 @@ import {MongoDb} from '../db/mongo.db';
 import {DataReturnDTO, DataValidDTO, League} from '../models';
 import {IController} from './controller.interface';
 
+
+/**
+ * Controller defining the CRUD methods for league
+ *
+ * @export
+ */
+
 export class LeagueController implements IController {
     private table: string = 'league';
 
@@ -31,16 +38,34 @@ export class LeagueController implements IController {
 
     public async get(req: Request, res: Response) {
         let out: DataReturnDTO;
-
-        if (req.query.id && req.query.id.length === MongoDb.MONGO_ID_LEN) { // Retrieve league by id
-            out = await MongoDb.getById(this.table, req.query.id);
-        } else if (req.query.Name && req.query.Name.length > 0) { // Retrieve League by name
-            out = await MongoDb.getByName(this.table, req.query.id);
+        if (req.query.id) {
+            if (req.query.id.length === MongoDb.MONGO_ID_LEN) { // Retrieve league by id
+                out = await MongoDb.getById(this.table, req.query.id);
+            } else {
+                res.json({error: 'The specified id is malformed'});
+            }
+        } else if (req.query.Name) {
+            if (req.query.Name.length > 0) { // Retrieve League by name
+                out = await MongoDb.getByName(this.table, req.query.id);
+            } else {
+                res.json({error: 'The name specified is invalid'});
+                res.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } else {
+            res.json({error: 'A Name or Id must be specified for this request'});
+            res.statusCode = HttpStatus.BAD_REQUEST;
         }
 
         if (out.valid) {
-            res.json(out.data);
-            res.statusCode = HttpStatus.OK;
+            if (out.data) {
+                res.json(out.data);
+                res.statusCode = HttpStatus.OK;
+                return;
+            } else {
+                res.json([]);
+                res.statusCode = HttpStatus.NOT_FOUND;
+                return;
+            }
             return;
         } else {
             res.json(out.data);
@@ -63,13 +88,21 @@ export class LeagueController implements IController {
 
     // create a league object
     public async post(req: Request, res: Response) {
-        const validLeague: DataValidDTO = await League.validate(req);
+        let validLeague: DataValidDTO;
+        try {
+            validLeague = await League.validate(req);
+        } catch (e) {
+            console.log(e);
+        }
+
+        console.log(validLeague + 'dthfesuifhios');
         if (!validLeague.valid) {
-            res.json(validLeague.error);
+            res.json({error: validLeague.error});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         } else {
-            const league: League = new League(req.query.Owner, req.query.Name, req.query.Description, req.query.Game_type);
+            const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
+            console.log(league);
             if (await MongoDb.save(this.table, league)) {
                 res.json(league);
                 res.statusCode = HttpStatus.OK;
@@ -90,7 +123,7 @@ export class LeagueController implements IController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if (!req.query.id || req.query.id) {
+        if (!req.query.id || req.query.id.length !== MongoDb.MONGO_ID_LEN) {
             res.json({error: 'The id in this request is not valid'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
@@ -100,7 +133,7 @@ export class LeagueController implements IController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        const league: League = new League(req.query.Owner, req.query.Name, req.query.Description, req.query.Game_type);
+        const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
         if (await MongoDb.updateById(this.table, req.query.id, league)) {
             league._id = req.query.id;
             res.json(league);

@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db/mongo.db';
 import {DataReturnDTO, User} from '../models';
-import {IController} from "./controller.interface";
+import {IController} from './controller.interface';
 
 /**
  * Controller defining the CRUD methods for user
@@ -32,7 +32,7 @@ export class UserController implements IController {
             }
         } else if (req.query.displayName) {
             if (req.query.displayName.length >= User.MIN_DISPLAYNAME_LEN) {
-                const out = await MongoDb.getByDisplayName(this.table, req.query.displayName);
+                const out: DataReturnDTO = await MongoDb.getByDisplayName(this.table, req.query.displayName);
                 if (out.valid) {
                     res.json(out.data);
                     res.statusCode = HttpStatus.OK;
@@ -104,7 +104,7 @@ export class UserController implements IController {
     }
 
     public async getAll(req: Request, res: Response) {
-        const out = await MongoDb.getAll(this.table);
+        const out: DataReturnDTO = await MongoDb.getAll(this.table);
         if (out.valid) {
             res.json(out.data);
             res.statusCode = HttpStatus.OK;
@@ -123,7 +123,7 @@ export class UserController implements IController {
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;
         }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+        if (!(await MongoDb.getById(this.table, req.query.id)).data) {
             res.json({error: 'You cannot update a user that does not exist'});
             res.statusCode = HttpStatus.BAD_REQUEST;
             return;

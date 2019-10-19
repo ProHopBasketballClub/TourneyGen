@@ -1,7 +1,7 @@
 import {Router} from 'express';
-import {LeagueController} from '../controllers/league-controller';
+import {LeagueController} from '../controllers';
 
-// This class mount's the user-controller routes. This means it matches requests type to the function we want called in the controller
+// This class mount's the league-controller routes. This means it matches requests type to the function we want called in the controller
 export function mountLeagueRoutes(router: Router, route: string) {
     const controller: LeagueController = new LeagueController();
     const allLeagueRoute: string = '/api/league/all';

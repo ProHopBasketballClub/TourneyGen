@@ -70,7 +70,6 @@ export class MongoDb {
         let out: any;
         try {
             out = await operation(...operation_args);
-            console.log(out);
         } catch (e) {
             console.log(e);
             mongo.close();
@@ -78,7 +77,7 @@ export class MongoDb {
 
         }
         mongo.close();
-        return {valid: true, data: out};
+        return new DataReturnDTO(true,out);
     }
 
     // saves a single record of any type into a specified table/collection

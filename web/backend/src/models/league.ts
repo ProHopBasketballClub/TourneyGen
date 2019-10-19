@@ -1,25 +1,24 @@
 import {Request} from 'express';
 import {MongoDb} from '../db/mongo.db';
 import {DataValidDTO} from './dataValidDTO';
-import {User} from './user';
 
 export class League {
 
     public static async validate(req: Request): Promise<DataValidDTO> {
-        if (!req.query.Owner || req.query.Owner.length !== MongoDb.MONGO_ID_LEN) {
+        if (!req.body.Owner || req.body.Owner.length !== MongoDb.MONGO_ID_LEN) {
             return new DataValidDTO(false, 'A league owner must be specified');
         }
-        const retreviedOwner = await MongoDb.getById('user', req.query.Owner);
-        if (retreviedOwner.valid === false || retreviedOwner.data.empty) { // Make sure the owner exists in the database
+        const retrievedOwner = await MongoDb.getById('user', req.body.Owner);
+        if (retrievedOwner.valid === false || !retrievedOwner.data) { // Make sure the owner exists in the database
             return new DataValidDTO(false, 'The specified league owner could not be found');
         }
-        if (!req.query.Game_type.length || req.query.Game_type.length < 1) {
+        if (!req.body.Game_type.length || req.body.Game_type.length < 1) {
             return new DataValidDTO(false, 'A game type is required');
         }
-        if (!req.query.Name || req.query.Name.length < 1) {
+        if (!req.body.Name || req.body.Name.length < 1) {
             return new DataValidDTO(false, 'A Name for the league is required');
         }
-        if (!req.query.Description || req.query.Description.length < 1) {
+        if (!req.body.Description || req.body.Description.length < 1) {
             return new DataValidDTO(false, 'A Description is required');
         }
         return new DataValidDTO(true, '');

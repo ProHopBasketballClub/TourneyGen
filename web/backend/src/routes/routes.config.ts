@@ -10,6 +10,7 @@ import {mountUserRoutes} from './user.routes';
  * @export
  */
 export function mountRoutes(router: Router) {
+    // Routes must be prepended by a slash
     mountUserRoutes(router,'/api/user');
-    mountLeagueRoutes(router,'api/league');
+    mountLeagueRoutes(router,'/api/league');
 }
