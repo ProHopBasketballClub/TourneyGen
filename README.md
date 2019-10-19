@@ -34,6 +34,38 @@ and as such are very volatile.
 Upon cloning the repo, you first need to install the
 requirements, and setup pre-commit on your machine.
 
+### Project requirements
+In order to even run the project, you must have both docker/docker-compose,
+and npm version 6.12.0 installed.
+
+To install docker
+
+on linux:
+``` commandline
+sudo snap install docker
+```
+
+on mac:
+``` commandline
+brew install docker
+brew install docker-compose
+```
+
+To install npm
+
+on linux:
+``` commandline
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm install npm -g
+```
+
+on mac:
+``` commandline
+brew install npm
+sudo npm install -g npm@latest
+```
+
 ### Requirements
 This project uses npm for package management, and as
 such, running 
@@ -58,13 +90,14 @@ npm run build:backend
 ```
 
 ## Starting the Server
-In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile
+In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile.
+If you setup docker differently than is set out in this document, then you may not need to use sudo.
 ```commandline
-docker-compose build
+sudo docker-compose build
 ```
 In order to start the Server run. The output will be the port the backend is running on.
 ```commandline
-docker-compose up
+sudo docker-compose up
 ```
 
 

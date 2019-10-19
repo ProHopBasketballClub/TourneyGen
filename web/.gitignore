@@ -1,0 +1,5 @@
+# Ignore all compiles js files that end up here.
+*.js
+
+# Ignore all compiled html files that end up here.
+*.html
