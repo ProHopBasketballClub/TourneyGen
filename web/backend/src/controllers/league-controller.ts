@@ -4,7 +4,6 @@ import {MongoDb} from '../db/mongo.db';
 import {DataReturnDTO, DataValidDTO, League} from '../models';
 import {IController} from './controller.interface';
 
-
 /**
  * Controller defining the CRUD methods for league
  *
