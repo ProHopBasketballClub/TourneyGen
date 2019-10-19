@@ -1,6 +1,7 @@
 
 import { Router } from 'express';
 
+import {mountLeagueRoutes} from './league.routes';
 import {mountUserRoutes} from './user.routes';
 
 /**
@@ -10,4 +11,5 @@ import {mountUserRoutes} from './user.routes';
  */
 export function mountRoutes(router: Router) {
     mountUserRoutes(router,'/api/user');
+    mountLeagueRoutes(router,'api/league');
 }

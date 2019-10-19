@@ -1,21 +1,21 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db/mongo.db';
-import {User} from '../models';
+import {DataReturnDTO, User} from '../models';
+import {IController} from "./controller.interface";
 
 /**
  * Controller defining the CRUD methods for user
  *
  * @export
  */
-export class UserController {
-    private MONGO_ID_LEN: number = 24;
+export class UserController implements IController {
     private table: string = 'user';
 
     public async get(req: Request, res: Response) {
         if (req.query.id) {
-            if (req.query.id.length === this.MONGO_ID_LEN) {
-                const out = await MongoDb.getById(this.table, req.query.id);
+            if (req.query.id.length === MongoDb.MONGO_ID_LEN) {
+                const out: DataReturnDTO = await MongoDb.getById(this.table, req.query.id);
                 if (out.valid) {
                     res.json(out.data);
                     res.statusCode = HttpStatus.OK;
@@ -71,7 +71,7 @@ export class UserController {
             res.statusCode = HttpStatus.OK;
             return;
         } else {
-            res.json({error: 'Internal Server Error update failed'});
+            res.json({error: 'Internal Server Error creation failed'});
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             return;
         }

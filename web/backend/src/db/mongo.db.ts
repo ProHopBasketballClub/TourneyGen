@@ -1,6 +1,9 @@
 import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
+import {DataReturnDTO} from '../models/dataReturnDTO';
 
 export class MongoDb {
+
+    public static MONGO_ID_LEN = 24;
 
     public static async save(table: string, record: any): Promise<boolean> {
         return await this._boolean_operation(table, [record], this._save);
@@ -16,6 +19,10 @@ export class MongoDb {
 
     public static async getByDisplayName(table: string, name: string) {
         return await this._get_operation(table, [name], this._getByDisplayName);
+    }
+
+    public static async getByName(table: string, name: string) {
+        return await this._get_operation(table, [name], this._getByName);
     }
 
     public static async getAll(table: string) {
@@ -49,7 +56,7 @@ export class MongoDb {
 
     /// This function connect to mongo and performs a retrieves and return a dictionary of valid and data
     // if the return is not valid the data contains the error
-    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[])=>object): Promise<any> {
+    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[]) => object): Promise<any> {
         const mongo: MongoDb = new MongoDb();
         try {
             await mongo.connect();
@@ -67,7 +74,7 @@ export class MongoDb {
         } catch (e) {
             console.log(e);
             mongo.close();
-            return {valid: false, data: e};
+            return  new DataReturnDTO(false,e);
 
         }
         mongo.close();
@@ -93,6 +100,10 @@ export class MongoDb {
     // user specific query for getting users identified by displayName
     private static async _getByDisplayName(name: string, collection: Collection) {
         return await collection.findOne({displayName: name});
+    }
+
+    private static async _getByName(name: string, collection: Collection) {
+        return await collection.findOne({Name: name});
     }
 
     // returns all of the documents saved to a table/collection
