@@ -10,11 +10,11 @@ pipeline {
       }
       steps { 
         script {
-          env="ENVIRONMENT=PROD\r\n"
+          deploy_env="ENVIRONMENT=PROD\r\n"
           backend_location="BACKEND_LOCATION=tourneygen.api.theserverproject.com/Api/\r\n"
         }
         dir('web/frontend') {
-            writeFile file: '.env', text: env + backend_location
+            writeFile file: '.env', text: deploy_env + backend_location
         }
       }
     }
