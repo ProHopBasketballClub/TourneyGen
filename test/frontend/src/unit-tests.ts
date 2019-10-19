@@ -1,3 +1,5 @@
+// This file should be removed once actual test are written.
+
 var chai = require("chai");
 var assert = chai.assert;
 var expect = chai.expect;
