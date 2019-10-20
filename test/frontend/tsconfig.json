@@ -5,7 +5,6 @@
     "sourceMap": false
   },
   "include": [
-    "src/**/*", 
-    "env.ts"
+    "src/**/*"
   ]
 }
