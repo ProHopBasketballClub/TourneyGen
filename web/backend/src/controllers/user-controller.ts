@@ -101,7 +101,7 @@ export class UserController implements IController {
             res.json({error: 'The id parameter is malformed'});
         }
         if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }
@@ -139,7 +139,7 @@ export class UserController implements IController {
             return;
         }
         if (!(await MongoDb.getById(this.table, req.query.id)).data) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }
