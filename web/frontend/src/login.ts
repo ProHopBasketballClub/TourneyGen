@@ -1,8 +1,7 @@
-//import * as express from 'express';
-//import {Router} from 'express';
+// import * as express from 'express';
+// import {Router} from 'express';
 import * as env from '../env.js';
-console.log("working");
-
+console.log('working');
 
 function get_login() {
     const username = (document.getElementById('username') as HTMLInputElement).value;
@@ -12,8 +11,8 @@ function get_login() {
 
 function check_login(username) {
     console.log(env);
-    //const route = env.BACKEND_LOCATION+'/user?displayName=' + username;
-    //console.log(route);
+    // const route = env.BACKEND_LOCATION+'/user?displayName=' + username;
+    // console.log(route);
 }
 
 export default get_login;
