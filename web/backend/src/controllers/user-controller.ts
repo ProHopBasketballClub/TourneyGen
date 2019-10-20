@@ -96,6 +96,10 @@ export class UserController implements IController {
             res.json({error: 'Display name must be at least ' + User.MIN_DISPLAYNAME_LEN + ' long and an id must be a param'});
             return;
         }
+        if (req.query.id.length !== MongoDb.MONGO_ID_LEN) {
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.json({error: 'The id parameter is malformed'});
+        }
         if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'You cannot update a user that does not exist'});
