@@ -11,15 +11,12 @@ we will from now on be known as 'Panznir',
 a portmanteau of Mjolnir and Panzer, the only
 ideas we had for a team name.
 
-# INSERT-PROJECT-NAME-HERE
-We are... not the most creative bunch (could you guess from the team name?)
-We're actively searching for a name for our project...
 
-What is INSERT-PROJECT-NAME-HERE? It is primarily a sports leage
+What is TourneyGen? It is primarily a sports league
 management website. What does that mean? Well basically, if you are
 in charge of a leage (sports, e-sports, etc), then you can use our
 website to effectively manage the teams and tournaments hosted within
-your league! Sign up at [INSERT-PROJECT-NAME-HERE's website](http://tourneygen.theserverproject.com/)
+your league! Sign up at [TourneyGen's website](http://tourneygen.theserverproject.com/)
 
 # Course info
 To avoid disrupting this file as well as seperatinng course 
@@ -99,5 +96,11 @@ In order to start the Server run. The output will be the port the backend is run
 ```commandline
 sudo docker-compose up
 ```
+
+To run the front end server, use
+```commandline
+node web/frontend/src/app.js
+```
+
 
 
