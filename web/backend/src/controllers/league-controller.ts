@@ -20,7 +20,7 @@ export class LeagueController implements IController {
             return;
         }
         if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot delete a league that does not exist'});
             return;
         }
@@ -45,9 +45,9 @@ export class LeagueController implements IController {
                 res.json({error: 'The specified id is malformed'});
                 return;
             }
-        } else if (req.query.Name) {
-            if (req.query.Name.length > 0) { // Retrieve League by name
-                out = await MongoDb.getByName(this.table, req.query.id);
+        } else if (req.query.name) {
+            if (req.query.name.length > 0) { // Retrieve League by name
+                out = await MongoDb.getByName(this.table, req.query.name);
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'The name specified is invalid'});
@@ -69,7 +69,6 @@ export class LeagueController implements IController {
                 res.json([]);
                 return;
             }
-            return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             res.json(out.data);
@@ -101,7 +100,11 @@ export class LeagueController implements IController {
             return;
         } else {
             const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
-            console.log(league);
+            if ((await MongoDb.getByName(this.table, req.body.Name)).data) {
+                res.statusCode = HttpStatus.BAD_REQUEST;
+                res.json({error: 'A league with this name already exists'});
+            }
+
             if (await MongoDb.save(this.table, league)) {
                 res.statusCode = HttpStatus.OK;
                 res.json(league);
@@ -128,7 +131,7 @@ export class LeagueController implements IController {
             return;
         }
         if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a league that does not exist'});
             return;
         }

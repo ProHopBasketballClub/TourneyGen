@@ -12,7 +12,7 @@ export class League {
         if (retrievedOwner.valid === false || !retrievedOwner.data) { // Make sure the owner exists in the database
             return new DataValidDTO(false, 'The specified league owner could not be found');
         }
-        if (!req.body.Game_type.length || req.body.Game_type.length < 1) {
+        if (!req.body.Game_type || req.body.Game_type.length < 1) {
             return new DataValidDTO(false, 'A game type is required');
         }
         if (!req.body.Name || req.body.Name.length < 1) {
