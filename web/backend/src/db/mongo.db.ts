@@ -13,19 +13,19 @@ export class MongoDb {
         return await this._boolean_operation(table, [record, id], this._updateById);
     }
 
-    public static async getById(table: string, id: string) {
+    public static async getById(table: string, id: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [id], this._getById);
     }
 
-    public static async getByDisplayName(table: string, name: string) {
+    public static async getByDisplayName(table: string, name: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [name], this._getByDisplayName);
     }
 
-    public static async getByName(table: string, name: string) {
+    public static async getByName(table: string, name: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [name], this._getByName);
     }
 
-    public static async getAll(table: string) {
+    public static async getAll(table: string): Promise<DataReturnDTO> {
         try {
             return await this._get_operation(table, [], this._getAll);
         } catch (e) {
@@ -56,7 +56,7 @@ export class MongoDb {
 
     /// This function connect to mongo and performs a retrieves and return a dictionary of valid and data
     // if the return is not valid the data contains the error
-    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[]) => object): Promise<any> {
+    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[]) => object): Promise<DataReturnDTO> {
         const mongo: MongoDb = new MongoDb();
         try {
             await mongo.connect();
