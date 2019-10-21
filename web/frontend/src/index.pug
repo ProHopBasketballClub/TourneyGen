@@ -12,3 +12,7 @@ html(lang='en')
             Backend Current Backend State &darr;
             br
             img(src="resources/fatpug2.jpg")
+        p(class="auto-text")
+            Current environment and env vars:
+        each evar in env
+            p(class="auto-text")=evar
