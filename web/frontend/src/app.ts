@@ -55,7 +55,7 @@ app.get('/submit_login', (req, res) => {
     const route = 'http://' + (env as any).env.BACKEND_LOCATION + '/Api/user?displayName=' + username;
 
     const user_object: any = api_get_request(route);
-    let id = 0;
+    let id = '';
     let email = '';
     let name = '';
 
