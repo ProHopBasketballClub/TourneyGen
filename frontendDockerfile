@@ -1,0 +1,18 @@
+FROM node:latest
+EXPOSE ${PORT}
+
+# Do general setup of container.
+COPY package.json package.json
+RUN npm install
+RUN mkdir -p web/frontend
+COPY web/frontend/ web/frontend
+
+# Create args for and populate .env file.
+ARG ENVIRONMENT=docker
+ARG BACKEND_LOCATION=172.28.1.1:34345
+RUN printf "ENVIRONMENT=$ENVIRONMENT\nBACKEND_LOCATION=$BACKEND_LOCATION\n" > .env
+
+# Build the frontend files.
+RUN npm run build:frontend
+
+CMD ["npm", "run", "start:frontend"]
