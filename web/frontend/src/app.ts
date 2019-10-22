@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
 import * as env from '../env';
+import { default_cookie_max_age } from './constants/cookie';
 import { generate_get_route, user_route } from './constants/routes';
 
 const app = express();
@@ -80,8 +81,8 @@ function generate_auth_token(id: string, email: string, name: string, random: nu
 }
 
 function create_cookie(cookie_name, cookie_value, res) {
-    // Adds a cookie to the browser based on the cookie_obj passed.
-    res.cookie(cookie_name, cookie_value, { maxAge: 900000, httpOnly: true });
+    // Adds a cookie to the browser with the name and value passed.
+    res.cookie(cookie_name, cookie_value, { maxAge: default_cookie_max_age, httpOnly: true });
 }
 
 function destory_cookie(cookie_name: string, cookies) {
@@ -91,7 +92,7 @@ function destory_cookie(cookie_name: string, cookies) {
         return false;
     }
 
-    cookies.set(cookie_name, { expires: Date.now() });
+    cookies.set(cookie_name, { expires: Date.now(), maxAge: 0 });
     return true;
 }
 
