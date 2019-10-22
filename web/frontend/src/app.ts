@@ -82,7 +82,6 @@ app.get('/home', (req, res) => {
     res.render('home');
 });
 
-
 app.listen(port,() => {
     return console.info(`Server is listening on port ${port}`);
 });
