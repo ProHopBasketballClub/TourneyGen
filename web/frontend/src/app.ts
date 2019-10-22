@@ -1,12 +1,10 @@
 // This is the express server for the frontend
 
-import { fail } from 'assert';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
-import { callbackify } from 'util';
 import * as env from '../env';
 
 const app = express();
@@ -107,7 +105,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    is_logged_in(req.cookies, (success) => {
+        res.redirect('/');
+    }, (failure) => {
+        res.render('login');
+    });
 });
 
 app.get('/submit_login', (req, res) => {
