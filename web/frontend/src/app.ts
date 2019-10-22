@@ -75,9 +75,7 @@ function generate_auth_token(id: string, email: string, name: string, random: nu
     // use it in a way disallowing reversabililty (ie checking
     // necessary information against this.) That way if real
     // security is implemented here it will be useable.
-    const token = id + email + name + random.toString();
-
-    return token;
+    return id + email + name + random.toString();
 }
 
 function create_cookie(cookie_name, cookie_value, res) {
