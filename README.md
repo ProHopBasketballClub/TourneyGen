@@ -97,9 +97,10 @@ In order to start the Server run. The output will be the port the backend is run
 sudo docker-compose up
 ```
 
-To run the front end server, use
+Before the frontend can be run, it needs to be built.
+In order to run the frontend, simply run
 ```commandline
-node web/frontend/src/app.js
+npn run start:frontend
 ```
 
 
