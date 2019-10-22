@@ -27,6 +27,8 @@ services:
     networks:
       docks:
         ipv4_address: 172.28.1.3
+    links:
+      - app
     environment:
       PORT: 34346
   mongo:
