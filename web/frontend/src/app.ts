@@ -1,11 +1,13 @@
 // This is the express server for the frontend
 
+import { fail } from 'assert';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
+import { callbackify } from 'util';
 import * as env from '../env';
-import * as cookieParser from 'cookie-parser'
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -35,53 +37,49 @@ function api_get_request(route: string, callback) {
             // The whole response has been received. return the data
             resp.on('end', () => {
                 APIResponse = JSON.parse(data);
-                console.log("Sending this back to callback: " + Object.keys(data));
                 callback(APIResponse);
             });
 
         }).on('error', (err) => {
-            callback('Error: ' + err.message);
+            callback(null);
         });
     } catch (e) {
         console.log(e);
     }
 }
 
-function async_convert(params, async_method, callback) {
-    // callback gets 1 parameter. This parameter is called data.
-
-    function runCallback(data) {
-        callback(data);
+function is_logged_in(cookies, success_callback, failure_callback) {
+    if (!cookies.tourneygen_auth || !cookies.tourneygen_srn || !cookies.tourneygen_user ) {
+        failure_callback( { reason: 'No user found in cookies. User has not attemped to login yet.' } );
+        return;
     }
-
-    // Calls the async method with the passed parameters,
-    // and a callback. The callback should take one parameter.
-    // That callback method will be run synchronously.
-    async_method(...params, runCallback);
-  
-}
-
-function is_logged_in(cookies): boolean {
     const route = user_route + cookies.tourneygen_user;
-    const user_object: any = api_get_request(route);
-    //console.log("route: " + route);
-    //console.log("user_object: " + user_object);
 
-    // Error checking for user_object.
+    api_get_request(route, (user_object) => {
+        if (!user_object) {
+            failure_callback({ reason: 'User not found.' });
+            return;
+        }
 
-    const auth_token = generate_auth_token(user_object.id, user_object.email, user_object.name, cookies.tourneygen_srn);
-
-    return auth_token === cookies.tourneygen_auth;
+        const auth_token = generate_auth_token(unescape(user_object._id), unescape(user_object.email), unescape(user_object.displayName), cookies.tourneygen_srn);
+        if (auth_token === cookies.tourneygen_auth) {
+            success_callback({}); // Success. No need for reason. Still return for clean code.
+        } else {
+            failure_callback({ reason: 'Generated token did not match stored token.' });
+        }
+    });
 }
 
 function generate_auth_token(id: string, email: string, name: string, random: number) {
     // Theoretically some security could be added here.
-    // for now just returning id. 
+    // for now just returning concat of free data.
     // Note, methods using this function *should*
     // use it in a way disallowing reversabililty (ie checking
     // necessary information against this.) That way if real
     // security is implemented here it will be useable.
-    return id;
+    const token = id + email + name + random.toString();
+
+    return token;
 }
 
 function create_cookie(cookie_name, cookie_value, res) {
@@ -101,12 +99,11 @@ function destory_cookie(cookie_name: string, cookies) {
 }
 
 app.get('/', (req, res) => {
-    if (!is_logged_in(req.cookies)) {
+    is_logged_in(req.cookies, (success) => {
+       res.render('index');
+    }, (failure) => {
         res.redirect('/login');
-    }
-    else {
-        res.render('index');
-    }
+    });
 });
 
 app.get('/login', (req, res) => {
@@ -115,32 +112,37 @@ app.get('/login', (req, res) => {
 
 app.get('/submit_login', (req, res) => {
 
-    if (is_logged_in(req.cookies)) {
-        // return some kind of error.
-    }
+    is_logged_in(req.cookies, (success) => {
+            res.redirect('/'); // User is already logged-in,
+    }, (failure) => {
+        const username = req.query.username ? req.query.username : '';
+        const route = user_route + username;
 
-    const username = req.query.username ? req.query.username : '';
-    console.log("Username: " + username);
+        api_get_request(route, (user_object) => {
 
-    const route = user_route + username;
+            if (!user_object) {
+                // User wasn't valid.
+                // When possible, pass that info along.
+                res.redirect('/login');
+                return;
+            }
 
-    api_get_request(route, (user_object) => {
+            const id = user_object ? user_object._id : '';
+            const email = user_object ? user_object.email : '';
+            const name = user_object ? user_object.displayName : '';
+            const random_number = Math.random();
 
-        let id = user_object ? user_object._id : '';
-        let email = user_object ? user_object.email : '';
-        let name = user_object ? user_object.displayName : '';
-        let random_number = Math.random();
-    
-        // Attach a "security random number" (srn)
-        // the user's auth token, and their username
-        // to the browser.
-        create_cookie('tourneygen_srn', random_number, res);
-        create_cookie('tourneygen_auth', generate_auth_token(id, email, name, random_number), res);
-        create_cookie('tourneygen_user', name , res);
-    
-        // Send user to their home page.
-        // GH-9 should handle this.
-        res.redirect('/login');
+            // Attach a "security random number" (srn)
+            // the user's auth token, and their username
+            // to the browser.
+            create_cookie('tourneygen_srn', random_number, res);
+            create_cookie('tourneygen_auth', generate_auth_token(id, email, name, random_number), res);
+            create_cookie('tourneygen_user', name , res);
+
+            // Send user to their home page.
+            // GH-9 should handle this.
+            res.redirect('/');
+        });
     });
 });
 
