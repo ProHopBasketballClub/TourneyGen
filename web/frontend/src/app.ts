@@ -16,12 +16,10 @@ app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.redirect('/login');
-});
-
-// This function can be used to make a get request to the server
+// Define useful functions.
 async function api_get_request(route: string) {
+    // Make a get request to the server at route.
+
     let data: string = '';
     let APIResponse = new Promise((resolve, reject) => {
         http.get(route, (resp) => {
@@ -49,22 +47,20 @@ async function api_get_request(route: string) {
     return await APIResponse;
 }
 
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 app.get('/login', (req, res) => {
     res.render('login');
 });
 
-app.get('/submit_login', async (req, res) => {
+app.get('/submit_login', (req, res) => {
     const username = req.query.username ? req.query.username : '';
     const route = 'http://' + (env as any).env.BACKEND_LOCATION + '/Api/user?displayName=' + username;
     console.log('Using route: ' + route);
 
-    const user_object: any = await api_get_request(route);
-    // For Ross - the problem is that the api_get_request function returns
-    // Nothing, as the APIResponse variable is set when the HTTP response
-    // 'resp.on('end) event listener is triggered, but nothing waits for that...
-    // so user_object comes back as undefined. If you add an object to your db, and then
-    // try to login ideally the three fields i created on localhost:3001/login should be populated
-    // But due to this bug it isn't.
+    const user_object: any = api_get_request(route);
     console.log('userobj: ' + user_object);
     let id = 0;
     let email = '';
