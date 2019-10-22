@@ -23,12 +23,12 @@ services:
       context: .
       dockerfile: frontendDockerfile
     ports:
-      - "80:80"
+      - "34346:34346"
     networks:
       docks:
         ipv4_address: 172.28.1.3
     environment:
-      PORT: 80
+      PORT: 34346
   mongo:
     container_name: mongo
     restart: unless-stopped
