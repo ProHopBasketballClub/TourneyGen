@@ -25,21 +25,16 @@ async function api_get_request(route: string) {
         http.get(route, (resp) => {
             // A chunk of data has been recieved.
             resp.on('data', (chunk) => {
-                console.log('Data chunk is: ' + chunk);
                 data += chunk;
             });
 
             // The whole response has been received. return the data
             resp.on('end', () => {
-                console.log('The data is: ' + data);
                 APIResponse = JSON.parse(data);
-                console.log('Parsing the data.');
-                console.log('The API response is: ' + APIResponse);
                 resolve(APIResponse);
             });
 
         }).on('error', (err) => {
-            console.log('Error: ' + err.message);
             reject('Error: ' + err.message);
         });
     });
@@ -58,10 +53,8 @@ app.get('/login', (req, res) => {
 app.get('/submit_login', (req, res) => {
     const username = req.query.username ? req.query.username : '';
     const route = 'http://' + (env as any).env.BACKEND_LOCATION + '/Api/user?displayName=' + username;
-    console.log('Using route: ' + route);
 
     const user_object: any = api_get_request(route);
-    console.log('userobj: ' + user_object);
     let id = 0;
     let email = '';
     let name = '';
@@ -71,7 +64,6 @@ app.get('/submit_login', (req, res) => {
         id = user_object._id;
         email = user_object.email;
     }
-    console.log(name, id, email);
 
     // Attach some sutff to browser....
 
