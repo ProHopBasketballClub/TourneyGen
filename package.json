@@ -12,7 +12,13 @@
     "lint": "./node_modules/.bin/tslint -c tslint.json 'web/**/*.ts' --fix",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "(cd test/backend && tsc) && mocha test/backend/src/ && find test/backend/ -name '*.js' -type f -delete",
-    "test:frontend": "(cd test/frontend && tsc) && mocha test/frontend/src/ && find test/frontend/ -name '*.js' -type f -delete"
+    "test:frontend": "(cd test/frontend && tsc) && mocha test/frontend/src/ && find test/frontend/ -name '*.js' -type f -delete",
+    "start:frontend": "node web/frontend/src/app.js",
+    "sb:frontend": "npm run build:frontend && npm run start:frontend",
+    "start:backend": "docker-compose up --build",
+    "startBackground:backend": "docker-compose up --build -d",
+    "sb:backend": "npm run build:backend && npm run start:backend",
+    "sb": "npm run sb:backend && npm run sb:frontend"
   },
   "repository": {
     "type": "git",
