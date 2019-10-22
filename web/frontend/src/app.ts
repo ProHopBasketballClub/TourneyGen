@@ -6,11 +6,12 @@ import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
 import * as env from '../env';
+import { generate_get_route, user_route } from './constants/routes';
 
 const app = express();
 const DEFAULT_PORT = 3001;
 const port = (env as any).env.PORT || DEFAULT_PORT;
-const user_route = 'http://' + (env as any).env.BACKEND_LOCATION + '/Api/user?displayName=';
+const backend_location = (env as any).env.BACKEND_LOCATION;
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -51,7 +52,7 @@ function is_logged_in(cookies, success_callback, failure_callback) {
         failure_callback( { reason: 'No user found in cookies. User has not attemped to login yet.' } );
         return;
     }
-    const route = user_route + cookies.tourneygen_user;
+    const route = backend_location + generate_get_route(user_route, { displayName: cookies.tourneygen_user });
 
     api_get_request(route, (user_object) => {
         if (!user_object) {
@@ -111,12 +112,12 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/submit_login', (req, res) => {
-
     is_logged_in(req.cookies, (success) => {
             res.redirect('/'); // User is already logged-in,
     }, (failure) => {
         const username = req.query.username ? req.query.username : '';
-        const route = user_route + username;
+        const route = backend_location + generate_get_route(user_route, { displayName: username });
+        console.log('Submitting loging request to route: ' + route);
 
         api_get_request(route, (user_object) => {
 
