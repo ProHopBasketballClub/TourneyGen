@@ -1,0 +1,36 @@
+.category-header{
+    font-size: 40px;
+}
+
+.home-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+    
+}
+
+.category-list{
+    font-size: 24px;
+}
+
+.category-card {
+    background-color: #353535;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    margin: 20px;
+    height: 400px;
+    width: 40%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#new-league {
+    color: white;
+}
+
+.list-item {
+    color: #bbbbbb;
+}

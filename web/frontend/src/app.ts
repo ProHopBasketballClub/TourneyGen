@@ -1,11 +1,11 @@
 // This is the express server for the frontend
 
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
 import * as env from '../env';
-import * as cookieParser from 'cookie-parser'
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -35,7 +35,7 @@ function api_get_request(route: string, callback) {
             // The whole response has been received. return the data
             resp.on('end', () => {
                 APIResponse = JSON.parse(data);
-                console.log("Sending this back to callback: " + Object.keys(data));
+                console.log('Sending this back to callback: ' + Object.keys(data));
                 callback(APIResponse);
             });
 
@@ -58,7 +58,7 @@ function async_convert(params, async_method, callback) {
     // and a callback. The callback should take one parameter.
     // That callback method will be run synchronously.
     async_method(...params, runCallback);
-  
+
 }
 
 // function is_logged_in(cookies): boolean {
@@ -76,7 +76,7 @@ function async_convert(params, async_method, callback) {
 
 function generate_auth_token(id: string, email: string, name: string, random: number) {
     // Theoretically some security could be added here.
-    // for now just returning id. 
+    // for now just returning id.
     // Note, methods using this function *should*
     // use it in a way disallowing reversabililty (ie checking
     // necessary information against this.) That way if real
@@ -108,31 +108,31 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
-app.get('/submit_login', (req, res) => {
+app.post('/login', (req, res) => {
 
     // if (is_logged_in(req.cookies)) {
     //     // return some kind of error.
     // }
 
-    const username = req.query.username ? req.query.username : '';
-    console.log("Username: " + username);
+    const username = req.body.username ? req.body.username : '';
+    console.log('Username: ' + username);
 
     const route = user_route + username;
 
     api_get_request(route, (user_object) => {
 
-        let id = user_object ? user_object._id : '';
-        let email = user_object ? user_object.email : '';
-        let name = user_object ? user_object.displayName : '';
-        let random_number = Math.random();
-    
+        const id = user_object ? user_object._id : '';
+        const email = user_object ? user_object.email : '';
+        const name = user_object ? user_object.displayName : '';
+        const random_number = Math.random();
+
         // Attach a "security random number" (srn)
         // the user's auth token, and their username
         // to the browser.
         create_cookie('tourneygen_srn', random_number, res);
         create_cookie('tourneygen_auth', generate_auth_token(id, email, name, random_number), res);
         create_cookie('tourneygen_user', name , res);
-    
+
         // Send user to their home page.
         // GH-9 should handle this.
         res.redirect('/login');
@@ -140,7 +140,19 @@ app.get('/submit_login', (req, res) => {
 });
 
 app.get('/home', (req, res) => {
-    res.render('home');
+    // When we have an API route for user's leagues,
+    // We can populate these dynamically.
+    const leagues = [
+        {"name": "league1"},
+        {"name": "league2"}
+        ];
+    const matches = {};
+
+
+    res.render('home', {
+        leagues: leagues,
+        matches: matches
+    });
 });
 
 app.listen(port,() => {
