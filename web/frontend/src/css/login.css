@@ -31,10 +31,6 @@ input[type=text] {
     margin: 0 0 15px 0;
 }
 
-label {
-    /* cool */
-}
-
 .login-button {
     border-radius: 12px;
     padding: 8px 12px;
