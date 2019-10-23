@@ -143,15 +143,14 @@ app.get('/home', (req, res) => {
     // When we have an API route for user's leagues,
     // We can populate these dynamically.
     const leagues = [
-        {"name": "league1"},
-        {"name": "league2"}
+        {name: 'league1'},
+        {name: 'league2'},
         ];
     const matches = {};
 
-
     res.render('home', {
-        leagues: leagues,
-        matches: matches
+        leagues,
+        matches,
     });
 });
 
