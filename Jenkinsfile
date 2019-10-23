@@ -14,7 +14,7 @@ pipeline {
     stage('Test') {
       steps {
         sh 'npm run generate_coverage'
-        sh 'bash <(curl -s https://codecov.io/bash) -t $CODECOVTOKEN'
+        sh "curl -s https://codecov.io/bash | bash -s - -t ${CODECOVTOKEN} || echo 'Codecov did not collect coverage reports'"
       }
     }
     stage('Cleanup') {

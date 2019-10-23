@@ -19,7 +19,7 @@
     "startBackground:backend": "docker-compose up --build -d",
     "sb:backend": "npm run build:backend && npm run start:backend",
     "sb": "npm run sb:backend && npm run sb:frontend",
-    "generate_coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-summary npm run test"
+    "generate_coverage": "./node_modules/.bin/nyc npm run test && ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov"
 
   },
   "repository": {
