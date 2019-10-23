@@ -11,9 +11,8 @@ html(lang='en')
                 p(class='category-card-title')
                     | Leagues
                 div(class='category-card-entry-container')
-                    - var league_list= leagues ? leagues : false
-                    if league_list
-                        each league in league_list
+                    if leagues
+                        each league in leagues
                             a(href='/' class = 'list-item category-card-entry-list-item')
                                 div(class='category-card-entries')
                                     p(class='category-list')
@@ -29,9 +28,8 @@ html(lang='en')
                     | Teams
                 
                 div(class='category-card-entry-container')
-                    - var team_list = teams ? teams : false
-                    if team_list
-                        each team in team_list
+                    if teams
+                        each team in teams
                             div(class='category-card-entries')
                                 a(href='home' class = 'list-item')
                                     p(class='category-list')
