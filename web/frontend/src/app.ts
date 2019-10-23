@@ -20,7 +20,13 @@ app.use(cookieParser()); // NOTE: If security is being implemented, a secret can
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-       res.render('index');
+        const leagues = [
+            {name: 'league1'},
+            {name: 'league2'},
+        ];
+        res.render('home', {
+            leagues,
+        });
     }, (failure) => {
         res.redirect('/login');
     });
@@ -34,13 +40,13 @@ app.get('/login', (req, res) => {
     });
 });
 
-app.get('/submit_login', (req, res) => {
+app.post('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
             res.redirect('/'); // User is already logged-in,
     }, (failure) => {
-        const username = req.query.username ? req.query.username : '';
+        const username = req.body.username ? req.body.username : '';
         const route = backend_location + generate_get_route(user_route, { displayName: username });
-        console.log('Submitting loging request to route: ' + route);
+        console.log('Submitting login request to route: ' + route);
 
         api_get_request(route, (user_object) => {
 

@@ -1,0 +1,73 @@
+
+.home-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+    
+}
+
+.category-card-entry-container{
+    margin-bottom: 20px;
+}
+
+.category-list{
+    font-size: 24px;
+}
+
+.category-card-title {
+    font-size: 40px;
+    margin: 10px 31px;
+}
+
+.category-card-entries {
+    margin-bottom: 8px;
+    background: #444444;
+    padding: 0.1px 41px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 4px 0px #1a1a1a;
+}
+.category-card-entries p {
+    text-decoration: none;
+}
+.category-card {
+    background-color: #353535;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    margin: 20px;
+    width: 90%;
+    text-align: left;
+    display: block;
+    flex-direction: column;
+}
+
+.button {
+    background-color: #212121;
+    color: black;
+    padding: 7px;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 0px 0px 0px 0px white;
+    font-size: 16px;
+    border-radius: 30px;
+    margin-top: 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.category-card-title {
+    size: 15px;
+}
+
+.category-card-entry-list-item{
+    text-decoration: none;
+}
+
+#new-league {
+    color: white;
+}
+
+.list-item {
+    color: #bbbbbb;
+}
