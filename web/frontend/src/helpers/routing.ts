@@ -39,7 +39,7 @@ export function create_cookie(cookie_name, cookie_value, res, cookie_params: obj
     res.cookie(cookie_name, cookie_value, cookie_params);
 }
 
-export function destory_cookie(cookie_name: string, cookies) {
+export function destroy_cookie(cookie_name: string, cookies) {
     // Removed the cookie from the browser with the passed name.
 
     if (!cookies[cookie_name]) {

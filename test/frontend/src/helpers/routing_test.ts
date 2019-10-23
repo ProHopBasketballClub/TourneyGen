@@ -4,7 +4,7 @@ import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
 
 import { user_route } from '../../../../web/frontend/src/constants/routes';
-import { api_get_request, create_cookie, destory_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
+import { api_get_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
 
 const success = 200; // Make tsline be quiet.
 const backend_location = (env as any).env.BACKEND_LOCATION;
@@ -95,11 +95,11 @@ describe('Test the routing helpers.', () => {
         const cookies = { name: 'val', set(param1, param2) { /* do nothing */ } };
 
         it('Should return true for a valid token name', () => {
-            expect(destory_cookie('name', cookies)).to.equal(true);
+            expect(destroy_cookie('name', cookies)).to.equal(true);
         });
 
         it('Should return false for an invalid token name', () => {
-            expect(destory_cookie('fake_name', cookies)).to.equal(false);
+            expect(destroy_cookie('fake_name', cookies)).to.equal(false);
         });
     });
 
