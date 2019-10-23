@@ -2,13 +2,12 @@ doctype html
 html(lang='en')
     head
         title Tourney Gen
-        base(href = '/')
         link(rel="stylesheet" type='text/css' href="./../css/tourneygen.css")
         link(rel="stylesheet" type='text/css' href="./../css/login.css")
     body
         div(class="login-container")
             div(class="login-card")
                 img(src="./../resources/tourneygenlogo.png")
-                form(class = "login-form" action = '/submit_login' method="GET")
+                form(class = "login-form" action = '/login' method="POST")
                     input(type="text" id = "username" class = "login-field" name = "username" placeholder="Username")
                     input(type="submit" id = "submit" class = "login-button" value = "Login")
