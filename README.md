@@ -3,6 +3,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code Quality Score](https://www.code-inspector.com/project/658/score/svg)](https://www.code-inspector.com/project/preferences/658)
 [![Code Grade](https://www.code-inspector.com/project/658/status/svg)](https://www.code-inspector.com/project/preferences/658)
+[![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-9/branch/master/graph/badge.svg?token=DoKdk9BFej)](https://codecov.io/gh/seng350/seng350f19-project-team-3-9)
+
+
 
 # Team 3-9  -  SENG-350
 Hello, we're team 3-9. We're not really sure what the

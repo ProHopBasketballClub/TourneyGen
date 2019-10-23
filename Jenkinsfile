@@ -13,8 +13,8 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'npm run test:frontend'
-        sh 'npm run test:backend'
+        sh 'npm run generate_coverage'
+        sh './node_modules/.bin/codecov -t $CODECOVTOKEN'
       }
     }
     stage('Cleanup') {
