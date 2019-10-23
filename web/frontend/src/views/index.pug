@@ -5,14 +5,11 @@ html(lang='en')
         link(rel="stylesheet" href="tourneygen.css")
     body
         p(class="main-text")
-            Team 3-9: Ethan, Jordon, Landon, Ross
-        p(style = "color: gray")
+            |Team 3-9: Ethan, Jordon, Landon, Ross. Welcome to the home page.
+            |if you found this then that means you logged in... Good for you!            
+        p(class = "main-text")
             Automatically generated with pug!
         p(class="align-center")
             Backend Current Backend State &darr;
             br
             img(src="resources/fatpug2.jpg")
-        p(class="auto-text")
-            Current environment and env vars:
-        each evar in env
-            p(class="auto-text")=evar
