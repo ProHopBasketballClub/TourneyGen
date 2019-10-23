@@ -4,24 +4,6 @@ html(lang='en')
         title Tourney Gen
         link(rel="stylesheet" type='text/css' href="./../css/tourneygen.css")
         link(rel="stylesheet" type='text/css' href="./../css/homeview.css")
-    //- body
-    //-     div(class='home-container')
-    //-         div(class='category-card')
-    //-             h1(class='category-header')
-    //-                 | Leagues
-    //-             each league in leagues ? leagues : []
-    //-                 a(href='home' class = 'list-item')
-    //-                     p(class='category-list')
-    //-                         | #{league.name}
-    //-             a(data-toggle="modal" class='button' id = 'new-league' href="#normalModal") 
-    //-                 | Create new League
-    //-         div(class='category-card')
-    //-             h1(class='category-header')
-    //-                 | Teams
-    //-             each match in matches ? matches : []
-    //-                 a(href='home' class = 'list-item')
-    //-                     p(class='category-list')
-    //-                         | #{match.name}
 
     body
         div(class='home-container')
@@ -32,7 +14,7 @@ html(lang='en')
                     - var league_list= leagues ? leagues : false
                     if league_list
                         each league in league_list
-                            a(href='home' class = 'list-item category-card-entry-list-item')
+                            a(href='/' class = 'list-item category-card-entry-list-item')
                                 div(class='category-card-entries')
                                     p(class='category-list')
                                         | #{league.name}
@@ -56,7 +38,4 @@ html(lang='en')
                                         | #{team.name}
                     else
                         div(class='category-card-entries')
-                            p No matches
-                div(class='button')
-                    a(data-toggle="modal" class='button' id = 'new-league' href="#normalModal") 
-                        | Create new team
+                            p No Teams
