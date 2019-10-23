@@ -23,16 +23,11 @@ form {
 }
 
 form>p {
-    
     margin: 0;
 }
 
 input[type=text] {
     margin: 0 0 15px 0;
-}
-
-label {
-    /* cool */
 }
 
 .login-button {
@@ -46,4 +41,3 @@ label {
     padding: 8px 12px;
     font-size: 18px;
 }
-
