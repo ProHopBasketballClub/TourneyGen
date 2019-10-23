@@ -66,8 +66,16 @@ export function api_post_request(route: string, path: string, body: object, call
                 APIResponse = post_body;
                 APIResponse.status_code = post_response.statusCode;
                 callback(APIResponse);
+                return;
+            } else if (post_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                console.log('302 response: ', post_response);
+                APIResponse = post_response;
+                callback(APIResponse);
+                return;
             } else {
+                console.log(post_response.statusCode);
                 callback(null);
+                return;
             }
         } catch (e) {
             console.log(e);

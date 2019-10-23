@@ -4,9 +4,10 @@ import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
 
 import { user_route } from '../../../../web/frontend/src/constants/routes';
-import { api_get_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
+import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
 
-const success = 200; // Make tsline be quiet.
+const success = 200; // Make tslint be quiet.
+const moved = 302;
 const backend_location = (env as any).env.BACKEND_LOCATION;
 
 describe('Test the routing helpers.', () => {
@@ -17,6 +18,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
+            status_code: 200,
         };
 
         beforeEach('Stub out http.get', () => {
@@ -62,6 +64,86 @@ describe('Test the routing helpers.', () => {
 
         it('Should pass null to the callback method on failure.', (done) => {
             api_get_request('http://invalidURL/invalid', (data) => {
+                expect(data).to.equal(null);
+                done();
+            });
+        });
+    });
+
+    describe('Test api_post_request should call the callback with the correct parameters', () => {
+
+        const response_object = {
+            _id: '123abc',
+            displayName: 'user',
+            email: 'user@email.com',
+            status_code: 200,
+        };
+
+        const route = 'http://www.website.com';
+        const path = '/the/backend';
+
+        const invalid_route = 'http://invalidURL';
+        const invalid_path = '/invalid';
+
+        const body = {
+            email: 'testing@gmail.com',
+            username: 'testing',
+        };
+
+        beforeEach('Stub out http.post', () => {
+            // Setup a nock interceptor to intercept the fake request being made.
+            nock(route)
+            .post(path)
+            .reply(success, response_object);
+        });
+        afterEach('Clean out the nock interceptors', () => {
+            nock.cleanAll();
+        });
+
+        it('Should call the callback method on success.', (done) => {
+            api_post_request(route, path, body, (data) => {
+                expect(data).to.not.equal(null);
+                done(); // The callback was called!
+            });
+        });
+
+        it('Should call the callback method on 302', (done) => {
+            nock(route)
+            .get(path)
+            .reply(moved, '<!DOCTYPE html>');
+
+            api_post_request(route, path, body, (data) => {
+                done(); // The callback was called!
+            });
+        });
+
+        it('Should call the callback method on invalid URL.', (done) => {
+
+            api_post_request(invalid_route, invalid_path, body, (data) => {
+                done(); // The callback was called!
+            });
+        });
+
+        it('Should call the callback method on invalid data returned', (done) => {
+            // Setup a nock interceptor to return invalid data.
+            nock(invalid_route)
+            .get(path)
+            .reply(success, '<!DOCTYPE html>');
+
+            api_post_request(invalid_route, path, body, (data) => {
+                done(); // The callback was called!
+            });
+        });
+
+        it('Should pass the correct APIResponse to the callback method on success.', (done) => {
+            api_post_request(route, path, body, (data) => {
+                expect(data).to.eql(response_object); // eql for object equality check.
+                done();
+            });
+        });
+
+        it('Should pass null to the callback method on failure.', (done) => {
+            api_post_request(invalid_route, invalid_path, body, (data) => {
                 expect(data).to.equal(null);
                 done();
             });
@@ -160,6 +242,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
+            status_code: 200,
         };
 
         const valid_cookies = {

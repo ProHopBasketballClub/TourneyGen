@@ -55,7 +55,6 @@ app.post('/login', (req, res) => {
         console.log('Submitting login request to route: ' + route);
 
         api_get_request(route, (user_object) => {
-            console.log(user_object);
             if (!user_object) {
                 // User wasn't valid.
                 // When possible, pass that info along.
@@ -100,34 +99,18 @@ app.post('/signup', async (req, res) => {
         displayName : username,
         email,
     };
-    api_post_request(route, url_path, body, (user_object) => {
 
-        console.log(user_object);
+    api_post_request(route, url_path, body, (user_object) => {
         if (user_object) {
             if (user_object.status_code === HttpStatus.OK) {
-                api_post_request('', '/login', body, (login_object) => {
-                    console.log('logged in user');
-                    console.log(login_object, body);
-                });
+                // Hit the login route to auto login
+                const login_body = {
+                    username,
+                };
+                res.redirect('/login');
             }
-        } else {
-            console.log('');
         }
-
     });
-
-    // console.log(body);
-    // const user_object: any = await api_post_request(route, path, body);
-    // const id = '';
-    // const name = '';
-
-    // Ideally this is what would happen upon a post to registration
-    // if (status_code === 200){
-    //     res.redirect('/login')
-    // }
-    // else {
-    //     display(error_message)
-    // }
 
 });
 
