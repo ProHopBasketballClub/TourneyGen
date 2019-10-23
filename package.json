@@ -18,7 +18,9 @@
     "start:backend": "docker-compose up --build",
     "startBackground:backend": "docker-compose up --build -d",
     "sb:backend": "npm run build:backend && npm run start:backend",
-    "sb": "npm run sb:backend && npm run sb:frontend"
+    "sb": "npm run sb:backend && npm run sb:frontend",
+    "generate_coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-summary npm run test"
+
   },
   "repository": {
     "type": "git",
@@ -55,6 +57,7 @@
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
     "mongodb": "^3.3.2",
+    "nyc": "^14.1.1",
     "pug": "^2.0.4",
     "pug-cli": "^1.0.0-alpha6",
     "systemjs": "^6.1.0",

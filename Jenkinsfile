@@ -27,8 +27,8 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'npm run test:frontend'
-        sh 'npm run test:backend'
+        sh 'npm run generate_coverage'
+        sh 'bash <(curl -s https://codecov.io/bash) -t $CODECOVTOKEN'
       }
     }
     stage('Master-Deploy') {
