@@ -20,12 +20,12 @@ app.use(cookieParser()); // NOTE: If security is being implemented, a secret can
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-        let leagues = [
-            {"name": "league1"},
-            {"name": "league2"}
-        ]
+        const leagues = [
+            {name: 'league1'},
+            {name: 'league2'},
+        ];
         res.render('home', {
-            leagues: leagues
+            leagues,
         });
     }, (failure) => {
         res.redirect('/login');
