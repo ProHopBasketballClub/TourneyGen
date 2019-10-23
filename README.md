@@ -78,33 +78,27 @@ will automatically install your requirements.
 A linter has been added to the repository. It will fix any formatting issue in Typescript when a commit is made.
 
 ## Building the project
-Thanks to the magic of npm, building the project is easy!
-
-In order to build the frontend, simply run
+Thanks to the magic of Docker, building the project manually is no longer
+necessary. Docker will do all of the building automagically when you run
 ``` commandline
-npm run build:frontend
-```
-and to build the backend, simply run
-``` commandline
-npm run build:backend
+sudo-docker-compose build
 ```
 
 ## Starting the Server
 In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile.
 If you setup docker differently than is set out in this document, then you may not need to use sudo.
-```commandline
-sudo docker-compose build
-```
+
 In order to start the Server run. The output will be the port the backend is running on.
 ```commandline
 sudo docker-compose up
 ```
 
-Before the frontend can be run, it needs to be built.
-In order to run the frontend, simply run
-```commandline
-npn run start:frontend
+Alternatively, to both build and start the server in one, run
+``` commandline
+sudo docker-compose up --build
 ```
 
+Docker controls both the front and the backend. If you would like to connect directly to the backend
+then connect to `localhost:34345`. To connect to the frontend, connect to `localhost:34346`.
 
 
