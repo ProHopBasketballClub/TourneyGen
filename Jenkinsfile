@@ -14,7 +14,7 @@ pipeline {
     stage('Test') {
       steps {
         sh 'npm run generate_coverage'
-        sh "./node_modules/.bin/codecov"
+        sh './node_modules/.bin/codecov -t $CODECOVTOKEN'
       }
     }
     stage('Cleanup') {
