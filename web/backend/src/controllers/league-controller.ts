@@ -92,7 +92,6 @@ export class LeagueController implements IController {
     // create a league object
     public async post(req: Request, res: Response) {
         let validLeague: DataValidDTO;
-        console.log(req.body );
         validLeague = await League.validate(req);
         if (!validLeague.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
@@ -103,8 +102,8 @@ export class LeagueController implements IController {
             if ((await MongoDb.getByName(this.table, req.body.Name)).data) {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'A league with this name already exists'});
+                return;
             }
-
             if (await MongoDb.save(this.table, league)) {
                 res.statusCode = HttpStatus.OK;
                 res.json(league);

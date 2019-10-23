@@ -73,11 +73,11 @@ export class MongoDb {
         } catch (e) {
             console.log(e);
             mongo.close();
-            return  new DataReturnDTO(false,e);
+            return new DataReturnDTO(false, e);
 
         }
         mongo.close();
-        return new DataReturnDTO(true,out);
+        return new DataReturnDTO(true, out);
     }
 
     // saves a single record of any type into a specified table/collection
@@ -137,7 +137,6 @@ export class MongoDb {
     public async connect() {
         try {
             if (!this.client) {
-                console.info(`Connecting to ${this.connectionString}`);
                 this.client = await MongoClient.connect(this.connectionString, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
@@ -150,14 +149,20 @@ export class MongoDb {
 
     public getDb(): Db {
         if (this.client) {
-            console.info(`getting db ${this.dbName}`);
-
             return this.client.db(this.dbName);
         } else {
             console.error('no db found');
 
             return undefined;
         }
+    }
+
+    public async shutdown() {
+        const testConnection = await MongoClient.connect(this.connectionString, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        await testConnection.close(true);
     }
 
 }
