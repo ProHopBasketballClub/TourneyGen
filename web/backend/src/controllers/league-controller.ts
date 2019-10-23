@@ -76,7 +76,7 @@ export class LeagueController implements IController {
         }
     }
 
-    public async getAll(req: Request, res: Response) {
+    public async getAll(req, res) {
         const out = await MongoDb.getAll(this.table);
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
@@ -92,8 +92,8 @@ export class LeagueController implements IController {
     // create a league object
     public async post(req: Request, res: Response) {
         let validLeague: DataValidDTO;
+        console.log(req.body );
         validLeague = await League.validate(req);
-
         if (!validLeague.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: validLeague.error});

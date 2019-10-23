@@ -25,6 +25,10 @@ export class App {
         this.express.use('/', router);
     }
 
+    public shutdown() {
+        process.exit(0);
+    }
+
     /**
      * tmp routes for connection testing purposes
      *
