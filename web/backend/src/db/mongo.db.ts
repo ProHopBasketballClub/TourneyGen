@@ -112,7 +112,7 @@ export class MongoDb {
 
     // deletes a single object identified by an id
     private static async _deleteById(id: string, collection: Collection): Promise<void> {
-        await collection.remove({_id: new ObjectId(id)});
+        await collection.deleteOne({_id: new ObjectId(id)});
     }
 
     // The mongo driver

@@ -1,22 +1,17 @@
-// import sinon
 import * as HttpStatus from 'http-status-codes';
+import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
+import {MongoDb} from '../../../../web/backend/src/db';
+
 // No ec6 import exists for these packages import must be done this way
 // tslint:disable-next-line:no-var-requires
 const chai = require('chai');
 // tslint:disable-next-line:no-var-requires
 const chaiHttp = require('chai-http');
 
-import * as mongoUnit from 'mongo-unit';
-
-import {MongoDb} from '../../../../web/backend/src/db';
-
-const LEAGUE_ROOT = '/api/league';
-
+// Set up the tests for http requests
 chai.use(chaiHttp);
 chai.should();
-let serve;
-let conn;
 /*
 Test 1) Happy path of creating a league
 Test 2) Try to create a league with no owner
@@ -41,7 +36,10 @@ describe('League Controller', async function() {
     let userId: string = '';
     let leagueId: string = '';
     let leagueName: string = '';
+    let serve; // A variable for the node app
+    let conn; // The variable for the connection to the server
     const TIME_OUT: number = 20000;
+    const LEAGUE_ROOT = '/api/league';
     this.timeout(TIME_OUT);
 
     before(async function() {
@@ -210,4 +208,26 @@ describe('League Controller', async function() {
         res.body.should.be.a('object');
     });
 
+    it('it should Delete a league by id', async function() {
+        const res = await chai.request(conn)
+            .delete(LEAGUE_ROOT)
+            .query({id: leagueId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+    });
+
+    it('it should Fail to Delete on no league id', async function() {
+        const res = await chai.request(conn)
+            .delete(LEAGUE_ROOT);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
+    });
+
+    it('it should Fail to Delete on bad league id', async function() {
+        const res = await chai.request(conn)
+            .delete(LEAGUE_ROOT)
+            .query({id: '000000000000000000000000'});
+        res.status.should.equal(HttpStatus.NOT_FOUND);
+        res.body.should.be.a('object');
+    });
 });
