@@ -9,10 +9,13 @@ html(lang='en')
         div(class="login-container")
             div(class="login-card")
                 img(src="./../resources/tourneygenlogo.png")
-                div(class="signup-forms")
+                div(class="signup-forms")                        
                     form(class = "login-form" action = "/signup" method="POST")
                         input(type="text" id = "username" class = "login-field" name = "username" placeholder="Username")
-
-                    form(class = "login-form" action = "/signup" method="POST")
                         input(type="text" id = "email" class = "login-field" name = "email" placeholder="Email")
-                        input(type="submit" id = "submit" class = "login-button" value = "Sign up")
+                        input(type="submit" id = "submit" class = "login-button" value = "Register")
+                p
+                    | Already have an account? Click 
+                    a(href='/login' class = 'text-link')
+                        | here 
+                    | to sign in.
