@@ -146,11 +146,11 @@ app.get('/home', (req, res) => {
         {name: 'league1'},
         {name: 'league2'},
         ];
-    const matches = {};
+    const teams = {};
 
     res.render('home', {
         leagues,
-        matches,
+        teams,
     });
 });
 
