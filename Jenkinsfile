@@ -13,8 +13,14 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'npm run test:frontend'
-        sh 'npm run test:backend'
+        sh 'npm run generate_coverage'
+        sh './node_modules/.bin/codecov -t $CODECOVTOKEN'
+      }
+    }
+    stage('Cleanup') {
+      steps {
+        sh 'npm run clean:frontend'
+        sh 'npm run clean:backend'
       }
     }
     stage('Master-Deploy') {
@@ -22,16 +28,9 @@ pipeline {
         expression { env.BRANCH_NAME == 'master' }
       }
       steps {
-        sh 'mkdir web/frontend/html'
-        sh 'mv web/frontend/src/* web/frontend/html'
-        sh 'rm -r web/frontend/src'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/frontend/html tourneygen@$SERVER:$TOURNEYGENFRONTLOCATION'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/web/backend/ tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/web/backend'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/Dockerfile tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/docker-compose.yml tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
-        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/package.json tourneygen@$SERVER:$TOURNEYGENBACKLOCATION/'
-        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENBACKLOCATION/ && docker-compose down)"'
-        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENBACKLOCATION/ && docker-compose build && docker-compose up -d)"'
+        sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/* tourneygen@$SERVER:$TOURNEYGENLOCATION/'
+        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENLOCATION/ && docker-compose down)"'
+        sh 'sshpass -p $TOURNEYGENPASSWORD ssh -oStrictHostKeyChecking=no tourneygen@$SERVER "(cd $TOURNEYGENLOCATION/ && docker-compose build --build-arg ENVIRONMENT=prod app_frontend && docker-compose up -d)"'
       }
     }
   }

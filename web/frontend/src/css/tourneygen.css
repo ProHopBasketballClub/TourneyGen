@@ -1,0 +1,32 @@
+/* Some of the following styling has been influenced by W3Schools https://www.w3schools.com/css/ */
+
+
+.main-text {
+    color: gray;
+}
+
+.title-text {
+    font-size: 60px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+/* This is so the body can be the whole page instead of
+    whatever fills it up (needed for flex) */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+button{
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 18px;
+}

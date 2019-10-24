@@ -3,6 +3,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code Quality Score](https://www.code-inspector.com/project/658/score/svg)](https://www.code-inspector.com/project/preferences/658)
 [![Code Grade](https://www.code-inspector.com/project/658/status/svg)](https://www.code-inspector.com/project/preferences/658)
+[![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-9/branch/master/graph/badge.svg?token=DoKdk9BFej)](https://codecov.io/gh/seng350/seng350f19-project-team-3-9)
+
+
 
 # Team 3-9  -  SENG-350
 Hello, we're team 3-9. We're not really sure what the
@@ -11,15 +14,12 @@ we will from now on be known as 'Panznir',
 a portmanteau of Mjolnir and Panzer, the only
 ideas we had for a team name.
 
-# INSERT-PROJECT-NAME-HERE
-We are... not the most creative bunch (could you guess from the team name?)
-We're actively searching for a name for our project...
 
-What is INSERT-PROJECT-NAME-HERE? It is primarily a sports leage
+What is TourneyGen? It is primarily a sports league
 management website. What does that mean? Well basically, if you are
 in charge of a leage (sports, e-sports, etc), then you can use our
 website to effectively manage the teams and tournaments hosted within
-your league! Sign up at [INSERT-PROJECT-NAME-HERE's website](http://tourneygen.theserverproject.com/)
+your league! Sign up at [TourneyGen's website](http://tourneygen.theserverproject.com/)
 
 # Course info
 To avoid disrupting this file as well as seperatinng course 
@@ -78,26 +78,27 @@ will automatically install your requirements.
 A linter has been added to the repository. It will fix any formatting issue in Typescript when a commit is made.
 
 ## Building the project
-Thanks to the magic of npm, building the project is easy!
-
-In order to build the frontend, simply run
+Thanks to the magic of Docker, building the project manually is no longer
+necessary. Docker will do all of the building automagically when you run
 ``` commandline
-npm run build:frontend
-```
-and to build the backend, simply run
-``` commandline
-npm run build:backend
+sudo-docker-compose build
 ```
 
 ## Starting the Server
 In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile.
 If you setup docker differently than is set out in this document, then you may not need to use sudo.
-```commandline
-sudo docker-compose build
-```
+
 In order to start the Server run. The output will be the port the backend is running on.
 ```commandline
 sudo docker-compose up
 ```
+
+Alternatively, to both build and start the server in one, run
+``` commandline
+sudo docker-compose up --build
+```
+
+Docker controls both the front and the backend. If you would like to connect directly to the backend
+then connect to `localhost:34345`. To connect to the frontend, connect to `localhost:34346`.
 
 

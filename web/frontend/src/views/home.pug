@@ -1,0 +1,39 @@
+doctype html
+html(lang='en')
+    head
+        title Tourney Gen
+        link(rel="stylesheet" type='text/css' href="./../css/tourneygen.css")
+        link(rel="stylesheet" type='text/css' href="./../css/homeview.css")
+
+    body
+        div(class='home-container')
+            div(class='category-card')
+                p(class='category-card-title')
+                    | Leagues
+                div(class='category-card-entry-container')
+                    if leagues
+                        each league in leagues
+                            a(href='/' class = 'list-item category-card-entry-list-item')
+                                div(class='category-card-entries')
+                                    p(class='category-list')
+                                        | #{league.name}
+                    else
+                        div(class='category-card-entries')
+                            p No Leagues
+                div(class='button')
+                    a(data-toggle="modal" class='button' id = 'new-league' href="#normalModal") 
+                        | Create new League
+                    
+                p(class='category-card-title')
+                    | Teams
+                
+                div(class='category-card-entry-container')
+                    if teams
+                        each team in teams
+                            div(class='category-card-entries')
+                                a(href='home' class = 'list-item')
+                                    p(class='category-list')
+                                        | #{team.name}
+                    else
+                        div(class='category-card-entries')
+                            p No Teams
