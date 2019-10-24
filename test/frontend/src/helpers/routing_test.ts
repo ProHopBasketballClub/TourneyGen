@@ -2,12 +2,12 @@ import { assert, expect } from 'chai';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
-
+import * as HttpStatus from 'http-status-codes';
 import { user_route } from '../../../../web/frontend/src/constants/routes';
 import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
 
-const success = 200; // Make tslint be quiet.
-const moved = 302;
+const success = HttpStatus.OK; // Make tslint be quiet.
+const moved = HttpStatus.MOVED_TEMPORARILY;
 const backend_location = (env as any).env.BACKEND_LOCATION;
 
 describe('Test the routing helpers.', () => {
@@ -18,7 +18,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
-            status_code: 200,
+            status_code: success,
         };
 
         beforeEach('Stub out http.get', () => {
@@ -76,7 +76,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
-            status_code: 200,
+            status_code: success,
         };
 
         const route = 'http://www.website.com';
@@ -242,7 +242,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
-            status_code: 200,
+            status_code: success,
         };
 
         const valid_cookies = {

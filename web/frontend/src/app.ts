@@ -34,10 +34,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => {
-    res.redirect('/login');
-});
-
 app.get('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         res.redirect('/');
