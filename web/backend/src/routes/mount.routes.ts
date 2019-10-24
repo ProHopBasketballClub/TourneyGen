@@ -11,7 +11,7 @@ export function mountAllRoutes(router: Router, controllers: IController[], route
                     // do nothing
                 })
                 .catch((error) => {
-                    // log error
+                    console.log(error);
                 });
         });
 
@@ -21,7 +21,7 @@ export function mountAllRoutes(router: Router, controllers: IController[], route
                     // do nothing
                 })
                 .catch((error) => {
-                    // log error
+                    console.log(error);
                 });
         });
 
@@ -31,7 +31,7 @@ export function mountAllRoutes(router: Router, controllers: IController[], route
                     // do nothing
                 })
                 .catch((error) => {
-                    // log error
+                    console.log(error);
                 });
         });
 
@@ -41,7 +41,7 @@ export function mountAllRoutes(router: Router, controllers: IController[], route
                     // do nothing
                 })
                 .catch((error) => {
-                    // log error
+                    console.log(error);
                 });
         });
 
@@ -51,7 +51,7 @@ export function mountAllRoutes(router: Router, controllers: IController[], route
                     // do nothing
                 })
                 .catch((error) => {
-                    // log error
+                    console.log(error);
                 });
         });
     }

@@ -91,11 +91,10 @@ export class LeagueController implements IController {
 
     // create a league object
     public async post(req: Request, res: Response) {
-        let validLeague: DataValidDTO;
-        validLeague = await League.validate(req);
-        if (!validLeague.valid) {
+        const isLeagueValid: DataValidDTO = await League.validate(req);
+        if (!isLeagueValid.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: validLeague.error});
+            res.json({error: isLeagueValid.error});
             return;
         } else {
             const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);

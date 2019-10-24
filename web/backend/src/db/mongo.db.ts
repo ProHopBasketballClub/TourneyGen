@@ -156,13 +156,4 @@ export class MongoDb {
             return undefined;
         }
     }
-
-    public async shutdown() {
-        const testConnection = await MongoClient.connect(this.connectionString, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        await testConnection.close(true);
-    }
-
 }
