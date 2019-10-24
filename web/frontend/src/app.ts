@@ -4,7 +4,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { user_route } from './constants/routes';
+import { league_get_all_route, user_route } from './constants/routes';
 
 import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
@@ -21,13 +21,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
 
 app.get('/', (req, res) => {
-    is_logged_in(req.cookies, (success) => {
-        const leagues = [
-            {name: 'league1'},
-            {name: 'league2'},
-        ];
-        res.render('home', {
-            leagues,
+    is_logged_in(req.cookies, (user_object) => {
+
+        api_get_request(backend_location + league_get_all_route, (all_leagues) => {
+            const leagues = [];
+
+            all_leagues.forEach((league) => {
+                if (league.Owner === user_object._id) {
+                    leagues.push(league);
+                }
+            });
+
+            res.render('home', {
+                leagues,
+            });
         });
     }, (failure) => {
         res.redirect('/login');

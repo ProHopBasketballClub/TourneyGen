@@ -11,12 +11,12 @@ html(lang='en')
                 p(class='category-card-title')
                     | Leagues
                 div(class='category-card-entry-container')
-                    if leagues
+                    if leagues && leagues.length > 0
                         each league in leagues
                             a(href='/' class = 'list-item category-card-entry-list-item')
                                 div(class='category-card-entries')
                                     p(class='category-list')
-                                        | #{league.name}
+                                        | #{league.Name}
                     else
                         div(class='category-card-entries')
                             p No Leagues
