@@ -1,0 +1,399 @@
+{
+	"info": {
+		"_postman_id": "b647853f-b22e-40e0-b330-f0f9cc0f59ec",
+		"name": "Seng350",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Debug",
+			"item": [
+				{
+					"name": "Database test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/todo",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"todo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"displayName\":\"eetar2\",\n\t\"email\":\"a@b.ca\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/user",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/user?displayName=eetar2",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"user"
+							],
+							"query": [
+								{
+									"key": "displayName",
+									"value": "eetar2"
+								},
+								{
+									"key": "id",
+									"value": "5d927eb517d260dc3df1808a",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"eetar35\",\n    \"email\": \"a@b.ca\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/user?id=5d89306443e4b99b65f56956",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5d89306443e4b99b65f56956"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/user?id=5d89306443e4b99b65f56956",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5d89306443e4b99b65f56956"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/user/all",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "League",
+			"item": [
+				{
+					"name": "Get League",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/league?Name=yes",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"league"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "yes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Leagues",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/league/all",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"league",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create League",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\":\"T1\",\n\t\"Description\":\"The first tournament\",\n\t\"Game_type\":\"R7\",\n\t\"Owner\": \"5dab8d68069d95a8643dac5c\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/league",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"league"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update League",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\":\"T1\",\n\t\"Description\":\"The first tournament\",\n\t\"Game_type\":\"R2016\",\n\t\"Owner\": \"5dab8d68069d95a8643dac5c\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/league?id=5dab9829f241cb661579ab9d",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"league"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5dab9829f241cb661579ab9d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete League",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/league?id=5dab9829f241cb661579ab9d",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"league"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5dab9829f241cb661579ab9d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

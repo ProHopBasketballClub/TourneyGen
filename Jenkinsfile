@@ -13,6 +13,7 @@ pipeline {
     }
     stage('Test') {
       steps {
+        sh 'npm install'
         sh 'npm run generate_coverage'
         sh './node_modules/.bin/codecov -t $CODECOVTOKEN'
       }

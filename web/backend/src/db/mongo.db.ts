@@ -1,6 +1,9 @@
 import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
+import {DataReturnDTO} from '../models/dataReturnDTO';
 
 export class MongoDb {
+
+    public static MONGO_ID_LEN = 24;
 
     public static async save(table: string, record: any): Promise<boolean> {
         return await this._boolean_operation(table, [record], this._save);
@@ -10,15 +13,19 @@ export class MongoDb {
         return await this._boolean_operation(table, [record, id], this._updateById);
     }
 
-    public static async getById(table: string, id: string) {
+    public static async getById(table: string, id: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [id], this._getById);
     }
 
-    public static async getByDisplayName(table: string, name: string) {
+    public static async getByDisplayName(table: string, name: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [name], this._getByDisplayName);
     }
 
-    public static async getAll(table: string) {
+    public static async getByName(table: string, name: string): Promise<DataReturnDTO> {
+        return await this._get_operation(table, [name], this._getByName);
+    }
+
+    public static async getAll(table: string): Promise<DataReturnDTO> {
         try {
             return await this._get_operation(table, [], this._getAll);
         } catch (e) {
@@ -49,7 +56,7 @@ export class MongoDb {
 
     /// This function connect to mongo and performs a retrieves and return a dictionary of valid and data
     // if the return is not valid the data contains the error
-    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[])=>object): Promise<any> {
+    private static async _get_operation(table: string, operation_args: any[], operation: (...args: any[]) => object): Promise<DataReturnDTO> {
         const mongo: MongoDb = new MongoDb();
         try {
             await mongo.connect();
@@ -63,15 +70,14 @@ export class MongoDb {
         let out: any;
         try {
             out = await operation(...operation_args);
-            console.log(out);
         } catch (e) {
             console.log(e);
             mongo.close();
-            return {valid: false, data: e};
+            return new DataReturnDTO(false, e);
 
         }
         mongo.close();
-        return {valid: true, data: out};
+        return new DataReturnDTO(true, out);
     }
 
     // saves a single record of any type into a specified table/collection
@@ -95,6 +101,10 @@ export class MongoDb {
         return await collection.findOne({displayName: name});
     }
 
+    private static async _getByName(name: string, collection: Collection) {
+        return await collection.findOne({Name: name});
+    }
+
     // returns all of the documents saved to a table/collection
     private static async _getAll(collection: Collection): Promise<any> {
         return collection.find().toArray();
@@ -102,7 +112,7 @@ export class MongoDb {
 
     // deletes a single object identified by an id
     private static async _deleteById(id: string, collection: Collection): Promise<void> {
-        await collection.remove({_id: new ObjectId(id)});
+        await collection.deleteOne({_id: new ObjectId(id)});
     }
 
     // The mongo driver
@@ -127,7 +137,6 @@ export class MongoDb {
     public async connect() {
         try {
             if (!this.client) {
-                console.info(`Connecting to ${this.connectionString}`);
                 this.client = await MongoClient.connect(this.connectionString, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
@@ -140,8 +149,6 @@ export class MongoDb {
 
     public getDb(): Db {
         if (this.client) {
-            console.info(`getting db ${this.dbName}`);
-
             return this.client.db(this.dbName);
         } else {
             console.error('no db found');
@@ -149,5 +156,4 @@ export class MongoDb {
             return undefined;
         }
     }
-
 }

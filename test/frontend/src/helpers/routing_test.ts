@@ -1,8 +1,8 @@
 import { assert, expect } from 'chai';
+import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
-import * as HttpStatus from 'http-status-codes';
 import { user_route } from '../../../../web/frontend/src/constants/routes';
 import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
 
