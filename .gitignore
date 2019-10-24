@@ -191,3 +191,5 @@ data/*
 
 #Ignore DS store
 .DS_Store
+
+#Ignore the package lock as its gernerated
