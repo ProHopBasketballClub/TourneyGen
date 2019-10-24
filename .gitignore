@@ -193,3 +193,4 @@ data/*
 .DS_Store
 
 #Ignore the package lock as its gernerated
+package-lock.json
