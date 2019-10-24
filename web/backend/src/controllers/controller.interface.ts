@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 export interface IController {
     delete(req: Request, res: Response);
     get(req: Request, res: Response);
+    getAll(req: Request, res: Response);
     post(req: Request, res: Response);
     put(req: Request, res: Response);
 }

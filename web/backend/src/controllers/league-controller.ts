@@ -76,7 +76,7 @@ export class LeagueController implements IController {
         }
     }
 
-    public async getAll(req: Request, res: Response) {
+    public async getAll(req, res) {
         const out = await MongoDb.getAll(this.table);
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
@@ -91,20 +91,18 @@ export class LeagueController implements IController {
 
     // create a league object
     public async post(req: Request, res: Response) {
-        let validLeague: DataValidDTO;
-        validLeague = await League.validate(req);
-
-        if (!validLeague.valid) {
+        const isLeagueValid: DataValidDTO = await League.validate(req);
+        if (!isLeagueValid.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: validLeague.error});
+            res.json({error: isLeagueValid.error});
             return;
         } else {
             const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
             if ((await MongoDb.getByName(this.table, req.body.Name)).data) {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'A league with this name already exists'});
+                return;
             }
-
             if (await MongoDb.save(this.table, league)) {
                 res.statusCode = HttpStatus.OK;
                 res.json(league);

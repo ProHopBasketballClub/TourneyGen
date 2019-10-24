@@ -1,10 +1,12 @@
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
+import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { user_route } from './constants/routes';
-import { api_get_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
+import { league_get_all_route, user_route } from './constants/routes';
+
+import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -19,13 +21,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
 
 app.get('/', (req, res) => {
-    is_logged_in(req.cookies, (success) => {
-        const leagues = [
-            {name: 'league1'},
-            {name: 'league2'},
-        ];
-        res.render('home', {
-            leagues,
+    is_logged_in(req.cookies, (user_object) => {
+
+        api_get_request(backend_location + league_get_all_route, (all_leagues) => {
+            const leagues = [];
+
+            all_leagues.forEach((league) => {
+                if (league.Owner === user_object._id) {
+                    leagues.push(league);
+                }
+            });
+
+            res.render('home', {
+                leagues,
+            });
         });
     }, (failure) => {
         res.redirect('/login');
@@ -49,7 +58,6 @@ app.post('/login', (req, res) => {
         console.log('Submitting login request to route: ' + route);
 
         api_get_request(route, (user_object) => {
-
             if (!user_object) {
                 // User wasn't valid.
                 // When possible, pass that info along.
@@ -74,6 +82,39 @@ app.post('/login', (req, res) => {
             res.redirect('/');
         });
     });
+});
+
+app.get('/signup', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        res.redirect('/');
+    }, (failure) => {
+        res.render('signup');
+    });
+});
+
+app.post('/signup', async (req, res) => {
+
+    const username = req.body.username ? req.body.username : '';
+    const email = req.body.email ? req.body.email : '';
+    const route =  (env as any).env.BACKEND_LOCATION;
+    const url_path = '/Api/user';
+    const body = {
+        displayName : username,
+        email,
+    };
+
+    api_post_request(route, url_path, body, (user_object) => {
+        if (user_object) {
+            if (user_object.status_code === HttpStatus.OK) {
+                // Hit the login route to auto login
+                const login_body = {
+                    username,
+                };
+                res.redirect('/login');
+            }
+        }
+    });
+
 });
 
 app.listen(port,() => {

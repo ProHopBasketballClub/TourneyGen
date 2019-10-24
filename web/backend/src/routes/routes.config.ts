@@ -1,8 +1,8 @@
+import {Router} from 'express';
+import {LeagueController, UserController} from '../controllers';
+import {IController} from '../controllers/controller.interface';
 
-import { Router } from 'express';
-
-import {mountLeagueRoutes} from './league.routes';
-import {mountUserRoutes} from './user.routes';
+import {mountAllRoutes} from './mount.routes';
 
 /**
  * Mounts all routes for the app
@@ -11,6 +11,7 @@ import {mountUserRoutes} from './user.routes';
  */
 export function mountRoutes(router: Router) {
     // Routes must be prepended by a slash
-    mountUserRoutes(router,'/api/user');
-    mountLeagueRoutes(router,'/api/league');
+    const conts: IController[] = [new UserController(), new LeagueController()];
+    const routes: string[] = ['/api/user', '/api/league'];
+    mountAllRoutes(router, conts, routes);
 }

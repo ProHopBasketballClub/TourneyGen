@@ -1,309 +1,212 @@
-import {expect, request, should, use} from 'chai';
-import chaiHttp = require('chai-http');
 import * as HttpStatus from 'http-status-codes';
-import {MongoDb} from '../../../../web/backend/src/db/mongo.db';
+import * as mongoUnit from 'mongo-unit';
+import {App} from '../../../../web/backend/src/app';
+import {MongoDb} from '../../../../web/backend/src/db';
 
-// Configures Chai to use requests and sets up the assertions
-use(chaiHttp);
-should();
+// No ec6 import exists for these packages import must be done this way
+// tslint:disable-next-line:no-var-requires
+const chai = require('chai');
+// tslint:disable-next-line:no-var-requires
+const chaiHttp = require('chai-http');
 
-// The basis of all the apis
-const API_ROOT: string = 'http://172.28.1.1:34345';
-let leagueId: string = '';
-let userId: string = '';
-// The root of the user api
-const LEAGUE_ROOT: string = '/api/league';
+// Set up the tests for http requests
+chai.use(chaiHttp);
+chai.should();
 
-/*
-Summary of tests
+describe('League Controller', async function() {
+    let userId: string = '';
+    let leagueId: string = '';
+    let leagueName: string = '';
+    let serve; // A variable for the node app
+    let conn; // The variable for the connection to the server
+    const TIME_OUT: number = 20000;
+    const LEAGUE_ROOT = '/api/league';
+    this.timeout(TIME_OUT);
 
-Test 1) Happy path of creating a league
-Test 2) Try to create a league with no owner
-Test 3) Try to create a league with no game_type
-Test 4) Try to create a league with no desc.
-Test 5) Try to create a league with a bad user id
-Test 6) Try to get league specified by id
-Test 7) Try to get league with no id
-Test 8) Try to get league with a bad id
-Test 9) Try to get league by name
-Test 10) Try to get league with a bad name
-Test 11) Try to get all leagues
-Test 12) Try to update league with new name
-Test 13) Try to update league with no id
-Test 14) Try to update league with bad id
-Test 15) Try to delete league
-Test 16) Try to delete league with no id
-Test 17) Try to delete league with bad id
- */
+    before(async () => {
+        serve = new App();
+        conn = await serve.express.listen();
+        process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+    });
 
-// Create a user in the database to be Owner
-// The done parameter and function act as awaits to force the function to fully run before advancing
-before(function(done) {
-    request(API_ROOT)
-        .post('/api/user')
-        .send({
-            displayName: 'eetar2',
-            email: 'a@b.ca',
-        })
-        .end((err, res) => {
-            userId = res.body._id;
-            done();
-        });
-});
+    before(async () => {
+        const res = await chai.request(conn)
+            .post('/api/user')
+            .send({
+                displayName: 'eetar2',
+                email: 'a@b.ca',
+            });
+        userId = res.body._id;
+        userId.length.should.equal(MongoDb.MONGO_ID_LEN);
 
-// Delete the user after the tests
-after(function(done) {
-    request(API_ROOT)
-        .delete('/api/user')
-        .query({id: userId})
-        .end((err, res) => {
-            userId = res.body._id;
-            done();
-        });
-});
+    });
 
-// Create a league in the database
-// Expect success and a league object returned
-describe('/api/league /Post Create a League', () => {
-    it('it should Create a league object', function(done) {
-        request(API_ROOT)
+    after(async () => {
+        await mongoUnit.drop();
+        await mongoUnit.stop();
+    });
+
+    it('Should succeed and return an array with 1 element', async () => {
+        const res = await chai.request(conn)
+            .get('/api/user' + '/all');
+        res.body.should.be.a('array');
+        res.body.length.should.equal(1);
+
+    });
+
+    it('it should Create a league object', async () => {
+        const league = {Name: 'league', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
-            .send({Name: 'league', Owner: userId, Game_type: 'R4', Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                res.body._id.length.should.equal(MongoDb.MONGO_ID_LEN);
-                leagueId = res.body._id;
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+        leagueId = res.body._id;
+        leagueName = res.body.Name;
     });
-});
 
-// Try to create an invalid league object
-// Expect fail with error string
-describe('/api/league /Post send bad league object', () => {
-    it('no league owner should reject', function(done) {
-        request(API_ROOT)
+    it('it should Fail on no owner', async () => {
+        const league = {Name: 'league', Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
-            .send({Name: 'league', Game_type: 'R4', Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to create an invalid league object
-// Expect fail with error string
-describe('/api/league /Post send bad league object', () => {
-    it('no game type should reject', function(done) {
-        request(API_ROOT)
+    it('it should Fail on no game_type', async () => {
+        const league = {Name: 'league', Owner: userId, Description: 'Yes'};
+        const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
-            .send({Name: 'league', Owner: userId, Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to create an invalid league object
-// Expect fail with error string
-describe('/api/league /Post send bad league object', () => {
-    it('no description should reject', function(done) {
-        request(API_ROOT)
+    it('it should Fail on no Desc.', async () => {
+        const league = {Name: 'league', Owner: userId, Game_type: 'Yes'};
+        const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
-            .send({Name: 'league', Owner: userId, Game_type: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to create an invalid league object
-// Expect fail with error string
-describe('/api/league /Post send bad league object', () => {
-    it('not valid owner should reject', function(done) {
-        request(API_ROOT)
+    it('it should Fail on duplicate name', async () => {
+        const league = {Name: 'league', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
-            .send({Name: 'league', Owner: '000000000000000000000000', Game_type: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to find a user by id
-// Expect to pass and return matching id
-describe('/api/league /Get get league with id', () => {
-    it('Should succeed and return a matching id', function(done) {
-        request(API_ROOT)
+    it('it should Fail on bad owner', async () => {
+        const league = {Name: 'league2', Owner: '000000000000000000000000', Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
+            .post(LEAGUE_ROOT)
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
+    });
+
+    it('it should Get a league by id', async () => {
+        const res = await chai.request(conn)
             .get(LEAGUE_ROOT)
-            .query({id: leagueId})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                res.body._id.should.equal(leagueId);
-                done();
-            });
+            .query({id: leagueId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to find a user by id
-// Expect to fail and return error string
-describe('/api/league /Get get league with id', () => {
-    it('Should fail no id specified', function(done) {
-        request(API_ROOT)
+    it('it should fail to get a league with no id', async () => {
+        const res = await chai.request(conn)
+            .get(LEAGUE_ROOT);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
+    });
+
+    it('it should Fail, try to get a league with bad id', async () => {
+        const res = await chai.request(conn)
             .get(LEAGUE_ROOT)
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .query({id: '000000000000000000000000'});
+        res.status.should.equal(HttpStatus.NOT_FOUND);
+        res.body.should.be.a('array');
     });
-});
 
-// Try to find a user by id
-// Expect to fail and return error string
-describe('/api/league /Get get league with id', () => {
-    it('Should fail no league found', function(done) {
-        request(API_ROOT)
+    it('it should Get a league by name', async () => {
+        const res = await chai.request(conn)
             .get(LEAGUE_ROOT)
-            .query({id: '000000000000000000000000'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.NOT_FOUND);
-                done();
-            });
+            .query({name: leagueName});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to find a user by name
-// Expect to pass and return league
-describe('/api/league /Get get league with name', () => {
-    it('Should pass and return league', function(done) {
-        request(API_ROOT)
+    it('it should Fail try to get a league with bad name', async () => {
+        const res = await chai.request(conn)
             .get(LEAGUE_ROOT)
-            .query({name: 'league'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                done();
-            });
+            .query({name: '000000000000000000000000'});
+        res.status.should.equal(HttpStatus.NOT_FOUND);
+        res.body.should.be.a('array');
     });
-});
 
-// Try to find a user by name
-// Expect to fail and return empty array
-describe('/api/league /Get get league with name', () => {
-    it('Should fail and return empty array', function(done) {
-        request(API_ROOT)
-            .get(LEAGUE_ROOT)
-            .query({name: 'not league'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.NOT_FOUND);
-                res.body.should.be.a('array');
-                res.body.length.should.equal(0);
-                done();
-            });
+    it('it should Get all Leagues', async function() {
+        const res = await chai.request(conn)
+            .get(LEAGUE_ROOT + '/all');
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('array');
+        res.body.length.should.equal(1);
     });
-});
 
-// Try to get all of the leagues
-// Should return an array of length 1
-describe('/api/league/all /Get Get all leagues', () => {
-    it('Should succeed and return an array with 1 element', function(done) {
-        request(API_ROOT)
-            .get(LEAGUE_ROOT + '/all')
-            .query({id: leagueId})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                res.body.should.be.a('array');
-                res.body.length.should.equal(1);
-                done();
-            });
-    });
-});
-
-// Try to update a league by id
-// Should return a league with a new name
-describe('/api/league /Put Update League', () => {
-    it('Should succeed and return a league with name New Name', function(done) {
-        request(API_ROOT)
+    it('it should Update a league object new name', async () => {
+        const league = {Name: 'leagueNew', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .put(LEAGUE_ROOT)
             .query({id: leagueId})
-            .send({Name: 'New Name', Owner: userId, Game_type: 'R4', Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                res.body.Name.should.equal('New Name');
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+        res.body.Name.should.equal('leagueNew');
     });
-});
 
-// Try to update a league by id
-// Should fail and error string
-describe('/api/league /Put Update League', () => {
-    it('Should fail no league specified', function(done) {
-        request(API_ROOT)
+    it('it should Fail no id specified for update', async () => {
+        const league = {Name: 'leagueNew', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .put(LEAGUE_ROOT)
-            .send({Name: 'New Name', Owner: userId, Game_type: 'R4', Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to update a league by id
-// Should fail and error string
-describe('/api/league /Put Update League', () => {
-    it('Should fail no league found', function(done) {
-        request(API_ROOT)
+    it('it should Fail bad id specified for update', async () => {
+        const league = {Name: 'leagueNew', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const res = await chai.request(conn)
             .put(LEAGUE_ROOT)
             .query({id: '000000000000000000000000'})
-            .send({Name: 'New Name', Owner: userId, Game_type: 'R4', Description: 'Yes'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.NOT_FOUND);
-                done();
-            });
+            .send(league);
+        res.status.should.equal(HttpStatus.NOT_FOUND);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to delete a league by id
-//  Should pass and remove league
-describe('/api/league /Delete Delete a League', () => {
-    it('it should Delete a league object', function(done) {
-        request(API_ROOT)
+    it('it should Delete a league by id', async () => {
+        const res = await chai.request(conn)
             .delete(LEAGUE_ROOT)
-            .query({id: leagueId})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.OK);
-                done();
-            });
+            .query({id: leagueId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to delete a league by id
-//  Should fail and return error
-describe('/api/league /Delete Delete a League', () => {
-    it('should error no id specified', function(done) {
-        request(API_ROOT)
-            .delete(LEAGUE_ROOT)
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.BAD_REQUEST);
-                done();
-            });
+    it('it should Fail to Delete on no league id', async () => {
+        const res = await chai.request(conn)
+            .delete(LEAGUE_ROOT);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
     });
-});
 
-// Try to delete a league by id
-//  Should fail and return error
-describe('/api/league /Delete Delete a League', () => {
-    it('should error no league found', function(done) {
-        request(API_ROOT)
+    it('it should Fail to Delete on bad league id', async () => {
+        const res = await chai.request(conn)
             .delete(LEAGUE_ROOT)
-            .query({id: '000000000000000000000000'})
-            .end((err, res) => {
-                res.should.have.status(HttpStatus.NOT_FOUND);
-                done();
-            });
+            .query({id: '000000000000000000000000'});
+        res.status.should.equal(HttpStatus.NOT_FOUND);
+        res.body.should.be.a('object');
     });
 });

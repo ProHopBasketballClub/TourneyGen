@@ -1,4 +1,6 @@
 import * as http from 'http';
+import * as HttpStatus from 'http-status-codes';
+import * as request from 'request';
 import * as env from '../../env';
 import { default_cookie_max_age } from '../constants/cookie';
 import { user_route } from '../constants/routes';
@@ -23,6 +25,7 @@ export function api_get_request(route: string, callback) {
         resp.on('end', () => {
             try {
                 APIResponse = JSON.parse(data);
+                APIResponse.status_code = resp.statusCode;
             } catch (e) {
                 callback(null);
                 return;
@@ -31,6 +34,54 @@ export function api_get_request(route: string, callback) {
         });
     }).on('error', (err) => {
         callback(null);
+    });
+}
+
+export function api_post_request(route: string, path: string, body: object, callback) {
+    /* Sends an HTTP GET request to the passed route, calling
+        the callback method with whatever response the backend
+        gives.
+    route: localhost:3001 --- backend_loaction
+    path: /signup --- route
+    */
+
+    const payload_body = JSON.stringify(body);
+    const data: string = '';
+    const response = '';
+    let APIResponse;
+    const url = route + path;
+    request({
+        body,
+        json: true,
+        method: 'POST',
+        url,
+    }, (error, post_response, post_body) => {
+        if (error) {
+            console.log(error);
+            callback(null);
+            return;
+        }
+        try {
+            if (post_response.statusCode === HttpStatus.OK) {
+                APIResponse = post_body;
+                APIResponse.status_code = post_response.statusCode;
+                callback(APIResponse);
+                return;
+            } else if (post_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                console.log('302 response: ', post_response);
+                APIResponse = post_response;
+                callback(APIResponse);
+                return;
+            } else {
+                console.log(post_response.statusCode);
+                callback(null);
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            callback(null);
+            return;
+        }
     });
 }
 

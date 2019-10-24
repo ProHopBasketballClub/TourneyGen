@@ -74,7 +74,7 @@ export class UserController implements IController {
         }
         if ((await MongoDb.getByDisplayName(this.table, user.displayName)).data !== null) {
             res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: 'A user already has this user name please choose a different one'});
+            res.json({error: 'A user already has this username, please choose a different one'});
             return;
         }
         if (await MongoDb.save(this.table, user)) {
