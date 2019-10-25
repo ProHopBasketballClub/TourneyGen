@@ -1,0 +1,23 @@
+doctype html
+if page_rendered
+    html(lang='en')
+        head
+            title Tourney Gen - leagues
+            link(rel="stylesheet" href="./../css/tourneygen.css")
+            link(rel="stylesheet" href="./../css/leagues.css")
+        body
+            div(class='home-container')
+                div(class='category-card')
+                    p(class='category-card-title')
+                        | #{league.name}
+                        div(class='category-card-entry-container')
+                            if tournaments
+                                for tourney in tournaments
+                                    a(href='/' class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{tourney.name}
+                                hr        
+                            else
+                                div(class='category-card-entries')
+                                    p No tournaments for this league
