@@ -20,6 +20,7 @@ export class UserController implements IController {
                     if (!out.data) {
                         res.statusCode = HttpStatus.NOT_FOUND;
                         res.json({error: 'No user was found with id ' + req.query.id});
+                        return ;
                     } else {
                         res.statusCode = HttpStatus.OK;
                         res.json(out.data);
@@ -28,6 +29,7 @@ export class UserController implements IController {
                 } else {
                     res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
                     res.json({error: out.data});
+                    return ;
                 }
 
             } else {
@@ -56,6 +58,7 @@ export class UserController implements IController {
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'The displayName must be at least 4 characters'});
+                return ;
             }
         } else {
             res.statusCode = HttpStatus.BAD_REQUEST;
@@ -124,6 +127,7 @@ export class UserController implements IController {
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
             res.json(out.data);
+            return ;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             res.json(out.data);
