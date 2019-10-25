@@ -1,7 +1,6 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
-import {MongoDb} from '../../../../web/backend/src/db';
 
 // The root of the user api
 const USER_ROOT: string = '/api/user';
@@ -16,14 +15,12 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 chai.should();
 
-// This tests examines what happens if an empty database is queried for all users
-// Expects an empty array
+// This need to be an async function no an anonymous or tsc fails to run the tests
 describe('User Controller tests', async function() {
     let userId: string = '';
     let serve; // A variable for the node app
     let conn; // The variable for the connection to the server
     const TIME_OUT: number = 20000;
-    const LEAGUE_ROOT = '/api/league';
     this.timeout(TIME_OUT);
 
     before(async () => {
@@ -37,7 +34,7 @@ describe('User Controller tests', async function() {
         await mongoUnit.stop();
     });
 
-    it('it should GET an empty array', async () => {
+    it('Get All user expect none', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT + '/all');
 
@@ -49,7 +46,7 @@ describe('User Controller tests', async function() {
 
 // This test examines what happens if the user endpoint is queried with no id or display Name
 // Expects 400 error and error string
-    it('it should GET user return 400 error', async () => {
+    it('Get user no id', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT);
         res.should.have.status(HttpStatus.BAD_REQUEST);
@@ -57,7 +54,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to create a user
 // Expects to succeed
-    it('it should create a user in the database', async () => {
+    it('Post it should create a user', async () => {
         const res = await chai.request(conn)
             .post(USER_ROOT)
             .send({
@@ -73,7 +70,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to create a user with a duplicate display name
 // Expects a 400 error and an error string
-    it('it should error and say name exists', async () => {
+    it(' Try to create user with duplicate name', async () => {
         const res = await chai.request(conn)
             .post(USER_ROOT)
             .send({
@@ -86,7 +83,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to update a user with object
 // Expect to succeed and update user name
-    it('it should update user and succeed', async () => {
+    it('It should update a user', async () => {
         const res = await chai.request(conn)
             .put(USER_ROOT)
             .query({id: userId})
@@ -99,7 +96,7 @@ describe('User Controller tests', async function() {
     });
 // This Attempts to update a user with a malformed id
 // Expects a 400 error and a error string
-    it('it should error on a bad id', async () => {
+    it('Try to update user with a bad id', async () => {
         const res = await chai.request(conn)
             .put(USER_ROOT)
             .query({id: 'Bad ID'})
@@ -113,7 +110,7 @@ describe('User Controller tests', async function() {
 
 // This attempts to update a user with an invalid user object
 // Expects a 400 error and a error string
-    it('it should error on a invalid user', async () => {
+    it('Try to create a user without a display name', async () => {
         const res = await chai.request(conn)
             .put(USER_ROOT)
             .query({id: userId})
@@ -125,7 +122,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to update a user that does not exist
 // Expects an 400 error and a error string
-    it('it should error with no user with id 0', async () => {
+    it('Try to update a user with a bad id', async () => {
         const res = await chai.request(conn)
             .put(USER_ROOT)
             .query({id: '000000000000000000000000'})
@@ -138,7 +135,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to get a user by display name
 // Expects a User objects an a 200
-    it('it should GET user return 200', async () => {
+    it('It should get a user by name', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT)
             .query({displayName: 'eetar23'});
@@ -149,7 +146,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to get a user by id
 // Expects a User objects an a 200
-    it('it should GET user return 200', async () => {
+    it('it should GET user by id', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT)
             .query({id: userId});
@@ -160,7 +157,7 @@ describe('User Controller tests', async function() {
 
 // Gets all of the users in the database
 // Expects array of length one
-    it('it should GET an  array of length 1', async () => {
+    it('it should GET all users expect 1', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT + '/all');
 
@@ -171,7 +168,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to delete a user with no id
 // Expects 400 and error string
-    it('it should error and say id required', async () => {
+    it('Try to delete a user without an id', async () => {
         const res = await chai.request(conn)
             .delete(USER_ROOT);
         res.should.have.status(HttpStatus.BAD_REQUEST);
@@ -179,7 +176,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to delete a user with invalid id
 // Expects 200 and success message
-    it('it should error and say id required', async () => {
+    it('Try to delete a user with a bad id', async () => {
         const res = await chai.request(conn)
             .delete(USER_ROOT)
             .query({id: '000000000000000000000000'});
@@ -188,7 +185,7 @@ describe('User Controller tests', async function() {
 
 // Attempts to delete a user by id
 // Expects 200 and success message
-    it('it should Delete user return 200', async () => {
+    it('it should Delete a user by id', async () => {
         const res = await chai.request(conn)
             .delete(USER_ROOT)
             .query({id: userId});
