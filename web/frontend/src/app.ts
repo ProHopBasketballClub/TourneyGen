@@ -4,14 +4,8 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-<<<<<<< HEAD
 import { league_get_all_route, league_route, user_route } from './constants/routes';
-
 import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
-=======
-import { user_route, league_route } from './constants/routes';
-import { api_get_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
->>>>>>> WIP
 
 const app = express();
 const DEFAULT_PORT = 3001;
