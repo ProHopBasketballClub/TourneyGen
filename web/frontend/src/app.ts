@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     is_logged_in(req.cookies, (user_object) => {
 
         api_get_request(backend_location + league_get_all_route, (all_leagues) => {
-            const leagues = []
+            const leagues = [];
             all_leagues.forEach((league) => {
                 if (league.Owner === user_object._id) {
                     leagues.push({ name: league, id: league.Owner });
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
             });
 
             res.render('home', {
-                leagues
+                leagues,
             });
         });
     }, (failure) => {
@@ -121,24 +121,23 @@ app.get('/leagues/:league_name/:id', (req,res) => {
         // this value ensures the HTML page is rendered before variables are used
         const page_rendered=true;
         const league = {
-            name: req.params.league_name,
             logo:null,
+            name: req.params.league_name,
         };
         const tournaments = [
             { name: 'tournament1' },
             { name: 'tournament2' },
-            { name: 'tournament3' }
+            { name: 'tournament3' },
         ];
         res.render('leagues', {
             league,
+            page_rendered,
             tournaments,
-            page_rendered
-        })
+        });
     }, (failure) => {
         res.redirect('/login');
-    })
+    });
 });
-   
 
 app.listen(port,() => {
     return console.info(`Server is listening on port ${port}`);
