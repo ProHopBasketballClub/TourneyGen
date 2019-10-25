@@ -13,11 +13,11 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if tournaments
                                 for tourney in tournaments
-                                    a(href='/' class = 'list-item category-card-entry-list-item')
+                                    a(href='/leagues' class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
                                                 | #{tourney.name}
-                                hr        
+                                    
                             else
                                 div(class='category-card-entries')
                                     p No tournaments for this league

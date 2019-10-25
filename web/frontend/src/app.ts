@@ -81,23 +81,23 @@ app.get('/leagues', (req,res) => {
     is_logged_in(req.cookies, (success) => {
         const page_rendered=true;
         const league = {
-            name:'league1',
             logo:null,
+            name:'league1',
         };
         const tournaments = [
             { name: 'tournament1' },
             { name: 'tournament2' },
-            { name: 'tournament3' }
+            { name: 'tournament3' },
         ];
         res.render('leagues', {
             league,
+            page_rendered,
             tournaments,
-            page_rendered
-        })
+        });
     }, (failure) => {
         res.redirect('/login');
-    })
-   
+    });
+
 });
 
 app.listen(port,() => {
