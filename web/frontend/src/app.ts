@@ -3,7 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
 import * as env from '../env';
-import { user_route, league_route } from './constants/routes';
+import { league_route, user_route } from './constants/routes';
 import { api_get_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
@@ -88,22 +88,22 @@ app.get('/leagues', (req,res) => {
             if (!league_object) {
                 // something wrong with the git request
                 // TODO: remove this once done, this is a test
-                console.log("ERROR: could not retrieve league")
+                console.log('ERROR: could not retrieve league');
             }
 
             console.log(league_object);
 
             // TODO: remove these test objects
-            const league = { name: "league1"};
-            const tournaments = { name: "t1" };
-        
+            const league = { name: 'league1'};
+            const tournaments = { name: 't1' };
+
             res.render('leagues', {
                 league,
                 page_rendered,
                 tournaments,
             });
-        })
-        
+        });
+
     }, (failure) => {
         res.redirect('/login');
     });
