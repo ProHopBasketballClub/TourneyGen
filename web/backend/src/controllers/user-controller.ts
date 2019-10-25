@@ -99,6 +99,7 @@ export class UserController implements IController {
         if (req.query.id.length !== MongoDb.MONGO_ID_LEN) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'The id parameter is malformed'});
+            return;
         }
         if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
