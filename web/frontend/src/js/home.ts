@@ -7,6 +7,7 @@ let obscurer: any = document.getElementById('home-content-obscure');
 let showModal = () => {
     modal.style.display = 'block';
     obscurer.style.display = 'block';
+
 };
 
 let hideModal = () => {
@@ -15,7 +16,6 @@ let hideModal = () => {
 };
 
 createNewButton.onclick = showModal;
-
 obscurer.onclick = hideModal;
 cancelButton.onclick = hideModal;
 submitButton.onclick = hideModal;

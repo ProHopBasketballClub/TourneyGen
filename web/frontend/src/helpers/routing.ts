@@ -88,6 +88,48 @@ export function api_post_request(route: string, path: string, body: object, call
     });
 }
 
+export function api_delete_request(route: string, callback) {
+    /* Sends an HTTP DELETE request to the passed route, calling
+        the callback method with whatever response the backend
+        gives.
+    */
+    // let data: string = '';
+    let APIResponse;
+    const url = route;
+    request({
+        json: true,
+        method: 'DELETE',
+        url,
+    }, (error, delete_response, post_body) => {
+        if (error) {
+            console.log(error);
+            callback(null);
+            return;
+        }
+        try {
+            if (delete_response.statusCode === HttpStatus.OK) {
+                APIResponse = post_body;
+                APIResponse.status_code = delete_response.statusCode;
+                callback(APIResponse);
+                return;
+            } else if (delete_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                console.log('302 response: ', delete_response);
+                APIResponse = delete_response;
+                callback(APIResponse);
+                return;
+            } else {
+                console.log(delete_response.statusCode);
+                callback(null);
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            callback(null);
+            return;
+        }
+    });
+}
+
 export function api_put_request(route: string, body: object, callback) {
     let APIResponse;
     console.log('submitting PUT request to: ' + route);

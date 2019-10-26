@@ -13,13 +13,20 @@ html(lang='en')
                     if leagues && leagues.length > 0
                         each league in leagues
                             - var url = 'league/' + league.id
-                            a(href=url class = 'list-item category-card-entry-list-item')
-                                div(class='category-card-entries')
-                                    p(class='category-list')
-                                        | #{league.name}
+                            div(class='category-card-entry-container')
+                                a(href=url class = 'list-item category-card-entry-list-item')
+                                    div(class='category-card-entries')
+                                        p(class='category-list')
+                                            | #{league.name}
+                                //- a(class="delete-league-button modal-open-button" id="button" + league.id)
+                                //-     | &times;
+
                     else
                         div(class='category-card-entries')
                             p No Leagues
+
+                    
+
                 div(class='button')
                     a(data-toggle="modal" class='button' id = 'new-league') 
                         | Create new League

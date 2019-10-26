@@ -72,6 +72,27 @@
     color: #bbbbbb;
 }
 
+.category-card-entry-container {
+    position: relative;
+}
+
+.delete-league-button {
+    cursor: pointer;
+    position: absolute;
+    font-size: 44px;
+    top: 50%;
+    right: 0%;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 1;
+}
+
+.delete-league-button:hover {
+    background: #595959;
+}
+
 .basic-form {
     flex: auto;
     display: flex;
@@ -138,8 +159,12 @@
 
 #create-league-modal {
     padding: 5% 35%;
+} 
+
+div[id^=delete-modal-] {
+    padding: 5% 35%;
 }
 
 #create-league-modal-content {
-    width: 18%;
+    width: 260px;
 }

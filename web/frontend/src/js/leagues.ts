@@ -21,3 +21,25 @@ edit_editButton.onclick = edit_showModal;
 edit_obscurer.onclick = edit_hideModal;
 edit_cancelButton.onclick = edit_hideModal;
 edit_submitButton.onclick = edit_hideModal;
+
+let delete_modal: any = document.getElementById('delete-league-modal');
+let delete_deleteButton: any = document.getElementById('delete-league');
+let delete_cancelButton: any = document.getElementById('cancel-delete-league');
+let delete_submitButton: any = document.getElementById('submit-delete-league');
+let delete_obscurer: any = document.getElementById('leagues-content-obscure');
+
+let delete_showModal = () => {
+    delete_modal.style.display = 'block';
+    delete_obscurer.style.display = 'block';
+};
+
+let delete_hideModal = () => {
+    delete_modal.style.display = 'none';
+    delete_obscurer.style.display = 'none';
+};
+
+delete_deleteButton.onclick = delete_showModal;
+
+delete_obscurer.onclick = delete_hideModal;
+delete_cancelButton.onclick = delete_hideModal;
+delete_submitButton.onclick = delete_hideModal;

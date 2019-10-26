@@ -48,6 +48,15 @@ if page_rendered
                         div(class="form-box")
                             input(type="button" id="cancel-edit-league" class="basic-button" value="Cancel")
                             input(type="submit" id="submit-edit-league" class="basic-button" value="Submit")
+            div(class="modal" id="delete-league-modal")
+                div(class="modal-content" id="delete-league-modal-content")
+                    form(class="basic-form-column" action="/delete_league" method="POST") 
+                        input(type="hidden" name="leagueId" value=league._id)
+                        div(class="form-box")
+                            p 
+                                | Are you sure you want to delete?
+                            input(type="button" id="cancel-delete-league" class="basic-button" value="Cancel")
+                            input(type="submit" id="submit-delete-league" class="basic-button" value="Submit")
     include adminpanels/extensions/league-adminpanel.pug
     script(src="./../js/leagues.js")
 
