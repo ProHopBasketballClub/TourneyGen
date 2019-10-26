@@ -1,7 +1,7 @@
 extends ../adminpanel.pug
 
 block admin-tools-content
-    a(href='/')
+    a(href='#' id="edit-league")
         | Edit League
     a(href='/delete-league-' + league.id)
         | Delete League

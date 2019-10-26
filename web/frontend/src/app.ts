@@ -5,7 +5,11 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import { league_get_all_route, league_route, user_route } from './constants/routes';
+<<<<<<< HEAD
 import { api_delete_request, api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
+=======
+import { api_get_request, api_post_request, api_put_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
+>>>>>>> master
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -48,6 +52,7 @@ app.get('/league/:id', (req,res) => {
             const page_rendered=true;
             if(league_object._id === req.params.id) {
                 const league = {
+                    _id: league_object._id,
                     description: league_object.Description,
                     game_type: league_object.Game_type,
                     name: league_object.Name,
@@ -99,9 +104,43 @@ app.post('/create_league', (req, res) => {
             }
 
             // Error case handled here, all success cases above should have returned.
-            // TODO: WhenFrom  we have front-end error handling, it should be reported here.
+            // TODO: When we have front-end error handling, it should be reported here.
             res.redirect('/');
         });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.post('/edit_league', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const leagueOwner = success._id;
+        const leagueName = req.body.leagueName;
+        const leagueDescription = req.body.leagueDescription;
+        const leagueGameType = req.body.leagueGameType;
+        const leagueId = req.body.leagueId ? req.body.leagueId : '';
+
+        if (!leagueName || !leagueDescription || !leagueGameType || !leagueId) {
+            // TODO: When we have front-end error handling, it should be reported here.
+            res.redirect('back'); // Go back to the refferer.
+        }
+
+        const payload = {
+            Description: leagueDescription,
+            Game_type: leagueGameType,
+            Name: leagueName,
+            Owner: leagueOwner,
+        };
+
+        api_put_request(generate_get_route(backend_location + league_route, { id: leagueId }), payload, (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the changes appear.
+                    res.redirect('back'); // Go back to the refferer.
+                }
+            }
+        });
+
     }, (failure) => {
         res.redirect('/login');
     });

@@ -15,6 +15,8 @@ export function api_get_request(route: string, callback) {
     let APIResponse;
     console.log('Submitting GET request to: ' + route);
 
+    // TODO: this should be updated to use request rather than
+    // http.get
     http.get(route, (resp) => {
 
         // A chunk of data has been recieved.
@@ -38,6 +40,7 @@ export function api_get_request(route: string, callback) {
     });
 }
 
+// TODO: Refactor: this should aleady have the thing combined. Also update the docstring.
 export function api_post_request(route: string, path: string, body: object, callback) {
     /* Sends an HTTP GET request to the passed route, calling
         the callback method with whatever response the backend
@@ -46,11 +49,8 @@ export function api_post_request(route: string, path: string, body: object, call
     path: /signup --- route
     */
 
-    const payload_body = JSON.stringify(body);
-    const data: string = '';
-    const response = '';
     let APIResponse;
-    const url = route + path;
+    const url: string = route + path;
     console.log('Submitting GET request to: ' + url);
 
     request({
@@ -129,6 +129,49 @@ export function api_delete_request(route: string, callback) {
         }
     });
 }
+
+
+export function api_put_request(route: string, body: object, callback) {
+    let APIResponse;
+    console.log('submitting PUT request to: ' + route);
+    console.log('with the body: ' + JSON.stringify(body));
+
+    request({
+        body,
+        json: true,
+        method: 'PUT',
+        url: route,
+    }, (error, put_response, put_body) => {
+
+        if (error) {
+            console.log(error);
+            callback(null);
+            return;
+        }
+        try {
+            if (put_response.statusCode === HttpStatus.OK) {
+                APIResponse = put_body;
+                APIResponse.status_code = put_response.statusCode;
+                callback(APIResponse);
+                return;
+            } else if (put_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                console.log('302 response: ', put_response);
+                APIResponse = put_response;
+                callback(APIResponse);
+                return;
+            } else {
+                console.log(put_response.statusCode);
+                callback(null);
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            callback(null);
+            return;
+        }
+    });
+}
+
 
 export function create_cookie(cookie_name, cookie_value, res, cookie_params: object = { maxAge: default_cookie_max_age, httpOnly: true }) {
     // Adds a cookie to the browser with the name and value passed.
