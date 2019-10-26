@@ -23,7 +23,7 @@ The static analysis for Team 3-6 project is handled by code inspector reports ca
 
 The code coverage report is available in the codecov.txt file.
 
-Several other metric can also be explored by examining the badges on the home page of the repository.
+Several other metrics can also be explored by examining the badges on the home page of this repository.
 ### Design Problems
 
 A major design issue that we encountered  in our design plan was the front end of the system was supposed to be served statically.
