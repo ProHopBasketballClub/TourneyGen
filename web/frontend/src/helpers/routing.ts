@@ -130,7 +130,6 @@ export function api_delete_request(route: string, callback) {
     });
 }
 
-
 export function api_put_request(route: string, body: object, callback) {
     let APIResponse;
     console.log('submitting PUT request to: ' + route);
@@ -171,7 +170,6 @@ export function api_put_request(route: string, body: object, callback) {
         }
     });
 }
-
 
 export function create_cookie(cookie_name, cookie_value, res, cookie_params: object = { maxAge: default_cookie_max_age, httpOnly: true }) {
     // Adds a cookie to the browser with the name and value passed.
