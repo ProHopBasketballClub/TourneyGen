@@ -1,0 +1,25 @@
+doctype html
+html(lang='en')
+    link(rel="stylesheet" type='text/css' href="./../css/adminpanel.css")
+    script.
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var admin_panel = document.getElementById('admin-panel');
+            admin_panel.onmouseover = function(e) {
+                admin_panel.classList.add("admin-panel-expanded");
+                admin_panel.classList.remove("admin-panel-collapsed");
+            }
+            admin_panel.onmouseout = function(e) {
+                admin_panel.classList.add('admin-panel-collapsed');
+                admin_panel.classList.remove('admin-panel-expanded');
+
+            }
+        });
+    body
+        div(id = 'admin-panel' class = 'admin-panel-collapsed')
+            p(class='admin-text')
+                | Admin Tools
+            a(href='/')
+                | Edit League
+            a(href='/')
+                | Delete League
+    

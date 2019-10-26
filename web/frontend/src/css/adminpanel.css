@@ -1,0 +1,56 @@
+
+#admin-panel {
+    position: absolute;
+    height: 400px;
+    right: 0px;
+    top: 22%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);   
+    z-index: 1000000000;
+}
+
+.admin-panel-collapsed {
+    width: 50px;
+    background-color: #a79d9d;
+    -webkit-transition: width 0.15s;
+    transition: visibility 0s linear 0.15s, opacity 0.15s;
+    border-radius: 15px 0 0 15px;
+    text-align: left;
+}
+
+.admin-panel-expanded {
+    background-color: #978f8f;
+    -webkit-transition: width 0.15s;
+    width: 300px;
+    padding: 15px;
+    border-radius: 15px 0 0 15px;
+    text-align: center;
+    font-size: 24px;
+    
+}
+
+.admin-panel-expanded>* {
+    display: block;
+    color: black;
+    padding-bottom: 15px;
+    white-space: nowrap;
+}
+
+.admin-panel-collapsed>.admin-text {
+    display: inline-block;
+    color: black;
+    white-space: nowrap;
+    -webkit-transform: rotate(90deg);
+    width: 40px;
+    margin-left: 7px;
+    margin-top: 115px;
+    font-size: 30px;
+    letter-spacing: 1.5px
+}
+
+.admin-panel-expanded>.admin-text {
+    display: none;
+}
+
+.admin-panel-collapsed>*:not(.admin-text) {
+    display: none;
+}
