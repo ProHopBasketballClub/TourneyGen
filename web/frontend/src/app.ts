@@ -5,7 +5,6 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import { league_get_all_route, user_route } from './constants/routes';
-
 import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
