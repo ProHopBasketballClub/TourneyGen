@@ -13,6 +13,7 @@ export function api_get_request(route: string, callback) {
     */
     let data: string = '';
     let APIResponse;
+    console.log('Submitting GET request to: ' + route);
 
     http.get(route, (resp) => {
 
@@ -50,6 +51,8 @@ export function api_post_request(route: string, path: string, body: object, call
     const response = '';
     let APIResponse;
     const url = route + path;
+    console.log('Submitting GET request to: ' + url);
+
     request({
         body,
         json: true,

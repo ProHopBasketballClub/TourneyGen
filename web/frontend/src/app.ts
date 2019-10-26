@@ -75,13 +75,44 @@ app.get('/login', (req, res) => {
     });
 });
 
+app.post('/create_league', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const ownerId = success._id;
+        const name = req.body.leagueName ? req.body.leagueName : '';
+        const description = req.body.leagueDescription ? req.body.leagueDescription : '';
+        const gameType = req.body.leagueGameType ? req.body.leagueGameType : '';
+
+        const payload = {
+            Description: description,
+            Game_type: gameType,
+            Name: name,
+            Owner: ownerId,
+        };
+
+        api_post_request(backend_location, league_route, payload, (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the new league appears.
+                    res.redirect('/');
+                    return;
+                }
+            }
+
+            // Error case handled here, all success cases above should have returned.
+            // TODO: When we have front-end error handling, it should be reported here.
+            res.redirect('/');
+        });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
 app.post('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
             res.redirect('/'); // User is already logged-in,
     }, (failure) => {
         const username = req.body.username ? req.body.username : '';
         const route = backend_location + generate_get_route(user_route, { displayName: username });
-        console.log('Submitting login request to route: ' + route);
 
         api_get_request(route, (user_object) => {
             if (!user_object) {
@@ -132,10 +163,6 @@ app.post('/signup', async (req, res) => {
     api_post_request(route, url_path, body, (user_object) => {
         if (user_object) {
             if (user_object.status_code === HttpStatus.OK) {
-                // Hit the login route to auto login
-                const login_body = {
-                    username,
-                };
                 res.redirect('/login');
             }
         }
