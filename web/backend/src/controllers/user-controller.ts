@@ -20,6 +20,7 @@ export class UserController implements IController {
                     if (!out.data) {
                         res.statusCode = HttpStatus.NOT_FOUND;
                         res.json({error: 'No user was found with id ' + req.query.id});
+                        return ;
                     } else {
                         res.statusCode = HttpStatus.OK;
                         res.json(out.data);
@@ -28,6 +29,7 @@ export class UserController implements IController {
                 } else {
                     res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
                     res.json({error: out.data});
+                    return ;
                 }
 
             } else {
@@ -56,6 +58,7 @@ export class UserController implements IController {
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'The displayName must be at least 4 characters'});
+                return ;
             }
         } else {
             res.statusCode = HttpStatus.BAD_REQUEST;
@@ -96,8 +99,13 @@ export class UserController implements IController {
             res.json({error: 'Display name must be at least ' + User.MIN_DISPLAYNAME_LEN + ' long and an id must be a param'});
             return;
         }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+        if (req.query.id.length !== MongoDb.MONGO_ID_LEN) {
             res.statusCode = HttpStatus.BAD_REQUEST;
+            res.json({error: 'The id parameter is malformed'});
+            return;
+        }
+        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }
@@ -119,6 +127,7 @@ export class UserController implements IController {
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
             res.json(out.data);
+            return ;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             res.json(out.data);
@@ -135,7 +144,7 @@ export class UserController implements IController {
             return;
         }
         if (!(await MongoDb.getById(this.table, req.query.id)).data) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }

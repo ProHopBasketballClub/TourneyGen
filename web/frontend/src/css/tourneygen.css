@@ -1,6 +1,4 @@
 /* Some of the following styling has been influenced by W3Schools https://www.w3schools.com/css/ */
-
-
 .main-text {
     color: gray;
 }
@@ -33,4 +31,35 @@ button{
 
 .text-link{
     color: #bbbbbb;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    padding: 7%  23%;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    box-shadow: 0px 0px 4px 0px #1a1a1a;
+}
+
+.content-obscure {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.6;
+    background-color: black;
+}
+
+.modal-content {
+    display: flex;
+    width: 50%;
+    padding: 2%;
+    background-color: #2a2a2a;
 }
