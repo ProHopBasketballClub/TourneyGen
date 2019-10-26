@@ -175,6 +175,34 @@ app.post('/signup', async (req, res) => {
     });
 
 });
+app.get('/league/:id', (req,res) => {
+
+    is_logged_in(req.cookies, (success) => {
+        // this value ensures the HTML page is rendered before variables are used
+        const route = backend_location + generate_get_route(league_route, { id: req.params.id });
+        api_get_request(route, (league_object) => {
+            const page_rendered=true;
+            if(league_object._id === req.params.id) {
+                let league = {
+                    description: league_object.Description,
+                    name: league_object.Name,
+                    game_type: league_object.Game_type,
+
+                };
+                const tournaments = [];
+                res.render('leagues', {
+                    league,
+                    page_rendered,
+                    tournaments,
+                });
+            }
+            
+        });
+
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
 
 app.listen(port,() => {
     return console.info(`Server is listening on port ${port}`);
