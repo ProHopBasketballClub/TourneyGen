@@ -76,7 +76,7 @@
     position: relative;
 }
 
-#delete-league-button {
+.delete-league-button {
     cursor: pointer;
     position: absolute;
     font-size: 44px;
@@ -86,17 +86,13 @@
     transform: translate(0%, -50%);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+    z-index: 1;
 }
 
-#delete-league-button:hover {
+.delete-league-button:hover {
     background: #595959;
 }
 
-#delete-league-from > .button {
-    border: none;
-    color: white;
-    padding: 8px 20px;
-    margin-right: 20px;
 .basic-form {
     flex: auto;
     display: flex;
@@ -163,8 +159,12 @@
 
 #create-league-modal {
     padding: 5% 35%;
+} 
+
+div[id^=delete-modal-] {
+    padding: 5% 35%;
 }
 
 #create-league-modal-content {
-    width: 18%;
+    width: 260px;
 }

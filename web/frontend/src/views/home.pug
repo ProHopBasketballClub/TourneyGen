@@ -18,8 +18,9 @@ html(lang='en')
                                     div(class='category-card-entries')
                                         p(class='category-list')
                                             | #{league.name}
-                                span(id="delete-league-button")
-                                    | &times;
+                                //- a(class="delete-league-button modal-open-button" id="button" + league.id)
+                                //-     | &times;
+
                     else
                         div(class='category-card-entries')
                             p No Leagues
