@@ -4,7 +4,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, user_route } from './constants/routes';
 import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
@@ -24,10 +24,9 @@ app.get('/', (req, res) => {
 
         api_get_request(backend_location + league_get_all_route, (all_leagues) => {
             const leagues = [];
-
             all_leagues.forEach((league) => {
                 if (league.Owner === user_object._id) {
-                    leagues.push(league);
+                    leagues.push({ name: league.Name, id: league._id });
                 }
             });
 
@@ -35,6 +34,34 @@ app.get('/', (req, res) => {
                 leagues,
             });
         });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.get('/league/:id', (req,res) => {
+
+    is_logged_in(req.cookies, (success) => {
+        // this value ensures the HTML page is rendered before variables are used
+        const route = backend_location + generate_get_route(league_route, { id: req.params.id });
+        api_get_request(route, (league_object) => {
+            const page_rendered=true;
+            if(league_object._id === req.params.id) {
+                const league = {
+                    description: league_object.Description,
+                    game_type: league_object.Game_type,
+                    name: league_object.Name,
+                };
+                const tournaments = [];
+                res.render('leagues', {
+                    league,
+                    page_rendered,
+                    tournaments,
+                });
+            }
+
+        });
+
     }, (failure) => {
         res.redirect('/login');
     });
