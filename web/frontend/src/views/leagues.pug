@@ -27,4 +27,27 @@ if page_rendered
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
+
+            div(id="leagues-content-obscure" class="content-obscure")
+            div(class="modal" id="edit-league-modal")
+                div(class="modal-content" id="edit-league-modal-content")
+                    form(class="basic-form-column" action="/edit_league" method="POST") 
+                        input(type="hidden" name="leagueId" value=league._id)
+                        div(class="form-box")
+                            h1(class="form-header" id="league-name-header")
+                                | League Name:
+                            input(type="text" id="league-name-field" class="form-field" name="leagueName" value=league.name)
+                        div(class="form-box")
+                            p(class="form-text" id="league-description-text")
+                                | League Description
+                            textarea(id="league-description-field" class="form-field" name="leagueDescription" rows="4" cols="20")
+                                | #{league.description}
+                            p(class="form-text")
+                                | Game Played in League
+                            input(type="text" id="league-game-type-field" class="form-field" name="leagueGameType" value=league.game_type)
+                        div(class="form-box")
+                            input(type="button" id="cancel-edit-league" class="basic-button" value="Cancel")
+                            input(type="submit" id="submit-edit-league" class="basic-button" value="Submit")
     include adminpanels/extensions/league-adminpanel.pug
+    script(src="./../js/leagues.js")
+
