@@ -112,8 +112,8 @@ app.post('/signup', async (req, res) => {
             }
         }
     });
-
 });
+
 app.get('/league/:id', (req,res) => {
 
     is_logged_in(req.cookies, (success) => {
@@ -134,7 +134,6 @@ app.get('/league/:id', (req,res) => {
                     tournaments,
                 });
             }
-
         });
 
     }, (failure) => {
