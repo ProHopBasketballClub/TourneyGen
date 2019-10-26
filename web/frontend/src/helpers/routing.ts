@@ -98,7 +98,7 @@ export function api_put_request(route: string, body: object, callback) {
         json: true,
         method: 'PUT',
         url: route,
-    }, (error, post_response, post_body) => {
+    }, (error, put_response, put_body) => {
 
         if (error) {
             console.log(error);
@@ -106,18 +106,18 @@ export function api_put_request(route: string, body: object, callback) {
             return;
         }
         try {
-            if (post_response.statusCode === HttpStatus.OK) {
-                APIResponse = post_body;
-                APIResponse.status_code = post_response.statusCode;
+            if (put_response.statusCode === HttpStatus.OK) {
+                APIResponse = put_body;
+                APIResponse.status_code = put_response.statusCode;
                 callback(APIResponse);
                 return;
-            } else if (post_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
-                console.log('302 response: ', post_response);
-                APIResponse = post_response;
+            } else if (put_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                console.log('302 response: ', put_response);
+                APIResponse = put_response;
                 callback(APIResponse);
                 return;
             } else {
-                console.log(post_response.statusCode);
+                console.log(put_response.statusCode);
                 callback(null);
                 return;
             }
