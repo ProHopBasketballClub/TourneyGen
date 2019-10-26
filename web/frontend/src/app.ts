@@ -173,8 +173,8 @@ app.post('/signup', async (req, res) => {
             }
         }
     });
-
 });
+
 app.get('/league/:id', (req,res) => {
 
     is_logged_in(req.cookies, (success) => {
@@ -183,11 +183,10 @@ app.get('/league/:id', (req,res) => {
         api_get_request(route, (league_object) => {
             const page_rendered=true;
             if(league_object._id === req.params.id) {
-                let league = {
+                const league = {
                     description: league_object.Description,
-                    name: league_object.Name,
                     game_type: league_object.Game_type,
-
+                    name: league_object.Name,
                 };
                 const tournaments = [];
                 res.render('leagues', {
@@ -196,7 +195,6 @@ app.get('/league/:id', (req,res) => {
                     tournaments,
                 });
             }
-            
         });
 
     }, (failure) => {
