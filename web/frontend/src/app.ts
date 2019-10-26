@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import { league_get_all_route, league_route, user_route } from './constants/routes';
-import { api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
+import { api_delete_request, api_get_request, api_post_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -138,6 +138,21 @@ app.get('/league/:id', (req,res) => {
             
         });
 
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.delete('/delete-league-:id', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const route = backend_location + generate_get_route(league_route, { id: req.params.id });
+        api_delete_request(route, (league_object) => {
+            if (league_object) {
+                if (league_object.status_code === HttpStatus.OK) {
+                    res.redirect('/');
+                }
+            }
+        });
     }, (failure) => {
         res.redirect('/login');
     });
