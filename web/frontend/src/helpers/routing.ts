@@ -148,7 +148,7 @@ export function is_logged_in(cookies, success_callback, failure_callback) {
     const route = backend_location + generate_get_route(user_route, { displayName: tourneygen_user });
 
     api_get_request(route, (user_object) => {
-        if (!user_object) {
+        if (!user_object || user_object.status_code === HttpStatus.NOT_FOUND) {
             failure_callback({ reason: 'User not found.' });
             return;
         }

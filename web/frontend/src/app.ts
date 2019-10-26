@@ -99,7 +99,7 @@ app.post('/create_league', (req, res) => {
             }
 
             // Error case handled here, all success cases above should have returned.
-            // TODO: When we have front-end error handling, it should be reported here.
+            // TODO: WhenFrom  we have front-end error handling, it should be reported here.
             res.redirect('/');
         });
     }, (failure) => {
@@ -109,22 +109,28 @@ app.post('/create_league', (req, res) => {
 
 app.post('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-            res.redirect('/'); // User is already logged-in,
+        // User is already logged in, so ignore their request.
     }, (failure) => {
-        const username = req.body.username ? req.body.username : '';
+        // Check for no body, and for string versions of falsey things.
+        if (!req.body.username || req.body.username === 'undefined' || req.body.username === 'null') {
+            res.redirect('/login');
+            return;
+        }
+
+        const username = req.body.username;
         const route = backend_location + generate_get_route(user_route, { displayName: username });
 
         api_get_request(route, (user_object) => {
-            if (!user_object) {
+            if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
                 // When possible, pass that info along.
                 res.redirect('/login');
                 return;
             }
 
-            const id = user_object ? user_object._id : '';
-            const email = user_object ? user_object.email : '';
-            const name = user_object ? user_object.displayName : '';
+            const id = user_object._id;
+            const email = user_object.email;
+            const name = user_object.displayName;
             const random_number = Math.random();
 
             // Attach a "security random number" (srn)
