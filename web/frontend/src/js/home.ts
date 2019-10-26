@@ -7,7 +7,6 @@ let obscurer: any = document.getElementById('home-content-obscure');
 let showModal = () => {
     modal.style.display = 'block';
     obscurer.style.display = 'block';
-    console.log('showefihdsu');
 
 };
 
