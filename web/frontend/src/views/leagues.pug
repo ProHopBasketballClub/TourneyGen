@@ -1,0 +1,29 @@
+doctype html
+if page_rendered
+    html(lang='en')
+        head
+            title Tourney Gen - leagues
+            link(rel="stylesheet" href="./../css/tourneygen.css")
+            link(rel="stylesheet" href="./../css/leagues.css")
+        body
+            div(class='home-container')
+                div(class='category-card')
+                    p(class='category-card-title')
+                        | #{league.name}
+                    p(id="league-game-type") 
+                        | #{league.game_type}
+                    p(id="league-description") 
+                        | #{league.description}
+                        div(class='category-card-entry-container')
+                            if tournaments && tournaments.length > 0
+                                for tourney in tournaments
+                                    a(href='/leagues' class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{tourney.name}      
+                            else
+                                div(class='category-card-entries')
+                                    p No tournaments for this league
+                    div(class='button')
+                            a(href='/' data-toggle="modal" class='button' id = 'new-league') 
+                                | Home
