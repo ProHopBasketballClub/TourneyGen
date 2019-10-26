@@ -124,16 +124,16 @@ app.get('/league/:id', (req,res) => {
             const page_rendered=true;
             const league = {
                 logo:null,
-                name: league_object.Name
+                name: league_object.Name,
             };
             const tournaments = [];
             res.render('leagues', {
                 league,
                 page_rendered,
-                tournaments
+                tournaments,
             });
         });
-        
+
     }, (failure) => {
         res.redirect('/login');
     });
