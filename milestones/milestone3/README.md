@@ -17,7 +17,7 @@ able to edit or delete leagues that they own.
 
 
 
-###Static Analysis 
+### Static Analysis 
 
 The static analysis for Team 3-6 project is handled by code inspector reports can be found [here](https://www.code-inspector.com/project/preferences/658). 
 
