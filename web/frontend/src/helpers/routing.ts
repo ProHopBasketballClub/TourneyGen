@@ -13,6 +13,7 @@ export function api_get_request(route: string, callback) {
     */
     let data: string = '';
     let APIResponse;
+    console.log('Submitting GET request to: ' + route);
 
     http.get(route, (resp) => {
 
@@ -50,6 +51,8 @@ export function api_post_request(route: string, path: string, body: object, call
     const response = '';
     let APIResponse;
     const url = route + path;
+    console.log('Submitting GET request to: ' + url);
+
     request({
         body,
         json: true,
@@ -187,7 +190,7 @@ export function is_logged_in(cookies, success_callback, failure_callback) {
     const route = backend_location + generate_get_route(user_route, { displayName: tourneygen_user });
 
     api_get_request(route, (user_object) => {
-        if (!user_object) {
+        if (!user_object || user_object.status_code === HttpStatus.NOT_FOUND) {
             failure_callback({ reason: 'User not found.' });
             return;
         }
