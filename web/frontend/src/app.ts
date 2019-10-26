@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import { league_get_all_route, league_route, user_route } from './constants/routes';
-import { api_get_request,api_delete_request,  api_post_request, api_put_request,
+import { api_delete_request, api_get_request,  api_post_request, api_put_request,
      create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
@@ -240,25 +240,9 @@ app.get('/league/:id', (req,res) => {
 
 app.post('/delete_league', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-        const leagueOwner = req.body.ownerName;
-        const leagueName = req.body.leagueName;
-        const leagueDescription = req.body.leagueDescription;
-        const leagueGameType = req.body.leagueGameType;
         const leagueId = req.body.leagueId ? req.body.leagueId : '';
 
-        if (!leagueName || !leagueDescription || !leagueGameType || !leagueId) {
-            // TODO: When we have front-end error handling, it should be reported here.
-            res.redirect('back'); // Go back to the refferer.
-        }
-
-        const payload = {
-            Description: leagueDescription,
-            Game_type: leagueGameType,
-            Name: leagueName,
-            Owner: leagueOwner,
-        };
-
-        api_put_request(generate_get_route(backend_location + league_route, { id: leagueId }), payload, (backend_response) => {
+        api_delete_request(generate_get_route(backend_location + league_route, { id: leagueId }), (backend_response) => {
             if (backend_response) {
                 if (backend_response.status_code === HttpStatus.OK) {
                     // Redirect the user so that the changes appear.

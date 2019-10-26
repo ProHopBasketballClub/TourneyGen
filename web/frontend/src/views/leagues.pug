@@ -53,10 +53,6 @@ if page_rendered
                     form(class="basic-form-column" action="/delete_league" method="POST") 
                         input(type="hidden" name="leagueId" value=league._id)
                         div(class="form-box")
-                            input(type="hidden" id="league-owner-field" class="form-field" name="ownerName" value="deleted")
-                            input(type="hidden" id="league-name-field" class="form-field" name="leagueName" value="deleted")
-                            input(type="hidden" id="league-description-field" class="form-field" name="leagueDescription" value="deleted")
-                            input(type="hidden" id="league-game-type-field" class="form-field" name="leagueGameType" value="deleted")
                             p 
                                 | Are you sure you want to delete?
                             input(type="button" id="cancel-delete-league" class="basic-button" value="Cancel")
