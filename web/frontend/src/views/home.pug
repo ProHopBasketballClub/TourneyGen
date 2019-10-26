@@ -13,10 +13,11 @@ html(lang='en')
                 div(class='category-card-entry-container')
                     if leagues && leagues.length > 0
                         each league in leagues
-                            a(href='/' class = 'list-item category-card-entry-list-item')
+                            - var url = 'league/' + league.id
+                            a(href=url class = 'list-item category-card-entry-list-item')
                                 div(class='category-card-entries')
                                     p(class='category-list')
-                                        | #{league.Name}
+                                        | #{league.name}
                     else
                         div(class='category-card-entries')
                             p No Leagues
