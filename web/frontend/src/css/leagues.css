@@ -70,4 +70,12 @@
 .list-item {
     color: #bbbbbb;
 }
-    
+
+#league-game-type {
+    font-size: 25px;
+    margin: 0 31px;
+}
+
+#league-description {
+    margin: 12px 31px 27px 31px;
+}
