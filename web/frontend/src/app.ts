@@ -195,7 +195,6 @@ app.get('/league/:id', (req,res) => {
                     tournaments,
                 });
             }
-
         });
 
     }, (failure) => {
