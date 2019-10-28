@@ -77,6 +77,14 @@ app.get('/login', (req, res) => {
     });
 });
 
+app.get('/signup', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        res.redirect('/');
+    }, (failure) => {
+        res.render('signup');
+    });
+});
+
 app.post('/create_league', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         const ownerId = success._id;
@@ -104,6 +112,24 @@ app.post('/create_league', (req, res) => {
             // TODO: When we have front-end error handling, it should be reported here.
             res.redirect('/');
         });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.post('/delete_league', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const leagueId = req.body.leagueId ? req.body.leagueId : '';
+
+        api_delete_request(generate_get_route(backend_location + league_route, { id: leagueId }), (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the changes appear.
+                    res.redirect('/'); // Go back to home
+                }
+            }
+        });
+
     }, (failure) => {
         res.redirect('/login');
     });
@@ -183,14 +209,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-app.get('/signup', (req, res) => {
-    is_logged_in(req.cookies, (success) => {
-        res.redirect('/');
-    }, (failure) => {
-        res.render('signup');
-    });
-});
-
 app.post('/signup', async (req, res) => {
 
     const username = req.body.username ? req.body.username : '';
@@ -208,51 +226,6 @@ app.post('/signup', async (req, res) => {
                 res.redirect('/login');
             }
         }
-    });
-});
-
-app.get('/league/:id', (req,res) => {
-
-    is_logged_in(req.cookies, (success) => {
-        // this value ensures the HTML page is rendered before variables are used
-        const route = backend_location + generate_get_route(league_route, { id: req.params.id });
-        api_get_request(route, (league_object) => {
-            const page_rendered=true;
-            if(league_object._id === req.params.id) {
-                const league = {
-                    description: league_object.Description,
-                    game_type: league_object.Game_type,
-                    name: league_object.Name,
-                };
-                const tournaments = [];
-                res.render('leagues', {
-                    league,
-                    page_rendered,
-                    tournaments,
-                });
-            }
-        });
-
-    }, (failure) => {
-        res.redirect('/login');
-    });
-});
-
-app.post('/delete_league', (req, res) => {
-    is_logged_in(req.cookies, (success) => {
-        const leagueId = req.body.leagueId ? req.body.leagueId : '';
-
-        api_delete_request(generate_get_route(backend_location + league_route, { id: leagueId }), (backend_response) => {
-            if (backend_response) {
-                if (backend_response.status_code === HttpStatus.OK) {
-                    // Redirect the user so that the changes appear.
-                    res.redirect('/'); // Go back to home
-                }
-            }
-        });
-
-    }, (failure) => {
-        res.redirect('/login');
     });
 });
 
