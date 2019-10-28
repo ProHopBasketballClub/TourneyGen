@@ -35,7 +35,8 @@ button{
 
 .modal {
     display: none; /* Hidden by default */
-    padding: 7%  23%;
+    align-items: center;
+    justify-content: center;
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -59,7 +60,8 @@ button{
 
 .modal-content {
     display: flex;
-    width: 50%;
+    margin-bottom: 15vh;
     padding: 2%;
     background-color: #2a2a2a;
+    border-radius: 25px;
 }

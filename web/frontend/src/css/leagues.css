@@ -128,27 +128,3 @@
     margin-top: 10px;
     margin-right: 10px;
 }
-
-#league-name-header{
-    padding-right: 10px;
-}
-
-#league-description-text {
-    padding-right: 10px;
-}
-
-#league-game-type-field {
-    height: 10%;
-}
-
-#league-description-field {
-    margin-right: 10px;
-}
-
-#edit-league-modal {
-    padding: 5% 35%;
-}
-
-#edit-league-modal-content {
-    width: 18%;
-}

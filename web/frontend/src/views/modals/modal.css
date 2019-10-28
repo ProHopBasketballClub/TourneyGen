@@ -1,0 +1,47 @@
+.basic-form {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-box-row {
+    flex: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 7px 0px;
+    padding-right: 7px;
+    align-content: center;
+    justify-content: center;
+}
+
+.form-box-column {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 7px 0px;
+    padding-right: 7px;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-header {
+    font-size: 40px;
+    margin-top: 0px;
+    margin-bottom: 5px
+}
+
+.form-text {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.form-field {
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 18px;    
+}
+
+.basic-button {
+    margin-top: 10px;
+    margin-right: 10px;
+}
