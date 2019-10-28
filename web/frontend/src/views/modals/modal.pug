@@ -1,7 +1,27 @@
 html(lang='en')
-    link(rel="stylesheet" type='text/css' href="./../css/modal/modal.css")
+
+    style
+        include modal.css
 
     body
-        div(id="home-content-obscure" class="content-obscure")
+        div(class='content-obscure' id=modalId + '-obscurer')
         div(class="modal" id=modalId)
             block modal-content
+        script
+            include modal.js
+        script.
+
+            const modalId = '#{modalId}';
+            // Attempt to parse out the openers and closers.
+            // Its a csv, but if there's only one element, there
+            // will be no comma. Thus, check for a comma, if its
+            // there, then split on comma, if its not
+            // then just add a list containing the one string.
+            const modalOpeners = '#{modalOpeners}'.includes(',') ? '#{modalOpeners}'.split(',') : ['#{modalOpeners}'];
+            const modalClosers = '#{modalClosers}'.includes(',') ? '#{modalClosers}'.split(',') : ['#{modalClosers}'];
+
+            if (window.addEventListener) {
+                window.addEventListener('load', () => {
+                    register_modal(modalId, modalOpeners, modalClosers);
+                }, false);
+            }

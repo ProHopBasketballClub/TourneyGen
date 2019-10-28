@@ -27,10 +27,11 @@ if page_rendered
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
+                                
+            include adminpanels/extensions/league-adminpanel.pug
 
-            div(id="leagues-content-obscure" class="content-obscure")
-            div(class="modal" id="edit-league-modal")
-
-    include adminpanels/extensions/league-adminpanel.pug
-    script(src="./../js/leagues.js")
+            - var modalId = "edit-league-modal"
+            - var modalOpeners = [ "edit-league" ]
+            - var modalClosers = [ "cancel-edit-league", "submit-edit-league" ]
+            include modals/extensions/editLeague/modal.pug
 

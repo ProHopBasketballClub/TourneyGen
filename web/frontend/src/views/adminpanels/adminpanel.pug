@@ -1,10 +1,12 @@
 doctype html
 html(lang='en')
-    link(rel="stylesheet" type='text/css' href="./../css/adminpanel.css")
+    style
+        include adminpanel.css
         
     body
         div(id = 'admin-panel' class = 'admin-panel-collapsed')
             p(class='admin-text')
                 | Admin Tools
             block admin-tools-content
-            script(src="./../../js/adminpanel.js") 
+        script
+            include adminpanel.js 

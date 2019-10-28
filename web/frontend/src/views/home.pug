@@ -38,6 +38,7 @@ html(lang='en')
                         div(class='category-card-entries')
                             p No Teams
 
-            div(id="home-content-obscure" class="content-obscure")
             - var modalId = "create-league-modal"
+            - var modalOpeners = [ "new-league" ]
+            - var modalClosers = [ "cancel-create-league", "submit-create-league" ]
             include modals/extensions/home/modal.pug
