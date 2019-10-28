@@ -71,3 +71,7 @@
 .list-item {
     color: #bbbbbb;
 }
+
+.category-card-entry-container {
+    position: relative;
+}

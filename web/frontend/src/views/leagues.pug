@@ -33,5 +33,14 @@ if page_rendered
             - var modalId = "edit-league-modal"
             - var modalOpeners = [ "edit-league" ]
             - var modalClosers = [ "cancel-edit-league", "submit-edit-league" ]
+            - var leagueId = league._id
+            - var leagueName = league.name
+            - var leagueDescription = league.description
+            - var leagueGameType = league.game_type
             include modals/extensions/editLeague/modal.pug
 
+            - var modalId = "delete-league-modal"
+            - var modalOpeners = [ "delete-league" ]
+            - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
+            - var leagueId = league._id
+            include modals/extensions/deleteLeague/modal.pug
