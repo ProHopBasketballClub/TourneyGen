@@ -117,7 +117,7 @@ export class LeagueController implements IController {
 
     // update an existing league object
     public async put(req: Request, res: Response) {
-        const validLeague: DataValidDTO = await League.validate(req);
+        const validLeague: DataValidDTO = await League.validateUpdate(req);
         if (!validLeague) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: validLeague.error});
@@ -133,11 +133,9 @@ export class LeagueController implements IController {
             res.json({error: 'You cannot update a league that does not exist'});
             return;
         }
-        const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
-        if (await MongoDb.updateById(this.table, req.query.id, league)) {
-            league._id = req.query.id;
+        if (await MongoDb.updateById(this.table, req.query.id, req.body)) {
             res.statusCode = HttpStatus.OK;
-            res.json(league);
+            res.json((await MongoDb.getById(this.table, req.query.id)).data);
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
