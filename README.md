@@ -4,6 +4,7 @@
 [![Code Quality Score](https://www.code-inspector.com/project/658/score/svg)](https://www.code-inspector.com/project/preferences/658)
 [![Code Grade](https://www.code-inspector.com/project/658/status/svg)](https://www.code-inspector.com/project/preferences/658)
 [![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-9/branch/master/graph/badge.svg?token=DoKdk9BFej)](https://codecov.io/gh/seng350/seng350f19-project-team-3-9)
+[![BCH compliance](https://bettercodehub.com/edge/badge/seng350/seng350f19-project-team-3-9?branch=master&token=1e91f01971b92e3a8085be6d8f38d504a7294a7a)](https://bettercodehub.com/)
 
 
 
