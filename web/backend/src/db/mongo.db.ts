@@ -1,5 +1,5 @@
 import {Collection, Db, MongoClient, ObjectId} from 'mongodb';
-import {DataReturnDTO} from '../models/dataReturnDTO';
+import {DataReturnDTO} from '../models/DTOs/dataReturnDTO';
 
 export class MongoDb {
 
