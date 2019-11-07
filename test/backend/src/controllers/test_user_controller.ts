@@ -99,6 +99,18 @@ describe('User Controller tests', async function() {
         res.should.have.status(HttpStatus.OK);
         res.body.displayName.should.equal('eetar23');
     });
+    it('It should update a user name', async () => {
+        const res = await chai.request(conn)
+            .put(USER_ROOT)
+            .query({id: userId})
+            .send({
+                displayName: 'eetar253',
+                email: 'a@b.ca',
+            });
+        res.should.have.status(HttpStatus.OK);
+        res.body.displayName.should.equal('eetar253');
+        res.body.email.should.equal('a@b.ca');
+    });
 // This Attempts to update a user with a malformed id
 // Expects a 400 error and a error string
     it('Try to update user with a bad id', async () => {
@@ -143,10 +155,10 @@ describe('User Controller tests', async function() {
     it('It should get a user by name', async () => {
         const res = await chai.request(conn)
             .get(USER_ROOT)
-            .query({displayName: 'eetar23'});
+            .query({displayName: 'eetar253'});
 
         res.should.have.status(HttpStatus.OK);
-        res.body.displayName.should.equal('eetar23');
+        res.body.displayName.should.equal('eetar253');
     });
 
 // Attempts to get a user by id

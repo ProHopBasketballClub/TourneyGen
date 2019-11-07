@@ -158,7 +158,7 @@ describe('League Controller', async function() {
     });
 
     it('it should Update a league object new name', async () => {
-        const league = {Name: 'leagueNew', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        const league = {Name: 'leagueNew'};
         const res = await chai.request(conn)
             .put(LEAGUE_ROOT)
             .query({id: leagueId})
@@ -166,6 +166,7 @@ describe('League Controller', async function() {
         res.status.should.equal(HttpStatus.OK);
         res.body.should.be.a('object');
         res.body.Name.should.equal('leagueNew');
+        res.body.Owner.should.equal(userId);
     });
 
     it('it should Fail no id specified for update', async () => {
