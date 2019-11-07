@@ -23,10 +23,15 @@ describe('User Controller tests', async function() {
     const TIME_OUT: number = 20000;
     this.timeout(TIME_OUT);
 
-    before(async () => {
+    before(async function() {
         serve = new App();
         conn = await serve.express.listen();
-        process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+        try {
+            process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+        } catch (e) {
+            await new Promise((resolve) => setTimeout(() => resolve(), TIME_OUT));
+        }
+
     });
 
     after(async () => {
