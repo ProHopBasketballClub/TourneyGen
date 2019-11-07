@@ -1,4 +1,5 @@
 export * from './user';
 export * from './league';
-export * from './dataReturnDTO';
-export * from './dataValidDTO';
+export * from './DTOs/dataReturnDTO';
+export * from './DTOs/dataValidDTO';
+export * from './team';

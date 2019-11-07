@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {MongoDb} from '../db/mongo.db';
-import {DataValidDTO} from './dataValidDTO';
+import {DataValidDTO} from './DTOs/dataValidDTO';
 
 export class League {
 
