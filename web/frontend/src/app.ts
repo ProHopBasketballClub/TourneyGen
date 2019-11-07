@@ -221,10 +221,10 @@ app.post('/signup', async (req, res) => {
     };
 
     api_post_request(route, url_path, body, (user_object) => {
-        if (user_object) {
-            if (user_object.status_code === HttpStatus.OK) {
-                res.redirect('/login');
-            }
+        if (user_object && user_object.status_code === HttpStatus.OK) {
+            res.redirect('/login');
+        } else {
+            res.redirect('/signup');
         }
     });
 });
