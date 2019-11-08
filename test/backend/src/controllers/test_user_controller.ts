@@ -29,6 +29,7 @@ describe('User Controller tests', async function() {
         try {
             process.env.DB_CONNECTION_STRING = await mongoUnit.start();
         } catch (e) {
+            console.log('Mongo Unit failed to start');
             await mongoUnit.drop();
             await mongoUnit.stop();
         }
