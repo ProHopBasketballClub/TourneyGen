@@ -29,7 +29,8 @@ describe('User Controller tests', async function() {
         try {
             process.env.DB_CONNECTION_STRING = await mongoUnit.start();
         } catch (e) {
-            await new Promise((resolve) => setTimeout(() => resolve(), TIME_OUT));
+            await mongoUnit.drop();
+            await mongoUnit.stop();
         }
 
     });
