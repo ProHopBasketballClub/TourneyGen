@@ -4,24 +4,18 @@ import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {Match} from '../models/match';
 import {IController} from './controller.interface';
+import {RequestValidation} from './validation';
 
 export class MatchController implements IController {
     private table: string = 'match';
 
     public async delete(req: Request, res: Response) {
-        if (!req.query.id || req.query.id.length !== MongoDb.MONGO_ID_LEN) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: 'Id must be specified as a param of this request'});
-            return;
-        }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
-            res.statusCode = HttpStatus.NOT_FOUND;
-            res.json({error: 'You cannot delete a team that does not exist'});
+        if (!await RequestValidation.RecordExists(req, res, this.table)) {
             return;
         }
         if (await MongoDb.deleteById(this.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
-            res.json({Msg: 'Successfully Deleted team with id ' + req.query.id});
+            res.json({Msg: 'Successfully Deleted match with id ' + req.query.id});
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -90,10 +84,12 @@ export class MatchController implements IController {
             res.json({error: isMatchValid.error});
             return;
         }
-        const team: Team = new Team(req.body.Roster, req.body.Owner, req.body.Name, req.body.Description);
-        if (await MongoDb.save(this.table, team)) {
+        const homeTeam: Team = (await MongoDb.getById('team', req.body.Home)).data;
+        const awayTeam: Team = (await MongoDb.getById('team', req.body.Away)).data;
+        const match: Match = new Match(req.body, homeTeam, awayTeam);
+        if (await MongoDb.save(this.table, match)) {
             res.statusCode = HttpStatus.OK;
-            res.json(team);
+            res.json(match);
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -110,14 +106,7 @@ export class MatchController implements IController {
             res.json({error: isValidMatch.error});
             return;
         }
-        if (!req.query.id || req.query.id.length !== MongoDb.MONGO_ID_LEN) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: 'The id in this request is not valid'});
-            return;
-        }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
-            res.statusCode = HttpStatus.NOT_FOUND;
-            res.json({error: 'You cannot update a team that does not exist'});
+        if (!await RequestValidation.RecordExistsWithBody(req, res, this.table)) {
             return;
         }
         if (await MongoDb.updateById(this.table, req.query.id, req.body)) {
@@ -129,5 +118,53 @@ export class MatchController implements IController {
             res.json({error: 'Internal Server Error update failed'});
             return;
         }
+    }
+
+    // public async confirmMatch(req: Request, res: Response) {
+    //
+    // }
+    //
+    // public async completeMatch(req: Request, res: Response) {
+    //
+    // }
+
+    public async setScore(req: Request, res: Response) {
+        if (!await RequestValidation.ValidScoreBody(res, req, this.table)) {
+            return;
+        }
+        const retrievedMatch: DataReturnDTO = await MongoDb.getById(this.table, req.query.id);
+        if (!retrievedMatch.valid) {
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.json({error: retrievedMatch.data});
+            return;
+        }
+        if (retrievedMatch.data.Away_Score) {
+            const validUpdate: DataValidDTO = await this.checkConflict(retrievedMatch.data, req.body);
+            if (!validUpdate.valid) {
+                res.statusCode = HttpStatus.CONFLICT;
+                res.json({Message: validUpdate.error});
+                return;
+            }
+        } else {
+            await MongoDb.updateById(this.table, req.body.id, {
+                Away_Score: req.body.Away_Score,
+                Home_Score: req.body.Home_Score,
+            });
+        }
+        res.statusCode = HttpStatus.OK;
+        res.json({Message: 'The score for match' + req.body.id + ' has been set'});
+        return;
+    }
+
+    private async checkConflict(match: Match, matchReq): Promise<DataValidDTO> {
+        if (match.Away_Score !== matchReq.Away_Score) {
+            await MongoDb.updateById(this.table, matchReq.id, {In_Conflict: true});
+            return new DataValidDTO(false, 'Away Score do not match. This match has been marked as conflicted');
+        }
+        if (match.Home_Score !== matchReq.Home_Score) {
+            await MongoDb.updateById(this.table, matchReq.id, {In_Conflict: true});
+            return new DataValidDTO(false, 'Home Scores do not match. This match has been marked as conflicted');
+        }
+        return new DataValidDTO(true, '');
     }
 }

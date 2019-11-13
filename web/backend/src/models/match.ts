@@ -1,4 +1,5 @@
 import {Request} from 'express';
+import {MongoDb} from '../db';
 import {DataValidDTO} from './DTOs/dataValidDTO';
 
 export class Match {
@@ -7,13 +8,26 @@ export class Match {
         if (!Object.keys(req.body).length) {
             return new DataValidDTO(false, 'A team object is required in the body of this request');
         }
-        if (!req.body.Home || req.body.Home.length < 1) {
+        if (!req.body.Home || req.body.Home.length !== MongoDb.MONGO_ID_LEN) {
             return new DataValidDTO(false, 'A home team must be specified');
         }
 
-        if (!req.body.Visitor || req.body.Away.length < 1) {
+        if (!req.body.Away || req.body.Away.length !== MongoDb.MONGO_ID_LEN) {
             return new DataValidDTO(false, 'A home away must be specified');
         }
+        if (req.body.Away === req.body.Home) {
+            return new DataValidDTO(false, 'A team cannot play itself');
+        }
+        const homeTeam = await MongoDb.getById('team', req.body.Home);
+        const awayTeam = await MongoDb.getById('team', req.body.Away);
+
+        if (!homeTeam.valid || !homeTeam.data) {
+            return new DataValidDTO(false, 'The specified home team was not found');
+        }
+        if (!awayTeam.valid || !awayTeam.data) {
+            return new DataValidDTO(false, 'The specified away team was not found');
+        }
+        return new DataValidDTO(true, '');
     }
 
     public static async validateUpdate(req: Request) {
@@ -26,7 +40,6 @@ export class Match {
                 return new DataValidDTO(false, 'A home team must be specified');
             }
         }
-
         if (!req.body.Visitor) {
             if (req.body.Away.length < 1) {
                 return new DataValidDTO(false, 'A home away must be specified');
@@ -37,18 +50,26 @@ export class Match {
     public _id: string; // The match id
     public Match: string;
     public Home: string; // The id of the home team
-    public Visitor: string; // The id of the away team
+    public Away: string; // The id of the away team
     public Victor: string; // The id of the winning team
     public Loser: string; // The id of the losing team
-    public Victor_Score: number;
-    public Loser_Score: number;
+    public Home_Score: number;
+    public Away_Score: number;
     public Confirmed: boolean;
     public In_Conflict: boolean; // If the match result is contested
     public Fill_From: [number, number];
-    public Tournament_Id: string; // The id of the tournament the match is in. Not required
+    public Tournament: string; // The id of the tournament the match is in. Not required
 
-    constructor(req: Request) {
-        this.Home = req.body.Home;
-        this.Victor = req.body.Away;
+    constructor(req, homeTeam, awayTeam) {
+        this.Home = req.Home;
+        this.Away = req.Away;
+        this.Match = homeTeam.Name + '-VS-' + awayTeam.Name;
+        this.Confirmed = false;
+
+        if (req.Tournament) {
+            this.Tournament = req.Tournament;
+        } else {
+            this.Tournament = 'Not part of a Tournament';
+        }
     }
 }

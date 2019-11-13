@@ -24,22 +24,6 @@ export class League {
         return new DataValidDTO(true, '');
     }
 
-    public _id: string; // The mongo id of this object
-    public Owner: string;// This will be the UID of the user that owns the league
-    public Name: string; // This is the name of the league
-    public Description: string;
-    public Logo: Uint8Array; // This will store images as bytes
-    public Game_type: string;// The game that this league plays
-    public Tournaments: string[];// This will hold the UIDs of tournaments in this league
-    public Teams: string[]; // This will hold the UIDs of teams in this league
-
-    constructor(owner: string, name: string, description: string, game_type: string) {
-        this.Owner = owner;
-        this.Name = name;
-        this.Description = description;
-        this.Game_type = game_type;
-    }
-
     public static async validateUpdate(req: Request) {
         if (Object.keys(req.body).length < 1) {
             return new DataValidDTO(false, 'A league is required in the body of this request');
@@ -69,5 +53,21 @@ export class League {
             }
         }
         return new DataValidDTO(true, '');
+    }
+
+    public _id: string; // The mongo id of this object
+    public Owner: string;// This will be the UID of the user that owns the league
+    public Name: string; // This is the name of the league
+    public Description: string;
+    public Logo: Uint8Array; // This will store images as bytes
+    public Game_type: string;// The game that this league plays
+    public Tournaments: string[];// This will hold the UIDs of tournaments in this league
+    public Teams: string[]; // This will hold the UIDs of teams in this league
+
+    constructor(owner: string, name: string, description: string, game_type: string) {
+        this.Owner = owner;
+        this.Name = name;
+        this.Description = description;
+        this.Game_type = game_type;
     }
 }
