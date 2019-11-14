@@ -73,7 +73,7 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team); 
+                            teams.push(team);
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
@@ -356,7 +356,7 @@ app.post('/login', (req, res) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
                 // When possible, pass that info along.
-                if (user_object){
+                if (user_object) {
                     errors.push(user_object.error);
                 }
                 res.redirect('/login');
