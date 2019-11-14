@@ -1,15 +1,23 @@
-#league-name-header{
+#team-name-header{
     padding-right: 10px;
 }
 
-#league-description-text {
+#team-description-text {
     padding-right: 10px;
 }
 
-#league-game-type-field {
+#team-roster-text {
+    padding-right: 10px;
+}
+
+#team-owner-field {
     height: 10%;
 }
 
-#league-description-field {
+#team-description-field {
+    margin-right: 10px;
+}
+
+#team-roster-field {
     margin-right: 10px;
 }
