@@ -15,6 +15,7 @@ chai.should();
 
 describe('Team Controller', async function() {
     let userId: string = '';
+    let leagueId: string = '';
     let serve; // A variable for the node app
     let conn; // The variable for the connection to the server
     const TIME_OUT: number = 20000;
@@ -30,7 +31,7 @@ describe('Team Controller', async function() {
     });
 
     before(async () => {
-        const res = await chai.request(conn)
+        let res = await chai.request(conn)
             .post('/api/user')
             .send({
                 displayName: 'eetar2',
@@ -39,6 +40,15 @@ describe('Team Controller', async function() {
         userId = res.body._id;
         userId.length.should.equal(MongoDb.MONGO_ID_LEN);
 
+        res = await chai.request(conn)
+            .post('/api/league')
+            .send({
+                Description: 'There is none',
+                Game_type: 'No one plays games anymore',
+                Name: 'League',
+                Owner: userId,
+            });
+        leagueId = res.body._id;
     });
 
     after(async () => {
@@ -47,7 +57,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should Create a team object', async () => {
-        const team = {Name: 'bois', Owner: userId, Roster: ['R4'], Description: 'Yes'};
+        const team = {Name: 'bois', Owner: userId, Roster: ['R4'], Description: 'Yes', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -58,7 +68,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on empty roster', async () => {
-        const team = {Name: 'bois2', Owner: userId, Roster: [''], Description: 'Yes'};
+        const team = {Name: 'bois2', Owner: userId, Roster: [''], Description: 'Yes', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -73,7 +83,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on no roster', async () => {
-        const team = {Name: 'bois2', Owner: userId, Description: 'Yes'};
+        const team = {Name: 'bois2', Owner: userId, Description: 'Yes', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -82,7 +92,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on no description', async () => {
-        const team = {Name: 'bois2', Owner: userId, Roster: ['Name']};
+        const team = {Name: 'bois2', Owner: userId, Roster: ['Name'], League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -91,7 +101,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on empty description', async () => {
-        const team = {Name: 'bois2', Owner: userId, Roster: ['R4'], Description: ''};
+        const team = {Name: 'bois2', Owner: userId, Roster: ['R4'], Description: '', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -100,7 +110,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on existing name', async () => {
-        const team = {Name: 'bois', Owner: userId, Roster: ['R4'], Description: 'Desc'};
+        const team = {Name: 'bois', Owner: userId, Roster: ['R4'], Description: 'Desc', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -109,7 +119,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on no name', async () => {
-        const team = {Owner: userId, Roster: ['R4'], Description: 'Desc'};
+        const team = {Owner: userId, Roster: ['R4'], Description: 'Desc', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
@@ -119,7 +129,7 @@ describe('Team Controller', async function() {
     });
 
     it('it should fail to create a team object on empty name', async () => {
-        const team = {Name: '', Owner: userId, Roster: ['R4'], Description: 'Desc'};
+        const team = {Name: '', Owner: userId, Roster: ['R4'], Description: 'Desc', League: leagueId};
         const res = await chai.request(conn)
             .post(TEAM_ROOT)
             .send(team);
