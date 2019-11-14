@@ -96,16 +96,16 @@ export class TeamController implements IController {
         // Get the league that owns this team
         const leagueTable = LeagueController.table;
         const leagueId = req.body.League;
-        const leaugeData: DataReturnDTO = await MongoDb.getById(leagueTable, leagueId);
+        const leagueData: DataReturnDTO = await MongoDb.getById(leagueTable, leagueId);
 
         // Ensure that there is a league found.
-        if (!leaugeData.valid) {
+        if (!leagueData.valid) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'Could not find team with id ' + leagueId});
             return;
         }
 
-        if (!leaugeData.data) {
+        if (!leagueData.data) {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             res.json({error: 'Internal Server Error creation failed'});
             return;
@@ -113,7 +113,7 @@ export class TeamController implements IController {
 
         if (await MongoDb.save(TeamController.table, team)) {
             // Add the team to the list of teams.
-            const teamList: string[] = leaugeData.data.Teams ? leaugeData.data.Teams : [];
+            const teamList: string[] = leagueData.data.Teams ? leagueData.data.Teams : [];
             teamList.push(team._id);
 
             if (await MongoDb.updateById(leagueTable, leagueId, { Teams: teamList })) {
