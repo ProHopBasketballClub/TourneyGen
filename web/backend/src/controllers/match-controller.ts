@@ -149,6 +149,7 @@ export class MatchController implements IController {
             Away_Score: req.body.Away_Score,
             Home_Score: req.body.Home_Score,
             Loser: req.body.Loser,
+            Updated_By: req.body.Updated_By,
             Victor: req.body.Victor,
         };
 
@@ -175,6 +176,11 @@ export class MatchController implements IController {
             }
             if (match.Loser !== matchReq.Loser) {
                 return new DataValidDTO(false, 'Losers do not match. This match has been marked as conflicted');
+            }
+            if (matchReq.Updated_By !== match.Updated_By) {
+                if (!await MongoDb.updateById(MatchController.table, match._id, {Confirmed: true})) {
+                    return new DataValidDTO(false, 'Internal Server error confirmation not set');
+                }
             }
             return new DataValidDTO(true, '');
         }

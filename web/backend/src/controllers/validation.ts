@@ -87,6 +87,12 @@ export class RequestValidation {
             res.json({error: 'The loser must be either the home or away team'});
             return false;
         }
+        if (req.body.Updated_by !== match.Home || req.body.Updated_By !== match.Away) {
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.json({error: 'Only teams that played the match can report the results'});
+            return false;
+        }
+
         return true;
     }
 }

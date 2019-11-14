@@ -59,6 +59,7 @@ export class Match {
     public In_Conflict: boolean; // If the match result is contested
     public Fill_From: [number, number];
     public Tournament: string; // The id of the tournament the match is in. Not required
+    public Updated_By: string;
 
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
