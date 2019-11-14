@@ -11,7 +11,7 @@ import {IController} from './controller.interface';
  */
 
 export class LeagueController implements IController {
-    private table: string = 'league';
+    public static table: string = 'league';
 
     public async delete(req: Request, res: Response) {
         if (!req.query.id) {
@@ -19,12 +19,12 @@ export class LeagueController implements IController {
             res.json({error: 'Id must be specified as a param of this request'});
             return;
         }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+        if ((await MongoDb.getById(LeagueController.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot delete a league that does not exist'});
             return;
         }
-        if (await MongoDb.deleteById(this.table, req.query.id)) {
+        if (await MongoDb.deleteById(LeagueController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
             res.json({Msg: 'Successfully Deleted league with id ' + req.query.id});
             return;
@@ -39,7 +39,7 @@ export class LeagueController implements IController {
         let out: DataReturnDTO;
         if (req.query.id) {
             if (req.query.id.length === MongoDb.MONGO_ID_LEN) { // Retrieve league by id
-                out = await MongoDb.getById(this.table, req.query.id);
+                out = await MongoDb.getById(LeagueController.table, req.query.id);
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'The specified id is malformed'});
@@ -47,7 +47,7 @@ export class LeagueController implements IController {
             }
         } else if (req.query.name) {
             if (req.query.name.length > 0) { // Retrieve League by name
-                out = await MongoDb.getByName(this.table, req.query.name);
+                out = await MongoDb.getByName(LeagueController.table, req.query.name);
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'The name specified is invalid'});
@@ -77,7 +77,7 @@ export class LeagueController implements IController {
     }
 
     public async getAll(req, res) {
-        const out = await MongoDb.getAll(this.table);
+        const out = await MongoDb.getAll(LeagueController.table);
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
             res.json(out.data);
@@ -98,12 +98,12 @@ export class LeagueController implements IController {
             return;
         } else {
             const league: League = new League(req.body.Owner, req.body.Name, req.body.Description, req.body.Game_type);
-            if ((await MongoDb.getByName(this.table, req.body.Name)).data) {
+            if ((await MongoDb.getByName(LeagueController.table, req.body.Name)).data) {
                 res.statusCode = HttpStatus.BAD_REQUEST;
                 res.json({error: 'A league with this name already exists'});
                 return;
             }
-            if (await MongoDb.save(this.table, league)) {
+            if (await MongoDb.save(LeagueController.table, league)) {
                 res.statusCode = HttpStatus.OK;
                 res.json(league);
                 return;
@@ -128,14 +128,14 @@ export class LeagueController implements IController {
             res.json({error: 'The id in this request is not valid'});
             return;
         }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+        if ((await MongoDb.getById(LeagueController.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a league that does not exist'});
             return;
         }
-        if (await MongoDb.updateById(this.table, req.query.id, req.body)) {
+        if (await MongoDb.updateById(LeagueController.table, req.query.id, req.body)) {
             res.statusCode = HttpStatus.OK;
-            res.json((await MongoDb.getById(this.table, req.query.id)).data);
+            res.json((await MongoDb.getById(LeagueController.table, req.query.id)).data);
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;

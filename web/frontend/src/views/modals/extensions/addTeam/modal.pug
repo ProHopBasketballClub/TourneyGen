@@ -6,6 +6,7 @@ block modal-content
 
     div(class="modal-content" id="add-team-modal-content")
         form(class="basic-form-column" action="/add_team" method="POST") 
+            input(type="hidden" name="leagueId" value=leagueId)
             div(class="form-box")
                 h1(class="form-header" id="team-name-header")
                     | Team Name:

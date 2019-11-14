@@ -92,6 +92,7 @@ app.post('/add_team', (req, res) => {
         const teamDescription = req.body.teamDescription;
         const ownerEmail = req.body.teamOwnerEmail;
         const textRoster = req.body.teamRoster;
+        const leagueId = req.body.leagueId;
 
         if (!(teamName && teamDescription && ownerEmail && textRoster)) {
             // TODO: When frontend error handling is implemented, report this error.
@@ -116,6 +117,7 @@ app.post('/add_team', (req, res) => {
                 Name: teamName,
                 Owner: user_object._id,
                 Roster: teamRoster,
+                _id: leagueId,
             };
             api_post_request(backend_location, team_route, payload, (backend_response) => {
                 if (backend_response) {
