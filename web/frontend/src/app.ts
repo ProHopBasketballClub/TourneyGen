@@ -1,3 +1,4 @@
+import { assertForOfStatement } from 'babel-types';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
@@ -130,10 +131,65 @@ app.get('/team/:id', (req, res) => {
                 });
             }
         });
+        // Example call to get_multiple
         // api_get_multiple_requests(routes, (response_object) => {
         //     console.log(response_object);
         //     res.render('home');
         // });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.post('/add_team', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const teamName = req.body.teamName;
+        const teamDescription = req.body.teamDescription;
+        const ownerEmail = req.body.teamOwnerEmail;
+        const textRoster = req.body.teamRoster;
+        const leagueId = req.body.leagueId;
+
+        if (!(teamName && teamDescription && ownerEmail && textRoster)) {
+            // TODO: When frontend error handling is implemented, report this error.
+            res.redirect('back');
+            return;
+        }
+
+        const teamRoster = (textRoster as string).split(',').map((item) => item.trim());
+
+        // Get the userID for the email.
+        const route = backend_location + generate_get_route(user_route, { email: ownerEmail });
+        api_get_request(route, (user_object) => {
+            if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
+                // User wasn't valid.
+                // TODO: When possible, pass that info along.
+                res.redirect('back');
+                return;
+            }
+
+            const payload = {
+                Description: teamDescription,
+                League: leagueId,
+                Name: teamName,
+                Owner: user_object._id,
+                Roster: teamRoster,
+            };
+            api_post_request(backend_location, team_route, payload, (backend_response) => {
+                if (backend_response) {
+                    if (backend_response.status_code === HttpStatus.OK) {
+                        // Redirect the user so that the new team appears.
+                        res.redirect('back');
+                        return;
+                    }
+                }
+
+                // Error case handled here, all success cases above should have returned.
+                // TODO: When we have front-end error handling, it should be reported here.
+                res.redirect('/');
+            });
+
+        });
+
     }, (failure) => {
         res.redirect('/login');
     });

@@ -69,5 +69,6 @@ export class League {
         this.Name = name;
         this.Description = description;
         this.Game_type = game_type;
+        this.Teams = [];
     }
 }

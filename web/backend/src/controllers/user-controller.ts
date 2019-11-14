@@ -10,12 +10,12 @@ import {IController} from './controller.interface';
  * @export
  */
 export class UserController implements IController {
-    private table: string = 'user';
+    public static table: string = 'user';
 
     public async get(req: Request, res: Response) {
         if (req.query.id) {
             if (req.query.id.length === MongoDb.MONGO_ID_LEN) {
-                const out: DataReturnDTO = await MongoDb.getById(this.table, req.query.id);
+                const out: DataReturnDTO = await MongoDb.getById(UserController.table, req.query.id);
                 if (out.valid) {
                     if (!out.data) {
                         res.statusCode = HttpStatus.NOT_FOUND;
@@ -39,7 +39,7 @@ export class UserController implements IController {
             }
         } else if (req.query.displayName) {
             if (req.query.displayName.length >= User.MIN_DISPLAYNAME_LEN) {
-                const out: DataReturnDTO = await MongoDb.getByDisplayName(this.table, req.query.displayName);
+                const out: DataReturnDTO = await MongoDb.getByDisplayName(UserController.table, req.query.displayName);
                 if (out.valid) {
                     if (!out.data) {
                         res.statusCode = HttpStatus.NOT_FOUND;
@@ -60,6 +60,29 @@ export class UserController implements IController {
                 res.json({error: 'The displayName must be at least 4 characters'});
                 return;
             }
+        } else if (req.query.email) {
+            if (req.query.email.length >= 1) {
+                const out: DataReturnDTO = await MongoDb.getByEmail(UserController.table, req.query.email);
+                if (out.valid) {
+                    if (!out.data) {
+                        res.statusCode = HttpStatus.NOT_FOUND;
+                        res.json({error: 'No user was found with email ' + req.query.email});
+                        return;
+                    } else {
+                        res.statusCode = HttpStatus.OK;
+                        res.json(out.data);
+                        return;
+                    }
+                } else {
+                    res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                    res.json(out.data);
+                    return;
+                }
+            } else {
+                res.statusCode = HttpStatus.BAD_REQUEST;
+                res.json({error: 'An email must be provided with this request.'});
+                return;
+            }
         } else {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'Invalid request id or displayName required'});
@@ -75,12 +98,12 @@ export class UserController implements IController {
             res.json({error: 'Display name must be at least ' + User.MIN_DISPLAYNAME_LEN + ' long'});
             return;
         }
-        if ((await MongoDb.getByDisplayName(this.table, user.displayName)).data !== null) {
+        if ((await MongoDb.getByDisplayName(UserController.table, user.displayName)).data !== null) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'A user already has this username, please choose a different one'});
             return;
         }
-        if (await MongoDb.save(this.table, user)) {
+        if (await MongoDb.save(UserController.table, user)) {
             res.statusCode = HttpStatus.OK;
             res.json(user);
             return;
@@ -103,14 +126,14 @@ export class UserController implements IController {
             res.json({error: 'The id parameter is malformed'});
             return;
         }
-        if ((await MongoDb.getById(this.table, req.query.id)).data === null) {
+        if ((await MongoDb.getById(UserController.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }
-        if (await MongoDb.updateById(this.table, req.query.id, req.body)) {
+        if (await MongoDb.updateById(UserController.table, req.query.id, req.body)) {
             res.statusCode = HttpStatus.OK;
-            res.json((await MongoDb.getById(this.table, req.query.id)).data);
+            res.json((await MongoDb.getById(UserController.table, req.query.id)).data);
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -121,7 +144,7 @@ export class UserController implements IController {
     }
 
     public async getAll(req: Request, res: Response) {
-        const out: DataReturnDTO = await MongoDb.getAll(this.table);
+        const out: DataReturnDTO = await MongoDb.getAll(UserController.table);
         if (out.valid) {
             res.statusCode = HttpStatus.OK;
             res.json(out.data);
@@ -141,12 +164,12 @@ export class UserController implements IController {
             res.json({error: 'Id must be specified as a param of this request'});
             return;
         }
-        if (!(await MongoDb.getById(this.table, req.query.id)).data) {
+        if (!(await MongoDb.getById(UserController.table, req.query.id)).data) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot update a user that does not exist'});
             return;
         }
-        if (await MongoDb.deleteById(this.table, req.query.id)) {
+        if (await MongoDb.deleteById(UserController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
             res.json({Msg: 'Successfully Deleted User with id ' + req.query.id});
             return;
