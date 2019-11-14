@@ -82,7 +82,7 @@ export class Team {
     public Name: string; // The name of the team
     public Description: string;
     public Logo: string; // The logo image id for mongo
-    public Upcoming_Matches: [string]; // List of upcoming
+    public Upcoming_Matches: [string]; // List of upcoming matches
 
     constructor(roster: [string], owner: string, name: string, description: string) {
         this.Roster = roster;
