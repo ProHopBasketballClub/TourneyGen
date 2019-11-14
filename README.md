@@ -18,7 +18,7 @@ ideas we had for a team name.
 
 What is TourneyGen? It is primarily a sports league
 management website. What does that mean? Well basically, if you are
-in charge of a leage (sports, e-sports, etc), then you can use our
+in charge of a league (sports, e-sports, etc), then you can use our
 website to effectively manage the teams and tournaments hosted within
 your league! Sign up at [TourneyGen's website](http://tourneygen.theserverproject.com/)
 
