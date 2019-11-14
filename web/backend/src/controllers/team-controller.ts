@@ -33,7 +33,7 @@ export class TeamController implements IController {
     public async get(req: Request, res: Response) {
         let out: DataReturnDTO;
         if (req.query.id) {
-            if (req.query.id.length === MongoDb.MONGO_ID_LEN) { // Retrieve match by id
+            if (req.query.id.length === MongoDb.MONGO_ID_LEN) { // Retrieve team by id
                 out = await MongoDb.getById(TeamController.table, req.query.id);
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
@@ -41,7 +41,7 @@ export class TeamController implements IController {
                 return;
             }
         } else if (req.query.name) {
-            if (req.query.name.length > 0) { // Retrieve League by name
+            if (req.query.name.length > 0) { // Retrieve team by name
                 out = await MongoDb.getByName(TeamController.table, req.query.name);
             } else {
                 res.statusCode = HttpStatus.BAD_REQUEST;
