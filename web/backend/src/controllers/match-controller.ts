@@ -120,6 +120,15 @@ export class MatchController implements IController {
         }
     }
 
+    public async resolveConflict(req: Request, res: Response) {
+        if (!await RequestValidation.RecordExistsWithBody(req, res, MatchController.table)) {
+            return;
+        }
+        if (!await RequestValidation.validMatchReport(req, res)) {
+            return;
+        }
+    }
+
     public async reportMatch(req: Request, res: Response) {
         if (!await RequestValidation.RecordExistsWithBody(req, res, MatchController.table)) {
             return;
