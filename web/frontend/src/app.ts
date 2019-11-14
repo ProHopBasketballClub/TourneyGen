@@ -73,8 +73,11 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team);
+                            teams.push(team); 
                         });
+                        // Sort team names alphabetically - not sure if this is best way
+                        // but its better than a random order due to async.
+                        teams.sort((a, b) => (a.Name > b.Name) ? 1 : -1);
                     }
                     res.render('leagues', {
                         errors,
@@ -86,9 +89,7 @@ app.get('/league/:id', (req,res) => {
                     });
                     errors = [];
                 });
-
             }
-
         });
 
     }, (failure) => {
@@ -355,7 +356,9 @@ app.post('/login', (req, res) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
                 // When possible, pass that info along.
-                errors.push(user_object.error);
+                if (user_object){
+                    errors.push(user_object.error);
+                }
                 res.redirect('/login');
                 return;
             }
