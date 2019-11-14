@@ -180,7 +180,6 @@ app.post('/add_team', (req, res) => {
         api_get_request(route, (user_object) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
-                console.log(user_object);
                 errors.push(user_object.error);
                 // TODO: When possible, pass that info along.
                 res.redirect('back');
@@ -203,7 +202,6 @@ app.post('/add_team', (req, res) => {
                     }
                 }
 
-                console.log(backend_response.error);
                 errors.push(backend_response.error);
                 // Error case handled here, all success cases above should have returned.
                 // TODO: When we have front-end error handling, it should be reported here.
