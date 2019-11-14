@@ -51,7 +51,7 @@ export function api_post_request(route: string, path: string, body: object, call
 
     let APIResponse;
     const url: string = route + path;
-    console.log('Submitting GET request to: ' + url);
+    console.log('Submitting POST request to: ' + url);
 
     request({
         body,

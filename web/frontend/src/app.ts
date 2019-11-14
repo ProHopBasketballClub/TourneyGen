@@ -1,10 +1,11 @@
+import { assertForOfStatement } from 'babel-types';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, league_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, team_route, user_route } from './constants/routes';
 import { api_delete_request, api_get_request,  api_post_request, api_put_request,
      create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
@@ -82,6 +83,58 @@ app.get('/signup', (req, res) => {
         res.redirect('/');
     }, (failure) => {
         res.render('signup');
+    });
+});
+
+app.post('/add_team', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const teamName = req.body.teamName;
+        const teamDescription = req.body.teamDescription;
+        const ownerEmail = req.body.teamOwnerEmail;
+        const textRoster = req.body.teamRoster;
+
+        if (!(teamName && teamDescription && ownerEmail && textRoster)) {
+            // TODO: When frontend error handling is implemented, report this error.
+            res.redirect('back');
+            return;
+        }
+
+        const teamRoster = (textRoster as string).split(',').map((item) => item.trim());
+
+        // Get the userID for the email.
+        const route = backend_location + generate_get_route(user_route, { email: ownerEmail });
+        api_get_request(route, (user_object) => {
+            if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
+                // User wasn't valid.
+                // TODO: When possible, pass that info along.
+                res.redirect('back');
+                return;
+            }
+
+            const payload = {
+                Description: teamDescription,
+                Name: teamName,
+                Owner: user_object._id,
+                Roster: teamRoster,
+            };
+            api_post_request(backend_location, team_route, payload, (backend_response) => {
+                if (backend_response) {
+                    if (backend_response.status_code === HttpStatus.OK) {
+                        // Redirect the user so that the new team appears.
+                        res.redirect('back');
+                        return;
+                    }
+                }
+
+                // Error case handled here, all success cases above should have returned.
+                // TODO: When we have front-end error handling, it should be reported here.
+                res.redirect('/');
+            });
+
+        });
+
+    }, (failure) => {
+        res.redirect('/login');
     });
 });
 
@@ -185,7 +238,7 @@ app.post('/login', (req, res) => {
         api_get_request(route, (user_object) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
-                // When possible, pass that info along.
+                // TODO: When possible, pass that info along.
                 res.redirect('/login');
                 return;
             }

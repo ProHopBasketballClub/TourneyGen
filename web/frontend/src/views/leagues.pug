@@ -28,7 +28,13 @@ if page_rendered
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
                                 
-            include adminpanels/extensions/league-adminpanel.pug
+            include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
+
+            - var modalId = "add-team-modal"
+            - var modalOpeners = [ "add-team" ]
+            - var modalClosers = [ "cancel-add-team", "submit-add-team" ]
+            - var leagueId = league._id
+            include modals/extensions/addTeam/modal.pug
 
             - var modalId = "edit-league-modal"
             - var modalOpeners = [ "edit-league" ]

@@ -60,6 +60,29 @@ export class UserController implements IController {
                 res.json({error: 'The displayName must be at least 4 characters'});
                 return;
             }
+        } else if (req.query.email) {
+            if (req.query.email.length >= 1) {
+                const out: DataReturnDTO = await MongoDb.getByEmail(this.table, req.query.email);
+                if (out.valid) {
+                    if (!out.data) {
+                        res.statusCode = HttpStatus.NOT_FOUND;
+                        res.json({error: 'No user was found with email ' + req.query.email});
+                        return;
+                    } else {
+                        res.statusCode = HttpStatus.OK;
+                        res.json(out.data);
+                        return;
+                    }
+                } else {
+                    res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                    res.json(out.data);
+                    return;
+                }
+            } else {
+                res.statusCode = HttpStatus.BAD_REQUEST;
+                res.json({error: 'An email must be provided with this request.'});
+                return;
+            }
         } else {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'Invalid request id or displayName required'});
