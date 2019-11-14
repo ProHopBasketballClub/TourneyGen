@@ -62,32 +62,22 @@ export class RequestValidation {
             return false;
         }
         const match: Match = retrievedMatch.data;
-        if (match.Home !== req.body.Home) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: 'The home team stored and submitted do not match'});
-            return false;
-        }
-        if (match.Away !== req.body.Away) {
-            res.statusCode = HttpStatus.BAD_REQUEST;
-            res.json({error: 'The away team stored and submitted do not match'});
-            return false;
-        }
         if (match.In_Conflict) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'This match is in a conflict only a league owner can resolve this'});
             return false;
         }
-        if (req.body.Victor !== match.Home || req.body.Victor !== match.Away) {
+        if (req.body.Victor !== match.Home && req.body.Victor !== match.Away) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'The victor must be either the home or away team'});
             return false;
         }
-        if (req.body.Loser !== match.Home || req.body.Loser !== match.Away) {
+        if (req.body.Loser !== match.Home && req.body.Loser !== match.Away) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'The loser must be either the home or away team'});
             return false;
         }
-        if (req.body.Updated_by !== match.Home || req.body.Updated_By !== match.Away) {
+        if (req.body.Updated_By !== match.Home && req.body.Updated_By !== match.Away) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'Only teams that played the match can report the results'});
             return false;
