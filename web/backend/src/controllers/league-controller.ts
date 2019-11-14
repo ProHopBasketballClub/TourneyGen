@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db/mongo.db';
-import {DataReturnDTO, DataValidDTO, League} from '../models';
+import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
+import { TeamController } from './team-controller';
 
 /**
  * Controller defining the CRUD methods for league
@@ -19,11 +20,18 @@ export class LeagueController implements IController {
             res.json({error: 'Id must be specified as a param of this request'});
             return;
         }
-        if ((await MongoDb.getById(LeagueController.table, req.query.id)).data === null) {
+
+        const leagueObject = await MongoDb.getById(LeagueController.table, req.query.id);
+        if (leagueObject.data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot delete a league that does not exist'});
             return;
         }
+        
+        await leagueObject.data.Teams.forEach(async (teamId) => {
+            await MongoDb.deleteById(TeamController.table, teamId);
+        });
+
         if (await MongoDb.deleteById(LeagueController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
             res.json({Msg: 'Successfully Deleted league with id ' + req.query.id});
