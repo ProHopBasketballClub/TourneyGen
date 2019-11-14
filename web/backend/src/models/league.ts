@@ -28,7 +28,7 @@ export class League {
         if (Object.keys(req.body).length < 1) {
             return new DataValidDTO(false, 'A league is required in the body of this request');
         }
-        if (req.body.Owner) {
+        if ('Owner' in req.body) {
             if (req.body.Owner.length !== MongoDb.MONGO_ID_LEN) {
                 return new DataValidDTO(false, 'A league owner must be specified');
             }
@@ -37,17 +37,17 @@ export class League {
                 return new DataValidDTO(false, 'The specified league owner could not be found');
             }
         }
-        if (req.body.Name) {
+        if ('Name' in req.body) {
             if (req.body.Name.length < 1) {
                 return new DataValidDTO(false, 'A Name for the league is required');
             }
         }
-        if (req.body.Description) {
+        if ('Description' in req.body) {
             if (req.body.Description.length < 1) {
                 return new DataValidDTO(false, 'A Description is required');
             }
         }
-        if (req.body.Game_type) {
+        if ('Game_type' in req.body) {
             if (req.body.Game_type.length < 1) {
                 return new DataValidDTO(false, 'A game type is required');
             }
@@ -62,13 +62,12 @@ export class League {
     public Logo: Uint8Array; // This will store images as bytes
     public Game_type: string;// The game that this league plays
     public Tournaments: string[];// This will hold the UIDs of tournaments in this league
-    public Teams: string[]; // This will hold the UIDs of teams in this league
+    public Teams: string[] = []; // This will hold the UIDs of teams in this league
 
     constructor(owner: string, name: string, description: string, game_type: string) {
         this.Owner = owner;
         this.Name = name;
         this.Description = description;
         this.Game_type = game_type;
-        this.Teams = [];
     }
 }

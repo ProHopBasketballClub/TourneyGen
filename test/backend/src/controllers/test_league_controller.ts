@@ -83,10 +83,28 @@ describe('League Controller', async function() {
         res.body.should.be.a('object');
     });
 
+    it('it should Fail on empty Desc.', async () => {
+        const league = {Name: 'league', Owner: userId, Description: '', Game_type: 'Yes'};
+        const res = await chai.request(conn)
+            .post(LEAGUE_ROOT)
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
+    });
+
     it('it should Fail on no Desc.', async () => {
         const league = {Name: 'league', Owner: userId, Game_type: 'Yes'};
         const res = await chai.request(conn)
             .post(LEAGUE_ROOT)
+            .send(league);
+        res.status.should.equal(HttpStatus.BAD_REQUEST);
+        res.body.should.be.a('object');
+    });
+
+    it('it should Fail on empty name.', async () => {
+        const league = {Name: '', Description: 'Yes', Owner: userId, Game_type: 'Yes'};
+        const res = await chai.request(conn)
+            .put(LEAGUE_ROOT)
             .send(league);
         res.status.should.equal(HttpStatus.BAD_REQUEST);
         res.body.should.be.a('object');

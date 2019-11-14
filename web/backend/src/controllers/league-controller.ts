@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db/mongo.db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
-import { TeamController } from './team-controller';
+import {TeamController} from './team-controller';
 
 /**
  * Controller defining the CRUD methods for league
@@ -126,7 +126,7 @@ export class LeagueController implements IController {
     // update an existing league object
     public async put(req: Request, res: Response) {
         const validLeague: DataValidDTO = await League.validateUpdate(req);
-        if (!validLeague) {
+        if (!validLeague.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: validLeague.error});
             return;
