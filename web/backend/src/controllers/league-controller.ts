@@ -27,7 +27,7 @@ export class LeagueController implements IController {
             res.json({error: 'You cannot delete a league that does not exist'});
             return;
         }
-        
+
         await leagueObject.data.Teams.forEach(async (teamId) => {
             await MongoDb.deleteById(TeamController.table, teamId);
         });

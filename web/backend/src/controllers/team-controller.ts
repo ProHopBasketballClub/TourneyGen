@@ -95,13 +95,19 @@ export class TeamController implements IController {
 
         // Get the league that owns this team
         const leagueTable = LeagueController.table;
-        const leagueId = req.body._id;
+        const leagueId = req.body.League;
         const leaugeData: DataReturnDTO = await MongoDb.getById(leagueTable, leagueId);
 
         // Ensure that there is a league found.
         if (!leaugeData.valid) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'Could not find team with id ' + leagueId});
+            return;
+        }
+
+        if (!leaugeData.data) {
+            res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            res.json({error: 'Internal Server Error creation failed'});
             return;
         }
 

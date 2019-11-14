@@ -114,10 +114,10 @@ app.post('/add_team', (req, res) => {
 
             const payload = {
                 Description: teamDescription,
+                League: leagueId,
                 Name: teamName,
                 Owner: user_object._id,
                 Roster: teamRoster,
-                _id: leagueId,
             };
             api_post_request(backend_location, team_route, payload, (backend_response) => {
                 if (backend_response) {
