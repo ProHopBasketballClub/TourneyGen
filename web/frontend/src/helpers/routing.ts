@@ -1,4 +1,3 @@
-import { response } from 'express';
 import * as http from 'http';
 import * as HttpStatus from 'http-status-codes';
 import * as request from 'request';
