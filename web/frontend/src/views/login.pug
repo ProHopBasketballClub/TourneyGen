@@ -8,11 +8,7 @@ html(lang='en')
         div(class="login-container")
             div(class="login-card")
                 img(src="./../resources/tourneygenlogo.png")
-                if errors && errors.length > 0
-                    for error in errors
-                        div(class = 'error-banner')
-                            p(class = 'error-message')
-                                | #{error}
+                include errors/error_message.pug
                 div(class="signup-forms")          
                     form(class = "login-form" action = '/login' method="POST")
                         input(type="text" id = "username" class = "login-field" name = "username" placeholder="Username")

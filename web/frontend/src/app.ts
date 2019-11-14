@@ -102,8 +102,6 @@ app.get('/signup', (req, res) => {
 app.get('/team/:id', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         const route = backend_location + generate_get_route(team_route, { id: req.params.id });
-        const route2 = backend_location + generate_get_route(user_route, { id: req.params.id });
-        const routes = [route, route2];
         api_get_request(route, (team_object) => {
             if(team_object._id === req.params.id) {
                 const owner_route = backend_location + generate_get_route(user_route, {id: team_object.Owner});
@@ -131,11 +129,6 @@ app.get('/team/:id', (req, res) => {
                 });
             }
         });
-        // Example call to get_multiple
-        // api_get_multiple_requests(routes, (response_object) => {
-        //     console.log(response_object);
-        //     res.render('home');
-        // });
     }, (failure) => {
         res.redirect('/login');
     });
