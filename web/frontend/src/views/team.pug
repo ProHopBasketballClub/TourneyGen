@@ -1,0 +1,48 @@
+doctype html
+if page_rendered
+    html(lang='en')
+        head
+            title Tourney Gen - team
+            link(rel="stylesheet" href="./../css/tourneygen.css")
+            //- TODO: Leagues has shared functionality code that should be in
+            //- a shared css: ex. Logged in view 
+            link(rel="stylesheet" href="./../css/leagues.css")
+            link(rel="stylesheet" href="./../css/team.css")
+        body
+            div(class='home-container')
+                div(class='category-card')
+                    p(class='category-card-title')
+                        | #{team.name}
+                    p(id="team-description") 
+                        | #{team.description}
+                    p(id="team-owner") 
+                        | Owner:
+                        | #{owner.name}
+                    p(id="team-roster") 
+                        | Roster:
+                        br
+                        for member in team.roster
+                            | #{member}
+                            br
+
+                    div(class='button')
+                        a(href='/' data-toggle="modal" class='button' id = 'new-league') 
+                            | Home
+                        //- Todo: Make this return to league view
+            include adminpanels/extensions/team-adminpanel.pug
+
+            - var modalId = "edit-team-modal"
+            - var modalOpeners = [ "edit-team" ]
+            - var modalClosers = [ "cancel-edit-team", "submit-edit-team" ]
+            - var teamId = team._id
+            - var teamName = team.name
+            - var teamDescription = team.description
+            - var teamRoster = String(team.roster).trim('[', ']')
+
+            include modals/extensions/editTeam/modal.pug
+
+            //- - var modalId = "delete-league-modal"
+            //- - var modalOpeners = [ "delete-league" ]
+            //- - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
+            //- - var leagueId = league._id
+            //- include modals/extensions/deleteLeague/modal.pug
