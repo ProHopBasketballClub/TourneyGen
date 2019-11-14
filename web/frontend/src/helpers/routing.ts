@@ -1,10 +1,10 @@
+import { response } from 'express';
 import * as http from 'http';
 import * as HttpStatus from 'http-status-codes';
 import * as request from 'request';
 import * as env from '../../env';
 import { default_cookie_max_age } from '../constants/cookie';
 import { user_route } from '../constants/routes';
-import { response } from 'express';
 const backend_location = (env as any).env.BACKEND_LOCATION;
 
 export function api_get_request(route: string, callback) {
@@ -42,14 +42,14 @@ export function api_get_request(route: string, callback) {
 }
 
 // This function can be used to make multiple get requests with one callback function.
-export function api_get_multiple_requests(routes: Array<string>, callback) {
+export function api_get_multiple_requests(routes: string[], callback) {
     console.log('Submitting multiple GET requests');
-    let result: Array<Object> = [];
-    routes.forEach(function(route){
-        api_get_request(route, (response) => {
-            result.push(response);
+    const result: object[] = [];
+    routes.forEach(function(route) {
+        api_get_request(route, (multi_response) => {
+            result.push(multi_response);
             // Only if this is the last get request, do we want to return
-            if (result.length == routes.length){
+            if (result.length === routes.length) {
                 callback(result);
             }
         });

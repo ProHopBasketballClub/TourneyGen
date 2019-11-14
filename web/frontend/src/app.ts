@@ -4,9 +4,9 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, league_route, user_route, team_route } from './constants/routes';
-import { api_delete_request, api_get_request,  api_post_request, api_put_request,
-     create_cookie, generate_auth_token, generate_get_route, is_logged_in, api_get_multiple_requests } from './helpers/routing';
+import { league_get_all_route, league_route, team_route, user_route } from './constants/routes';
+import { api_delete_request, api_get_multiple_requests,  api_get_request, api_post_request,
+     api_put_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -19,7 +19,6 @@ app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
-
 
 const errors = [];
 
@@ -65,10 +64,10 @@ app.get('/league/:id', (req,res) => {
                 const matches = [];
                 res.render('leagues', {
                     league,
+                    matches,
                     page_rendered,
-                    tournaments,
                     teams,
-                    matches
+                    tournaments,
                 });
             }
 
@@ -82,10 +81,10 @@ app.get('/league/:id', (req,res) => {
 app.get('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         res.redirect('/');
-    }, (failure) => {   
+    }, (failure) => {
         console.log(errors);
         res.render('login', {
-            errors
+            errors,
         });
         errors.pop();
     });
@@ -110,22 +109,22 @@ app.get('/team/:id', (req, res) => {
                 api_get_request(owner_route, (owner_object) =>  {
                         const team = {
                             _id: team_object._id,
-                            name: team_object.Name,
                             description: team_object.Description,
-                            roster: team_object.Roster
+                            name: team_object.Name,
+                            roster: team_object.Roster,
                         };
-                        if (owner_object._id == team_object.Owner){
+                        if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
-                                name: owner_object.displayName,
+                                _id: owner_object._id,
                                 email: owner_object.email,
-                                _id: owner_object._id
-                            }
-                        
+                                name: owner_object.displayName,
+                            };
+
                             res.render('team', {
-                                team,
                                 owner,
-                                page_rendered
+                                page_rendered,
+                                team,
                             });
                         }
                 });
@@ -139,9 +138,6 @@ app.get('/team/:id', (req, res) => {
         res.redirect('/login');
     });
 });
-
-
-
 
 app.post('/create_league', (req, res) => {
     is_logged_in(req.cookies, (success) => {
@@ -243,9 +239,9 @@ app.post('/edit_team', (req, res) => {
 
         const payload = {
             Description: teamDescription,
-            Roster: teamRoster,
             Name: teamName,
             Owner: teamOwner,
+            Roster: teamRoster,
         };
 
         api_put_request(generate_get_route(backend_location + team_route, { id: teamId }), payload, (backend_response) => {
