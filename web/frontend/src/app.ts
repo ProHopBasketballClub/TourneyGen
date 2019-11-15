@@ -141,10 +141,7 @@ app.get('/team/:id', (req, res) => {
                                 name: owner_object.displayName,
                             };
                             // This allows the PUG page to only render admin tools if user owns the team
-                            let is_admin = false;
-                            if ('_id' in success) {
-                                is_admin = (owner._id === success._id);
-                            }
+                            const is_admin = (owner && success && success._id && (owner._id === success._id))
                             res.render('team', {
                                 errors,
                                 is_admin,
