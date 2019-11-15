@@ -91,7 +91,7 @@ export class TeamController implements IController {
             res.json({error: isTeamValid.error});
             return;
         }
-        const team: Team = new Team(req.body.Roster, req.body.Owner, req.body.Name, req.body.Description);
+        const team: Team = new Team(req.body.Roster, req.body.Owner, req.body.Name, req.body.Description,req.body.League);
 
         // Get the league that owns this team
         const leagueTable = LeagueController.table;
