@@ -57,12 +57,12 @@ export class Team {
                 return new DataValidDTO(false, 'The Owner could not be found');
             }
         }
-        if (req.body.Description) {
+        if ('Description' in req.body) {
             if (req.body.Description.length < 1) {
                 return new DataValidDTO(false, 'A team must have a description');
             }
         }
-        if (req.body.Name) {
+        if ('Name' in req.body) {
             if (req.body.Name.length < 1) {
                 return new DataValidDTO(false, 'A team must have a name');
             }
@@ -70,7 +70,7 @@ export class Team {
                 return new DataValidDTO(false, 'A team with this name already exists');
             }
         }
-        if (req.body.Roster) {
+        if ('Roster' in req.body) {
             if (req.body.Roster.length < 1) {
                 return new DataValidDTO(false, 'A team requires at least 1 player');
             }
