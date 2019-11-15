@@ -77,7 +77,7 @@ app.get('/league/:id', (req,res) => {
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.Name > b.Name) ? 1 : -1);
+                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
                     }
                     res.render('leagues', {
                         errors,
