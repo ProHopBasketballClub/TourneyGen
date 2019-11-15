@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
 
-const errors = [];
+var errors = [];
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
