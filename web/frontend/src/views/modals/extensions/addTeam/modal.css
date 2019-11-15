@@ -1,0 +1,23 @@
+#team-name-header{
+    padding-right: 10px;
+}
+
+#team-description-text {
+    padding-right: 10px;
+}
+
+#team-roster-text {
+    padding-right: 10px;
+}
+
+#team-owner-field {
+    height: 10%;
+}
+
+#team-description-field {
+    margin-right: 10px;
+}
+
+#team-roster-field {
+    margin-right: 10px;
+}

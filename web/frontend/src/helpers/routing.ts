@@ -40,6 +40,22 @@ export function api_get_request(route: string, callback) {
     });
 }
 
+// This function can be used to make multiple get requests with one callback function.
+export function api_get_multiple_requests(routes: string[], callback) {
+    console.log('Submitting multiple GET requests');
+    const result: object[] = [];
+    routes.forEach(function(route) {
+        api_get_request(route, (multi_response) => {
+            result.push(multi_response);
+            // Only if this is the last get request, do we want to return
+            if (result.length === routes.length) {
+                callback(result);
+            }
+        });
+    });
+
+}
+
 // TODO: Refactor: this should aleady have the thing combined. Also update the docstring.
 export function api_post_request(route: string, path: string, body: object, callback) {
     /* Sends an HTTP GET request to the passed route, calling
@@ -51,7 +67,7 @@ export function api_post_request(route: string, path: string, body: object, call
 
     let APIResponse;
     const url: string = route + path;
-    console.log('Submitting GET request to: ' + url);
+    console.log('Submitting POST request to: ' + url);
 
     request({
         body,

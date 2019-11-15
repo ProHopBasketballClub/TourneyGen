@@ -18,6 +18,7 @@ describe('Match Controller', async function() {
     let homeId: string = '';
     let awayId: string = '';
     let matchId: string = '';
+    let leagueId: string = '';
     let serve; // A variable for the node app
     let conn; // The variable for the connection to the server
     const TIME_OUT: number = 20000;
@@ -42,11 +43,21 @@ describe('Match Controller', async function() {
         userId = res.body._id;
         userId.length.should.equal(MongoDb.MONGO_ID_LEN);
 
+        const league = {Name: 'league', Owner: userId, Game_type: 'R4', Description: 'Yes'};
+        // Create League for team
+        res = await chai.request(conn)
+            .post('/api/league')
+            .send(league);
+        res.status.should.equal(HttpStatus.OK);
+        leagueId = res.body._id;
+        userId.length.should.equal(MongoDb.MONGO_ID_LEN);
+
         // Create a home team
         res = await chai.request(conn)
             .post('/api/team')
             .send({
                 Description: 'yes',
+                League: leagueId,
                 Name: 'bois',
                 Owner: userId,
                 Roster: ['Ethan'],
@@ -58,6 +69,7 @@ describe('Match Controller', async function() {
             .post('/api/team')
             .send({
                 Description: 'yes',
+                League: leagueId,
                 Name: 'bois2',
                 Owner: userId,
                 Roster: ['Ethan'],

@@ -1,0 +1,11 @@
+html(lang='en')
+
+    style
+        include errors.css
+
+    body
+        if errors && errors.length > 0
+                        for error in errors
+                            div(class = 'error-banner')
+                                p(class = 'error-message')
+                                    | #{error}
