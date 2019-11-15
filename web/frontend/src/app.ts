@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
 
-let errors = [];
+const errors = [];
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
@@ -141,7 +141,10 @@ app.get('/team/:id', (req, res) => {
                                 name: owner_object.displayName,
                             };
                             // This allows the PUG page to only render admin tools if user owns the team
-                            const is_admin = (owner._id === success._id) ? true : false;
+                            let is_admin = false;
+                            if ('_id' in success) {
+                                is_admin = (owner._id === success._id);
+                            }
                             res.render('team', {
                                 errors,
                                 is_admin,
