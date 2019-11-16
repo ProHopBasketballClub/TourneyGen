@@ -44,16 +44,19 @@ export function api_get_request(route: string, callback) {
 export function api_get_multiple_requests(routes: string[], callback) {
     console.log('Submitting multiple GET requests');
     const result: object[] = [];
-    routes.forEach(function(route) {
-        api_get_request(route, (multi_response) => {
-            result.push(multi_response);
-            // Only if this is the last get request, do we want to return
-            if (result.length === routes.length) {
-                callback(result);
-            }
+    if (routes.length > 0) {
+        routes.forEach(function(route) {
+            api_get_request(route, (multi_response) => {
+                result.push(multi_response);
+                // Only if this is the last get request, do we want to return
+                if (result.length === routes.length) {
+                    callback(result);
+                }
+            });
         });
-    });
-
+    } else {
+        callback(null);
+    }
 }
 
 // TODO: Refactor: this should aleady have the thing combined. Also update the docstring.
@@ -92,8 +95,9 @@ export function api_post_request(route: string, path: string, body: object, call
                 callback(APIResponse);
                 return;
             } else {
+                APIResponse = post_body;
                 console.log(post_response.statusCode);
-                callback(null);
+                callback(APIResponse);
                 return;
             }
         } catch (e) {
@@ -175,8 +179,9 @@ export function api_put_request(route: string, body: object, callback) {
                 callback(APIResponse);
                 return;
             } else {
+                APIResponse = put_body;
                 console.log(put_response.statusCode);
-                callback(null);
+                callback(APIResponse);
                 return;
             }
         } catch (e) {

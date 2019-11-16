@@ -21,22 +21,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // NOTE: If security is being implemented, a secret can be passed here.
 
-const errors = [];
+let errors = [];
 
 app.get('/', (req, res) => {
-    is_logged_in(req.cookies, (user_object) => {
+    is_logged_in(req.cookies, (success) => {
 
         api_get_request(backend_location + league_get_all_route, (all_leagues) => {
             const leagues = [];
             all_leagues.forEach((league) => {
-                if (league.Owner === user_object._id) {
+                if (league.Owner === success._id) {
                     leagues.push({ name: league.Name, id: league._id });
                 }
             });
 
             res.render('home', {
+                errors,
                 leagues,
             });
+            errors = [];
         });
     }, (failure) => {
         res.redirect('/login');
@@ -57,21 +59,37 @@ app.get('/league/:id', (req,res) => {
                     description: league_object.Description,
                     game_type: league_object.Game_type,
                     name: league_object.Name,
+                    teams: league_object.Teams,
                 };
-                const tournaments = [];
-                // You should be able to add a team into this list from your DB and then
-                // View that team by clicking on the team object in the league page.
                 const teams = [];
+                const tournaments = [];
                 const matches = [];
-                res.render('leagues', {
-                    league,
-                    matches,
-                    page_rendered,
-                    teams,
-                    tournaments,
+
+                const team_routes = [];
+                league.teams.forEach((team) => {
+                    team_routes.push(backend_location + generate_get_route(team_route, {id: team}));
+                });
+                // This will make an api request to get a team object for each team id in the league
+                api_get_multiple_requests(team_routes, (response_object) => {
+                    if (response_object) {
+                        response_object.forEach((team) => {
+                            teams.push(team);
+                        });
+                        // Sort team names alphabetically - not sure if this is best way
+                        // but its better than a random order due to async.
+                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
+                    }
+                    res.render('leagues', {
+                        errors,
+                        league,
+                        matches,
+                        page_rendered,
+                        teams,
+                        tournaments,
+                    });
+                    errors = [];
                 });
             }
-
         });
 
     }, (failure) => {
@@ -83,11 +101,10 @@ app.get('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         res.redirect('/');
     }, (failure) => {
-        console.log(errors);
         res.render('login', {
             errors,
         });
-        errors.pop();
+        errors = [];
     });
 });
 
@@ -95,7 +112,10 @@ app.get('/signup', (req, res) => {
     is_logged_in(req.cookies, (success) => {
         res.redirect('/');
     }, (failure) => {
-        res.render('signup');
+        res.render('signup', {
+            errors,
+        });
+        errors = [];
     });
 });
 
@@ -112,6 +132,7 @@ app.get('/team/:id', (req, res) => {
                             name: team_object.Name,
                             roster: team_object.Roster,
                         };
+
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
@@ -119,12 +140,16 @@ app.get('/team/:id', (req, res) => {
                                 email: owner_object.email,
                                 name: owner_object.displayName,
                             };
-
+                            // This allows the PUG page to only render admin tools if user owns the team
+                            const is_admin = (owner && success && success._id && (owner._id === success._id))
                             res.render('team', {
+                                errors,
+                                is_admin,
                                 owner,
                                 page_rendered,
                                 team,
                             });
+                            errors = [];
                         }
                 });
             }
@@ -143,6 +168,7 @@ app.post('/add_team', (req, res) => {
         const leagueId = req.body.leagueId;
 
         if (!(teamName && teamDescription && ownerEmail && textRoster)) {
+            errors.push('All fields are required');
             // TODO: When frontend error handling is implemented, report this error.
             res.redirect('back');
             return;
@@ -155,6 +181,7 @@ app.post('/add_team', (req, res) => {
         api_get_request(route, (user_object) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
+                errors.push(user_object.error);
                 // TODO: When possible, pass that info along.
                 res.redirect('back');
                 return;
@@ -176,6 +203,7 @@ app.post('/add_team', (req, res) => {
                     }
                 }
 
+                errors.push(backend_response.error);
                 // Error case handled here, all success cases above should have returned.
                 // TODO: When we have front-end error handling, it should be reported here.
                 res.redirect('/');
@@ -211,11 +239,14 @@ app.post('/create_league', (req, res) => {
                 }
             }
 
+            errors.push(backend_response.error);
             // Error case handled here, all success cases above should have returned.
             // TODO: When we have front-end error handling, it should be reported here.
+
             res.redirect('/');
         });
     }, (failure) => {
+
         res.redirect('/login');
     });
 });
@@ -247,6 +278,7 @@ app.post('/edit_league', (req, res) => {
         const leagueId = req.body.leagueId ? req.body.leagueId : '';
 
         if (!leagueName || !leagueDescription || !leagueGameType || !leagueId) {
+            errors.push('All fields are required');
             // TODO: When we have front-end error handling, it should be reported here.
             res.redirect('back'); // Go back to the refferer.
         }
@@ -324,8 +356,9 @@ app.post('/login', (req, res) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
                 // When possible, pass that info along.
-                console.log(user_object.error);
-                errors.push(user_object.error);
+                if (user_object) {
+                    errors.push(user_object.error);
+                }
                 res.redirect('/login');
                 return;
             }
@@ -364,6 +397,7 @@ app.post('/signup', async (req, res) => {
         if (user_object && user_object.status_code === HttpStatus.OK) {
             res.redirect('/login');
         } else {
+            errors.push(user_object.error);
             res.redirect('/signup');
         }
     });

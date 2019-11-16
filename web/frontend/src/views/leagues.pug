@@ -7,7 +7,9 @@ if page_rendered
             link(rel="stylesheet" href="./../css/leagues.css")
         body
             div(class='home-container')
+            
                 div(class='category-card')
+                    include errors/error_message.pug
                     p(class='category-card-title')
                         | #{league.name}
                     p(id="league-game-type") 
