@@ -12,4 +12,14 @@ export function mountMatchRoutes(router) {
                 console.log(error);
             });
     });
+
+    router.put('/api/match/resolve', (req, res) => {
+        controller.resolveConflict(req, res)
+            .then(() => {
+                // do nothing
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    });
 }

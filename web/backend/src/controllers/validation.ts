@@ -62,10 +62,15 @@ export class RequestValidation {
             return false;
         }
         const match: Match = retrievedMatch.data;
-        if (match.In_Conflict) {
+        if (!req.query.Owner && match.In_Conflict) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'This match is in a conflict only a league owner can resolve this'});
             return false;
+        }
+        if (match.Confirmed) {
+            res.statusCode = HttpStatus.BAD_REQUEST;
+            res.json({error: 'This match has been confirmed. It cannot be edited'});
+            return;
         }
         if (req.body.Victor !== match.Home && req.body.Victor !== match.Away) {
             res.statusCode = HttpStatus.BAD_REQUEST;
@@ -77,7 +82,7 @@ export class RequestValidation {
             res.json({error: 'The loser must be either the home or away team'});
             return false;
         }
-        if (req.body.Updated_By !== match.Home && req.body.Updated_By !== match.Away) {
+        if (!req.query.Owner && req.body.Updated_By !== match.Home && req.body.Updated_By !== match.Away) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'Only teams that played the match can report the results'});
             return false;

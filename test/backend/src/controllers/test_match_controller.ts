@@ -180,4 +180,46 @@ describe('Match Controller', async function() {
 
     });
 
+    it('it should Create a Match object', async () => {
+        const match = {Home: homeId, Away: awayId};
+        const res = await chai.request(conn)
+            .post(MATCH_ROOT)
+            .send(match);
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+        matchId = res.body._id;
+
+    });
+
+    it('it should Report a match', async () => {
+        const result = {Victor: homeId, Loser: awayId, Away_Score: 420, Home_Score: 69, Updated_By: homeId};
+        const res = await chai.request(conn)
+            .put(MATCH_ROOT + '/report')
+            .send(result)
+            .query({id: matchId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+
+    });
+
+    it('it should conflict a match', async () => {
+        const result = {Victor: homeId, Loser: awayId, Away_Score: 4.0, Home_Score: 69, Updated_By: homeId};
+        const res = await chai.request(conn)
+            .put(MATCH_ROOT + '/report')
+            .send(result)
+            .query({id: matchId});
+        res.status.should.equal(HttpStatus.CONFLICT);
+        res.body.error.should.equal('Away Score do not match. This match has been marked as conflicted');
+    });
+
+    it('it should resolve a conflict', async () => {
+        const result = {Victor: homeId, Loser: awayId, Away_Score: 420, Home_Score: 69, Updated_By: homeId};
+        const res = await chai.request(conn)
+            .put(MATCH_ROOT + '/resolve')
+            .send(result)
+            .query({id: matchId, Owner: userId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+    });
+
 });
