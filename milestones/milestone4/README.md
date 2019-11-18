@@ -20,3 +20,11 @@ The update endpoints no longer nulls fields if they are included
 Move some validation functions to a new class to make code cleaner
 
 #### Frontend Changes
+
+In this iteration, the ability to create a new team was added. This is done by clicking add team in the league view as the owner of the league, and then adding a user by email.
+
+Additionally, in league view the list of teams within the league are listed and available to click on.
+
+If a team is clicked on, there is now a team view page where any team can be viewed, and the team owner has access to admin tools that currently allows the team owner only to edit their team information.
+
+This iteration also added error message display on the front end. The errors are stored in an app wide variable, and every time a page is rendered it checks if there are any errors to display, and if there are it will flash the error messages and clear the error variable. The error messages are created when a HTTP request to the API returns an error, such as an empty field in a post request or when a user tries to register an account with a username that already exists.
