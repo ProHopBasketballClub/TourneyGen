@@ -3,7 +3,7 @@
 #### Backend Changes
 
 This iteration added 2 more controllers. The first was the Team controller. 
-This allows league owners to setup a team with a Roster of players.
+This allows league owners to setup a team with a roster of players.
 
 The second was the Match controller. This controller allows teams to setup matches against each other.
 After a match is played both teams have to report the outcome. This will change the match to either confirmed or 
@@ -15,9 +15,9 @@ Notable fixes
 
 The system now properly validates empty update fields.
 
-The update endpoints no longer nulls fields if they are included
+The update endpoints no longer nulls fields if they are not included in the request body
 
-Move some validation functions to a new class to make code cleaner
+Moved some validation functions to a new class to make controller code cleaner
 
 #### Frontend Changes
 
