@@ -6,9 +6,10 @@ html(lang='en')
         link(rel="stylesheet" type='text/css' href="./../css/homeview.css")
     body
         div(class='home-container')
+            include errors/error_message.pug
             div(class='category-card')
                 p(class='category-card-title')
-                    | Leagues
+                    | My Leagues
                 div(class='category-card-entry-container')
                     if leagues && leagues.length > 0
                         each league in leagues
@@ -32,7 +33,7 @@ html(lang='en')
                         | Create new League
                     
                 p(class='category-card-title')
-                    | Teams
+                    | My Teams
                 
                 div(class='category-card-entry-container')
                     if teams
