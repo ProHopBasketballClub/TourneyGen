@@ -39,14 +39,14 @@ app.get('/', (req, res) => {
                     if(team.Owner === success._id) {
                         teams.push({ name: team.Name, id: team._id });
                     }
-                })
+                });
                 res.render('home', {
                     errors,
                     leagues,
                     teams,
                 });
                 errors = [];
-            })
+            });
 
         });
     }, (failure) => {
@@ -135,13 +135,20 @@ app.get('/team/:id', (req, res) => {
             if(team_object._id === req.params.id) {
                 const owner_route = backend_location + generate_get_route(user_route, {id: team_object.Owner});
                 api_get_request(owner_route, (owner_object) =>  {
+                    const team_league_route = backend_location + generate_get_route(league_route, {id: team_object.League});
+                    api_get_request(team_league_route, (league_object) => {
                         const team = {
-                            _id: team_object._id,
                             description: team_object.Description,
+                            id: team_object._id,
                             name: team_object.Name,
                             roster: team_object.Roster,
                         };
 
+                        const league = {
+                            id: league_object._id,
+                            name: league_object.Name,
+                        };
+                        console.log(league);
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
@@ -150,16 +157,18 @@ app.get('/team/:id', (req, res) => {
                                 name: owner_object.displayName,
                             };
                             // This allows the PUG page to only render admin tools if user owns the team
-                            const is_admin = (owner && success && success._id && (owner._id === success._id))
+                            const is_admin = (owner && success && success._id && (owner._id === success._id));
                             res.render('team', {
                                 errors,
                                 is_admin,
+                                league,
                                 owner,
                                 page_rendered,
                                 team,
                             });
                             errors = [];
                         }
+                    });
                 });
             }
         });
