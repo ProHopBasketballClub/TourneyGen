@@ -13,8 +13,15 @@
 
 /* This is so the body can be the whole page instead of
     whatever fills it up (needed for flex) */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+}
+
 html, body {
-    height: 100%;
     margin: 0;
 }
 
