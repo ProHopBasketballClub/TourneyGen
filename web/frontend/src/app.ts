@@ -5,7 +5,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, league_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_delete_request, api_get_multiple_requests,  api_get_request, api_post_request,
      api_put_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
@@ -33,12 +33,21 @@ app.get('/', (req, res) => {
                     leagues.push({ name: league.Name, id: league._id });
                 }
             });
+            api_get_request(backend_location + team_get_all_route, (all_teams) => {
+                const teams = [];
+                all_teams.forEach((team) => {
+                    if(team.Owner === success._id) {
+                        teams.push({ name: team.Name, id: team._id });
+                    }
+                })
+                res.render('home', {
+                    errors,
+                    leagues,
+                    teams,
+                });
+                errors = [];
+            })
 
-            res.render('home', {
-                errors,
-                leagues,
-            });
-            errors = [];
         });
     }, (failure) => {
         res.redirect('/login');
