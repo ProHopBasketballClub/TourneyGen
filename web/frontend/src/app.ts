@@ -82,11 +82,11 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team);
+                            teams.push({ name: team.Name, id: team._id, league: team.League });
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
+                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
                     res.render('leagues', {
                         errors,
