@@ -5,9 +5,9 @@ if page_rendered
             title Tourney Gen - leagues
             link(rel="stylesheet" href="./../css/tourneygen.css")
             link(rel="stylesheet" href="./../css/leagues.css")
+        include logout.pug
         body
             div(class='home-container')
-            
                 div(class='category-card')
                     include errors/error_message.pug
                     p(class='category-card-title')
