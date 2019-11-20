@@ -20,9 +20,9 @@ html(lang='en')
                                     p(class='category-list')
                                         | #{league.name}
 
-                    else
-                        div(class='category-card-entries')
-                            p No Leagues
+                else
+                    div(class='category-card-entries')
+                        p No Leagues
 
                     
 
@@ -33,7 +33,7 @@ html(lang='en')
                 p(class='category-card-title')
                     | My Teams
                 
-                    if teams && leagues.length > 0
+                    if teams && teams.length > 0
                         each team in teams
                             - var url = 'team/' + team.id
                             div(class='category-card-entry-container')
