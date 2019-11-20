@@ -39,14 +39,14 @@ app.get('/', (req, res) => {
                     if(team.Owner === success._id) {
                         teams.push({ name: team.Name, id: team._id });
                     }
-                })
+                });
                 res.render('home', {
                     errors,
                     leagues,
                     teams,
                 });
                 errors = [];
-            })
+            });
 
         });
     }, (failure) => {
@@ -150,7 +150,7 @@ app.get('/team/:id', (req, res) => {
                                 name: owner_object.displayName,
                             };
                             // This allows the PUG page to only render admin tools if user owns the team
-                            const is_admin = (owner && success && success._id && (owner._id === success._id))
+                            const is_admin = (owner && success && success._id && (owner._id === success._id));
                             res.render('team', {
                                 errors,
                                 is_admin,

@@ -104,7 +104,7 @@ export class MongoDb {
 
     }
 
-    private static async _getByDict(dict: object, collection: Collection){
+    private static async _getByDict(dict: object, collection: Collection) {
         return await collection.findOne(dict);
     }
 
