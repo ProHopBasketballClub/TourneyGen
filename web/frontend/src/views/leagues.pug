@@ -45,10 +45,10 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if teams && teams.length > 0
                                 for team in teams
-                                    a(href='/team/' + team._id class = 'list-item category-card-entry-list-item')
+                                    a(href='/team/' + team.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
-                                                | #{team.Name}      
+                                                | #{team.name}      
                             else
                                 div(class='category-card-entries')
                                     p No teams currently exist.

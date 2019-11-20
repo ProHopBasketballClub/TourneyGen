@@ -84,11 +84,11 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team);
+                            teams.push({ name: team.Name, id: team._id, league: team.League });
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
+                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
                     res.render('leagues', {
                         current_user,
@@ -139,13 +139,19 @@ app.get('/team/:id', (req, res) => {
             if(team_object._id === req.params.id) {
                 const owner_route = backend_location + generate_get_route(user_route, {id: team_object.Owner});
                 api_get_request(owner_route, (owner_object) =>  {
+                    const team_league_route = backend_location + generate_get_route(league_route, {id: team_object.League});
+                    api_get_request(team_league_route, (league_object) => {
                         const team = {
-                            _id: team_object._id,
                             description: team_object.Description,
+                            id: team_object._id,
                             name: team_object.Name,
                             roster: team_object.Roster,
                         };
 
+                        const league = {
+                            id: league_object._id,
+                            name: league_object.Name,
+                        };
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
@@ -159,12 +165,14 @@ app.get('/team/:id', (req, res) => {
                                 current_user,
                                 errors,
                                 is_admin,
+                                league,
                                 owner,
                                 page_rendered,
                                 team,
                             });
                             errors = [];
                         }
+                    });
                 });
             }
         });
