@@ -1,11 +1,19 @@
-import { assert, expect } from 'chai';
+import {assert, expect} from 'chai';
+import {response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
-import { user_route } from '../../../../web/frontend/src/constants/routes';
-import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
-import { response } from 'express';
+import {user_route} from '../../../../web/frontend/src/constants/routes';
+import {
+    api_get_request,
+    api_post_request,
+    create_cookie,
+    destroy_cookie,
+    generate_auth_token,
+    generate_get_route,
+    is_logged_in,
+} from '../../../../web/frontend/src/helpers/routing';
 
 const success = HttpStatus.OK; // Make tslint be quiet.
 const moved = HttpStatus.MOVED_TEMPORARILY;
@@ -25,8 +33,8 @@ describe('Test the routing helpers.', () => {
         beforeEach('Stub out http.get', () => {
             // Setup a nock interceptor to intercept the fake request being made.
             nock('http://www.website.com')
-            .get('/the/backend')
-            .reply(success, response_object);
+                .get('/the/backend')
+                .reply(success, response_object);
         });
         afterEach('Clean out the nock interceptors', () => {
             nock.cleanAll();
@@ -48,8 +56,8 @@ describe('Test the routing helpers.', () => {
         it('Should call the callback method on invalid data returned', (done) => {
             // Setup a nock interceptor to return invalid data.
             nock('http://invalid.website.com')
-            .get('/the/backend')
-            .reply(success, '<!DOCTYPE html>');
+                .get('/the/backend')
+                .reply(success, '<!DOCTYPE html>');
 
             api_get_request('http://invalid.website.com/the/backend', (data) => {
                 done(); // The callback was called!
@@ -94,8 +102,8 @@ describe('Test the routing helpers.', () => {
         beforeEach('Stub out http.post', () => {
             // Setup a nock interceptor to intercept the fake request being made.
             nock(route)
-            .post(path)
-            .reply(success, response_object);
+                .post(path)
+                .reply(success, response_object);
         });
         afterEach('Clean out the nock interceptors', () => {
             nock.cleanAll();
@@ -110,8 +118,8 @@ describe('Test the routing helpers.', () => {
 
         it('Should call the callback method on 302', (done) => {
             nock(route)
-            .get(path)
-            .reply(moved, '<!DOCTYPE html>');
+                .get(path)
+                .reply(moved, '<!DOCTYPE html>');
 
             api_post_request(route, path, body, (data) => {
                 done(); // The callback was called!
@@ -128,8 +136,8 @@ describe('Test the routing helpers.', () => {
         it('Should call the callback method on invalid data returned', (done) => {
             // Setup a nock interceptor to return invalid data.
             nock(invalid_route)
-            .get(path)
-            .reply(success, '<!DOCTYPE html>');
+                .get(path)
+                .reply(success, '<!DOCTYPE html>');
 
             api_post_request(invalid_route, path, body, (data) => {
                 done(); // The callback was called!
@@ -160,7 +168,10 @@ describe('Test the routing helpers.', () => {
         ];
 
         it('Should create a cookie with the correct name and value on the response', () => {
-            const response_object = { cookie() { /* do nothing */ } };
+            const response_object = {
+                cookie() { /* do nothing */
+                },
+            };
             const response_mock = sinon.mock(response_object);
             response_mock.expects('cookie').withExactArgs(...call_args);
 
@@ -174,16 +185,15 @@ describe('Test the routing helpers.', () => {
         // Testing cookie.set working is both hard and redundant.
         // That is a method provided by an npm library, and it is presumably
         // tested there, thus we only test our returns.
-        const call_args = {};
+        const call_args = {cookie_name: 'test'};
 
-        call_args['cookie_name'] = 'test';
-
-        const response_object = { cookie() { /* do nothing */ } };
-            const response_mock = sinon.mock(response_object);
-            create_cookie('cookie_name', 'cookie_value', response_object, {});
-            response_mock.verify();
-
-
+        const response_object = {
+            cookie() { /* do nothing */
+            },
+        };
+        const response_mock = sinon.mock(response_object);
+        create_cookie('cookie_name', 'cookie_value', response_object, {});
+        response_mock.verify();
 
         it('Should return true for a valid token name', () => {
             expect(destroy_cookie('cookie_name', response_object, call_args)).to.equal(true);
@@ -221,8 +231,8 @@ describe('Test the routing helpers.', () => {
     describe('Test generate_get_route returns properly constructed route', () => {
 
         const route = '/test/route';
-        const args1 = { arg1: 'val' };
-        const args2 = { arg1: 'val1', arg2: 'val2' };
+        const args1 = {arg1: 'val'};
+        const args2 = {arg1: 'val1', arg2: 'val2'};
 
         it('Should return just the route when no arguments are passed', () => {
             const expected = '/test/route';
@@ -290,8 +300,8 @@ describe('Test the routing helpers.', () => {
         beforeEach('Stub out http.get', () => {
             // Setup a nock interceptor to intercept the fake request being made.
             nock(backend_location)
-            .get(generate_get_route(user_route, { displayName: 'user' }))
-            .reply(success, response_object);
+                .get(generate_get_route(user_route, {displayName: 'user'}))
+                .reply(success, response_object);
         });
         afterEach('Clean out the nock interceptors', () => {
             nock.cleanAll();
@@ -317,8 +327,8 @@ describe('Test the routing helpers.', () => {
 
         it('Should call the failure callback when the user does not exist in db with a reason', (done) => {
             nock(backend_location)
-            .get(generate_get_route(user_route, { displayName: 'invalid_user' }))
-            .reply(success, null);
+                .get(generate_get_route(user_route, {displayName: 'invalid_user'}))
+                .reply(success, null);
 
             is_logged_in(invalid_user_cookies, (sucessful_query) => {
                 // This is a fail state. Wait for a timeout.
