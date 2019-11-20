@@ -148,7 +148,6 @@ app.get('/team/:id', (req, res) => {
                             id: league_object._id,
                             name: league_object.Name,
                         };
-                        console.log(league);
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
