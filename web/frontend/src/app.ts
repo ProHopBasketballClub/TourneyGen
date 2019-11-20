@@ -56,7 +56,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/league/:id', (req,res) => {
-
     is_logged_in(req.cookies, (success) => {
         const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
@@ -72,6 +71,7 @@ app.get('/league/:id', (req,res) => {
                     name: league_object.Name,
                     teams: league_object.Teams,
                 };
+                const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
                 const teams = [];
                 const tournaments = [];
                 const matches = [];
@@ -93,6 +93,7 @@ app.get('/league/:id', (req,res) => {
                     res.render('leagues', {
                         current_user,
                         errors,
+                        is_admin,
                         league,
                         matches,
                         page_rendered,
