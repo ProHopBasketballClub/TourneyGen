@@ -199,7 +199,6 @@ export function create_cookie(cookie_name, cookie_value, res, cookie_params: obj
 
 export function destroy_cookie(cookie_name: string, res, cookies) {
     // Removed the cookie from the browser with the passed name.
-
     if (!cookies[cookie_name]) {
         return false;
     }
