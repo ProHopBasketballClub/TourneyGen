@@ -8,6 +8,7 @@ if page_rendered
             //- a shared css: ex. Logged in view 
             link(rel="stylesheet" href="./../css/leagues.css")
             link(rel="stylesheet" href="./../css/team.css")
+        include logout.pug
         body
             div(class='home-container')
                 div(class='category-card')
@@ -19,6 +20,10 @@ if page_rendered
                     p(id="team-owner") 
                         | Owner:
                         | #{owner.name}
+                    p(id="league")
+                        | League: 
+                        a(href='/league/' + league.id)
+                            | #{league.name}
                     p(id="team-roster") 
                         | Roster:
                         br
@@ -36,7 +41,7 @@ if page_rendered
             - var modalId = "edit-team-modal"
             - var modalOpeners = [ "edit-team" ]
             - var modalClosers = [ "cancel-edit-team", "submit-edit-team" ]
-            - var teamId = team._id
+            - var teamId = team.id
             - var teamName = team.name
             - var teamDescription = team.description
             - var teamRoster = String(team.roster).trim('[', ']')

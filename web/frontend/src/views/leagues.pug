@@ -5,9 +5,9 @@ if page_rendered
             title Tourney Gen - leagues
             link(rel="stylesheet" href="./../css/tourneygen.css")
             link(rel="stylesheet" href="./../css/leagues.css")
+        include logout.pug
         body
             div(class='home-container')
-            
                 div(class='category-card')
                     include errors/error_message.pug
                     p(class='category-card-title')
@@ -45,18 +45,18 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if teams && teams.length > 0
                                 for team in teams
-                                    a(href='/team/' + team._id class = 'list-item category-card-entry-list-item')
+                                    a(href='/team/' + team.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
-                                                | #{team.Name}      
+                                                | #{team.name}      
                             else
                                 div(class='category-card-entries')
                                     p No teams currently exist.
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
-                                
-            include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
+            if is_admin
+                include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
 
             - var modalId = "add-team-modal"
             - var modalOpeners = [ "add-team" ]

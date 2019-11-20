@@ -1,0 +1,8 @@
+html(lang='en')
+
+body 
+    div(class = 'logout')
+        p
+            | You are currently logged in as #{current_user}
+        form(action = '/logout' method='POST')
+            input(type="submit" id=""  value="Logout")

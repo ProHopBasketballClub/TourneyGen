@@ -7,7 +7,7 @@ import * as path from 'path';
 import * as env from '../env';
 import { league_get_all_route, league_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_delete_request, api_get_multiple_requests,  api_get_request, api_post_request,
-     api_put_request, create_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
+     api_put_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -25,7 +25,7 @@ let errors = [];
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-
+        const current_user = success.displayName;
         api_get_request(backend_location + league_get_all_route, (all_leagues) => {
             const leagues = [];
             all_leagues.forEach((league) => {
@@ -41,6 +41,7 @@ app.get('/', (req, res) => {
                     }
                 });
                 res.render('home', {
+                    current_user,
                     errors,
                     leagues,
                     teams,
@@ -55,8 +56,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/league/:id', (req,res) => {
-
     is_logged_in(req.cookies, (success) => {
+        const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
         const route = backend_location + generate_get_route(league_route, { id: req.params.id });
         api_get_request(route, (league_object) => {
@@ -70,6 +71,7 @@ app.get('/league/:id', (req,res) => {
                     name: league_object.Name,
                     teams: league_object.Teams,
                 };
+                const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
                 const teams = [];
                 const tournaments = [];
                 const matches = [];
@@ -82,14 +84,16 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team);
+                            teams.push({ name: team.Name, id: team._id, league: team.League });
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
+                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
                     res.render('leagues', {
+                        current_user,
                         errors,
+                        is_admin,
                         league,
                         matches,
                         page_rendered,
@@ -130,18 +134,25 @@ app.get('/signup', (req, res) => {
 
 app.get('/team/:id', (req, res) => {
     is_logged_in(req.cookies, (success) => {
+        const current_user = success.displayName;
         const route = backend_location + generate_get_route(team_route, { id: req.params.id });
         api_get_request(route, (team_object) => {
             if(team_object._id === req.params.id) {
                 const owner_route = backend_location + generate_get_route(user_route, {id: team_object.Owner});
                 api_get_request(owner_route, (owner_object) =>  {
+                    const team_league_route = backend_location + generate_get_route(league_route, {id: team_object.League});
+                    api_get_request(team_league_route, (league_object) => {
                         const team = {
-                            _id: team_object._id,
                             description: team_object.Description,
+                            id: team_object._id,
                             name: team_object.Name,
                             roster: team_object.Roster,
                         };
 
+                        const league = {
+                            id: league_object._id,
+                            name: league_object.Name,
+                        };
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
@@ -152,14 +163,17 @@ app.get('/team/:id', (req, res) => {
                             // This allows the PUG page to only render admin tools if user owns the team
                             const is_admin = (owner && success && success._id && (owner._id === success._id));
                             res.render('team', {
+                                current_user,
                                 errors,
                                 is_admin,
+                                league,
                                 owner,
                                 page_rendered,
                                 team,
                             });
                             errors = [];
                         }
+                    });
                 });
             }
         });
@@ -389,6 +403,13 @@ app.post('/login', (req, res) => {
             res.redirect('/');
         });
     });
+});
+
+app.post('/logout', async (req, res) => {
+    destroy_cookie('tourneygen_srn', res, req.cookies);
+    destroy_cookie('tourneygen_auth', res, req.cookies);
+    destroy_cookie('tourneygen_user', res, req.cookies);
+    res.redirect('/login');
 });
 
 app.post('/signup', async (req, res) => {
