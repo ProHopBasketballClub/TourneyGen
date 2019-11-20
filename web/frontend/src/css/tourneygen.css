@@ -72,3 +72,8 @@ button{
     background-color: #2a2a2a;
     border-radius: 25px;
 }
+
+.logout {
+    text-align: right;
+    padding: 0 10px 0 10px;
+}

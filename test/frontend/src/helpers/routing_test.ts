@@ -5,6 +5,7 @@ import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
 import { user_route } from '../../../../web/frontend/src/constants/routes';
 import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
+import { response } from 'express';
 
 const success = HttpStatus.OK; // Make tslint be quiet.
 const moved = HttpStatus.MOVED_TEMPORARILY;
@@ -173,15 +174,23 @@ describe('Test the routing helpers.', () => {
         // Testing cookie.set working is both hard and redundant.
         // That is a method provided by an npm library, and it is presumably
         // tested there, thus we only test our returns.
+        const call_args = {};
 
-        const cookies = { name: 'val', set(param1, param2) { /* do nothing */ } };
+        call_args['cookie_name'] = 'test';
+
+        const response_object = { cookie() { /* do nothing */ } };
+            const response_mock = sinon.mock(response_object);
+            create_cookie('cookie_name', 'cookie_value', response_object, {});
+            response_mock.verify();
+
+
 
         it('Should return true for a valid token name', () => {
-            expect(destroy_cookie('name', cookies)).to.equal(true);
+            expect(destroy_cookie('cookie_name', response_object, call_args)).to.equal(true);
         });
 
         it('Should return false for an invalid token name', () => {
-            expect(destroy_cookie('fake_name', cookies)).to.equal(false);
+            expect(destroy_cookie('fake_name', response_object, call_args)).to.equal(false);
         });
     });
 
