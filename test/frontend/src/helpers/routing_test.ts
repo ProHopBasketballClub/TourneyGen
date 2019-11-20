@@ -1,11 +1,11 @@
 import { assert, expect } from 'chai';
+import { response } from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
 import { user_route } from '../../../../web/frontend/src/constants/routes';
 import { api_get_request, api_post_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from '../../../../web/frontend/src/helpers/routing';
-import { response } from 'express';
 
 const success = HttpStatus.OK; // Make tslint be quiet.
 const moved = HttpStatus.MOVED_TEMPORARILY;
@@ -176,14 +176,12 @@ describe('Test the routing helpers.', () => {
         // tested there, thus we only test our returns.
         const call_args = {};
 
-        call_args['cookie_name'] = 'test';
+        call_args.cookie_name = 'test';
 
         const response_object = { cookie() { /* do nothing */ } };
-            const response_mock = sinon.mock(response_object);
-            create_cookie('cookie_name', 'cookie_value', response_object, {});
-            response_mock.verify();
-
-
+        const response_mock = sinon.mock(response_object);
+        create_cookie('cookie_name', 'cookie_value', response_object, {});
+        response_mock.verify();
 
         it('Should return true for a valid token name', () => {
             expect(destroy_cookie('cookie_name', response_object, call_args)).to.equal(true);
