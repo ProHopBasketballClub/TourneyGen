@@ -26,7 +26,7 @@ describe('League Controller', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        mongoUnit.start().then(async (url) => {
+        await mongoUnit.start().then(async (url) => {
             console.log('fake mongo is started: ', url);
             process.env.DB_CONNECTION_STRING = url;
         }).catch( async (error) => {

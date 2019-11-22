@@ -26,14 +26,13 @@ describe('User Controller tests', async function() {
     before(async function() {
         serve = new App();
         conn = await serve.express.listen();
-        try {
-            process.env.DB_CONNECTION_STRING = await mongoUnit.start();
-        } catch (e) {
-            console.log('Mongo Unit failed to start');
+        await mongoUnit.start().then(async (url) => {
+            console.log('fake mongo is started: ', url);
+            process.env.DB_CONNECTION_STRING = url;
+        }).catch(async (error) => {
             await mongoUnit.drop();
             await mongoUnit.stop();
-        }
-
+        });
     });
 
     after(async () => {
@@ -166,13 +165,13 @@ describe('User Controller tests', async function() {
 // Attempts to get a user by email
 // Expects a User objects an a 200
     it('It should get a user by email', async () => {
-    const res = await chai.request(conn)
-        .get(USER_ROOT)
-        .query({email: 'a@b.ca'});
+        const res = await chai.request(conn)
+            .get(USER_ROOT)
+            .query({email: 'a@b.ca'});
 
-    res.should.have.status(HttpStatus.OK);
-    res.body.displayName.should.equal('eetar253');
-});
+        res.should.have.status(HttpStatus.OK);
+        res.body.displayName.should.equal('eetar253');
+    });
 
 // Attempts to get a user by id
 // Expects a User objects an a 200

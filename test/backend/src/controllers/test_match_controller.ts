@@ -28,7 +28,13 @@ describe('Match Controller', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+        await mongoUnit.start().then(async (url) => {
+            console.log('fake mongo is started: ', url);
+            process.env.DB_CONNECTION_STRING = url;
+        }).catch( async (error) => {
+            await mongoUnit.drop();
+            await mongoUnit.stop();
+        });
     });
 
     before(async () => {
