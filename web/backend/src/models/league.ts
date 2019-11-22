@@ -47,7 +47,7 @@ export class League {
                 return new DataValidDTO(false, 'A Name for the league is required');
             }
             const league: League = (await MongoDb.getByName(LeagueController.table, req.body.Name)).data;
-            if (req.query.id !== league._id) {
+            if (league && req.query.id !== league._id) {
                 return new DataValidDTO(false, 'A league with this name already exists');
             }
         }

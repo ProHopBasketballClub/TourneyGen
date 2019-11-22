@@ -75,7 +75,7 @@ export class Team {
                 return new DataValidDTO(false, 'A team must have a name');
             }
             const team: Team = (await MongoDb.getByName('team', req.body.Name)).data;
-            if (team._id !== req.query.id) {
+            if (team && team._id !== req.query.id) {
                 return new DataValidDTO(false, 'A team with this name already exists');
             }
         }
