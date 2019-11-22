@@ -2,18 +2,23 @@ doctype html
 if page_rendered
     html(lang='en')
         head
-            title Tourney Gen - leagues
+            title Tourney Gen - League
+            link(rel="shortcut icon" href="./../resources/favicon.ico")
             link(rel="stylesheet" href="./../css/tourneygen.css")
             link(rel="stylesheet" href="./../css/leagues.css")
+        include logout.pug
         body
             div(class='home-container')
                 div(class='category-card')
+                    include errors/error_message.pug
                     p(class='category-card-title')
                         | #{league.name}
                     p(id="league-game-type") 
                         | #{league.game_type}
                     p(id="league-description") 
                         | #{league.description}
+                    p
+                        | Tournaments
                         div(class='category-card-entry-container')
                             if tournaments && tournaments.length > 0
                                 for tourney in tournaments
@@ -23,12 +28,42 @@ if page_rendered
                                                 | #{tourney.name}      
                             else
                                 div(class='category-card-entries')
-                                    p No tournaments for this league
+                                    p No tournaments currently scheduled.
+                    p
+                        | Matches
+                        div(class='category-card-entry-container')
+                            if matches && matches.length > 0
+                                for match in matches
+                                    a(href='/matches' class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{match.name}      
+                            else
+                                div(class='category-card-entries')
+                                    p No matches currently scheduled.
+                    p
+                        | Teams
+                        div(class='category-card-entry-container')
+                            if teams && teams.length > 0
+                                for team in teams
+                                    a(href='/team/' + team.id class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{team.name}      
+                            else
+                                div(class='category-card-entries')
+                                    p No teams currently exist.
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
-                                
-            include adminpanels/extensions/league-adminpanel.pug
+            if is_admin
+                include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
+
+            - var modalId = "add-team-modal"
+            - var modalOpeners = [ "add-team" ]
+            - var modalClosers = [ "cancel-add-team", "submit-add-team" ]
+            - var leagueId = league._id
+            include modals/extensions/addTeam/modal.pug
 
             - var modalId = "edit-league-modal"
             - var modalOpeners = [ "edit-league" ]

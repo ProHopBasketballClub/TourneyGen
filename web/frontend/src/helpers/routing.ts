@@ -40,6 +40,25 @@ export function api_get_request(route: string, callback) {
     });
 }
 
+// This function can be used to make multiple get requests with one callback function.
+export function api_get_multiple_requests(routes: string[], callback) {
+    console.log('Submitting multiple GET requests');
+    const result: object[] = [];
+    if (routes.length > 0) {
+        routes.forEach(function(route) {
+            api_get_request(route, (multi_response) => {
+                result.push(multi_response);
+                // Only if this is the last get request, do we want to return
+                if (result.length === routes.length) {
+                    callback(result);
+                }
+            });
+        });
+    } else {
+        callback(null);
+    }
+}
+
 // TODO: Refactor: this should aleady have the thing combined. Also update the docstring.
 export function api_post_request(route: string, path: string, body: object, callback) {
     /* Sends an HTTP GET request to the passed route, calling
@@ -51,7 +70,7 @@ export function api_post_request(route: string, path: string, body: object, call
 
     let APIResponse;
     const url: string = route + path;
-    console.log('Submitting GET request to: ' + url);
+    console.log('Submitting POST request to: ' + url);
 
     request({
         body,
@@ -76,8 +95,9 @@ export function api_post_request(route: string, path: string, body: object, call
                 callback(APIResponse);
                 return;
             } else {
+                APIResponse = post_body;
                 console.log(post_response.statusCode);
-                callback(null);
+                callback(APIResponse);
                 return;
             }
         } catch (e) {
@@ -159,8 +179,9 @@ export function api_put_request(route: string, body: object, callback) {
                 callback(APIResponse);
                 return;
             } else {
+                APIResponse = put_body;
                 console.log(put_response.statusCode);
-                callback(null);
+                callback(APIResponse);
                 return;
             }
         } catch (e) {
@@ -176,14 +197,13 @@ export function create_cookie(cookie_name, cookie_value, res, cookie_params: obj
     res.cookie(cookie_name, cookie_value, cookie_params);
 }
 
-export function destroy_cookie(cookie_name: string, cookies) {
+export function destroy_cookie(cookie_name: string, res, cookies) {
     // Removed the cookie from the browser with the passed name.
-
     if (!cookies[cookie_name]) {
         return false;
     }
 
-    cookies.set(cookie_name, { expires: Date.now(), maxAge: 0 });
+    res.cookie(cookie_name, { expires: Date.now(), maxAge: 0 });
     return true;
 }
 

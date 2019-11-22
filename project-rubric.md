@@ -21,3 +21,24 @@
 - ADRs are not explained in terms of what choices were there on hand (-1)
 - There are no explanations of why a particular choice was made (-1)
 
+# Milestone 3   20 / 20
+
+## Marking Guide
+
+- code compiles
+- code conventions/CI from above (commented, code style, design principles)
+- working demo
+- clear explanation of what user stories were satisfied in this iteration
+- design as implemented follows design doc, or change rationale is present in README
+- async is async when necessary
+- TSLint does not complain
+- test suite present/part of CI
+- test coverage reasonable and meaningful
+
+Marks deducted:
+
+
+## Notes M3
+
+(explaining why marks were deducted)
+-----

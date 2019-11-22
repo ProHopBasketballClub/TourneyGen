@@ -2,10 +2,11 @@ doctype html
 html(lang='en')
     head
         title Tourney Gen
-        base(href = '/')
+        link(rel="shortcut icon" href="./../resources/favicon.ico")
         link(rel="stylesheet" type='text/css' href="./../css/tourneygen.css")
         link(rel="stylesheet" type='text/css' href="./../css/login.css")
     body
+        include errors/error_message.pug
         div(class="login-container")
             div(class="login-card")
                 img(src="./../resources/tourneygenlogo.png")

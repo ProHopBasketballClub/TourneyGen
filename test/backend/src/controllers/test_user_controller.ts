@@ -163,6 +163,17 @@ describe('User Controller tests', async function() {
         res.body.displayName.should.equal('eetar253');
     });
 
+// Attempts to get a user by email
+// Expects a User objects an a 200
+    it('It should get a user by email', async () => {
+    const res = await chai.request(conn)
+        .get(USER_ROOT)
+        .query({email: 'a@b.ca'});
+
+    res.should.have.status(HttpStatus.OK);
+    res.body.displayName.should.equal('eetar253');
+});
+
 // Attempts to get a user by id
 // Expects a User objects an a 200
     it('it should GET user by id', async () => {

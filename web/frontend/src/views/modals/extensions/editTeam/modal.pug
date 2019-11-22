@@ -1,0 +1,24 @@
+extends ../../modal.pug
+
+block modal-content
+    style
+        include modal.css
+
+    div(class="modal-content" id="edit-team-modal-content")
+        form(class="basic-form-column" action="/edit_team" method="POST") 
+            input(type="hidden" name="teamId" value=teamId)
+            div(class="form-box")
+                h1(class="form-header" id="team-name-header")
+                    | Team Name:
+                input(type="text" id="team-name-field" class="form-field" name="teamName" value=teamName)
+            div(class="form-box")
+                p(class="form-text" id="team-description-text")
+                    | Team Description
+                textarea(id="team-description-field" class="form-field" name="teamDescription" rows="4" cols="20")
+                    | #{teamDescription}
+                p(class="form-text")
+                    | Roster
+                input(type="text" id="team-game-type-field" class="form-field" name="teamRoster" value= teamRoster)
+            div(class="form-box")
+                input(type="button" id="cancel-edit-team" class="basic-button" value="Cancel")
+                input(type="submit" id="submit-edit-team" class="basic-button" value="Submit")

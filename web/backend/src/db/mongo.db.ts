@@ -21,6 +21,14 @@ export class MongoDb {
         return await this._get_operation(table, [name], this._getByDisplayName);
     }
 
+    public static async getByDict(table: string, dict: object): Promise<DataReturnDTO> {
+        return await this._get_operation(table, [name], this._getByDict);
+    }
+
+    public static async getByEmail(table: string, email: string): Promise<DataReturnDTO> {
+        return await this._get_operation(table, [email], this._getByEmail);
+    }
+
     public static async getByName(table: string, name: string): Promise<DataReturnDTO> {
         return await this._get_operation(table, [name], this._getByName);
     }
@@ -96,9 +104,17 @@ export class MongoDb {
 
     }
 
+    private static async _getByDict(dict: object, collection: Collection) {
+        return await collection.findOne(dict);
+    }
+
     // user specific query for getting users identified by displayName
     private static async _getByDisplayName(name: string, collection: Collection) {
         return await collection.findOne({displayName: name});
+    }
+
+    private static async _getByEmail(email: string, collection: Collection) {
+        return await collection.findOne({email: email.toLowerCase()});
     }
 
     private static async _getByName(name: string, collection: Collection) {
