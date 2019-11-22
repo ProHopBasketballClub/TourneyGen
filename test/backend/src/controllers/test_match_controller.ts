@@ -2,6 +2,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 import {MongoDb} from '../../../../web/backend/src/db';
+import {TestDatabase} from './testDatabase';
 
 // No ec6 import exists for these packages import must be done this way
 // tslint:disable-next-line:no-var-requires
@@ -28,13 +29,7 @@ describe('Match Controller', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        await mongoUnit.start().then(async (url) => {
-            console.log('fake mongo is started: ', url);
-            process.env.DB_CONNECTION_STRING = url;
-        }).catch( async (error) => {
-            await mongoUnit.drop();
-            await mongoUnit.stop();
-        });
+        await TestDatabase.start();
     });
 
     before(async () => {

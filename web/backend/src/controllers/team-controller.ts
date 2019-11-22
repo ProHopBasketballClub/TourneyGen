@@ -146,7 +146,7 @@ export class TeamController implements IController {
         }
         if ((await MongoDb.getById(TeamController.table, req.query.id)).data === null) {
             res.statusCode = HttpStatus.NOT_FOUND;
-            res.json({error: 'You cannot update a teama= that does not exist'});
+            res.json({error: 'You cannot update a team that does not exist'});
             return;
         }
         if (await MongoDb.updateById(TeamController.table, req.query.id, req.body)) {

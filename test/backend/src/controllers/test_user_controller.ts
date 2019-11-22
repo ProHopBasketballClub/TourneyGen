@@ -1,6 +1,7 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
+import {TestDatabase} from './testDatabase';
 
 // The root of the user api
 const USER_ROOT: string = '/api/user';
@@ -23,16 +24,10 @@ describe('User Controller tests', async function() {
     const TIME_OUT: number = 20000;
     this.timeout(TIME_OUT);
 
-    before(async function() {
+    before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        await mongoUnit.start().then(async (url) => {
-            console.log('fake mongo is started: ', url);
-            process.env.DB_CONNECTION_STRING = url;
-        }).catch(async (error) => {
-            await mongoUnit.drop();
-            await mongoUnit.stop();
-        });
+        await TestDatabase.start();
     });
 
     after(async () => {
