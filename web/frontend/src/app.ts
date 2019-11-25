@@ -161,17 +161,14 @@ app.get('/match/:id', (req, res) => {
             const home_route = backend_location + generate_get_route(team_route, {id: match_object.Home});
             const routes = [home_route, away_route];
             api_get_multiple_requests(routes, (teams_callback) => {
-                console.log(teams_callback);
                 teams_callback.forEach((team) => {
                     if (team._id === match_object.Home) {
                         home_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
                     } else if (team._id === match_object.Away) {
                         away_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
                     }
-                    console.log(home_team, away_team);
                 });
                 const page_rendered=true;
-                console.log(match);
                 res.render('match', {
                     away_team,
                     current_user,
