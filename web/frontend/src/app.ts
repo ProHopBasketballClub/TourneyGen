@@ -281,8 +281,8 @@ app.post('/create_match', (req, res) => {
         const league = req.body.leagueId;
 
         const payload = {
-            Home: homeTeam,
             Away: awayTeam,
+            Home: homeTeam,
             League: league,
         };
 

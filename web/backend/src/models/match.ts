@@ -67,7 +67,6 @@ export class Match {
     public Tournament: string; // The id of the tournament the match is in. Not required
     public Updated_By: string;
 
-
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
         this.Away = req.Away;
