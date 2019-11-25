@@ -15,7 +15,7 @@ if page_rendered
                         p(class='match-title')
                             | #{match.name}
                         div(class='league-view')
-                            a(href= 'league/' + match.league)
+                            a(href= '../league/' + match.league)
                                 | View league
                     div(class='teams-section')
                         if home_team
@@ -28,7 +28,7 @@ if page_rendered
                             div(id='away-team')
                                 p(class='team-title') 
                                     | Away Team
-                                a(href = 'team/' + away_team.id class='team-name') 
+                                a(href = '../team/' + away_team.id class='team-name') 
                                     | #{away_team.name}
 
                     div(class='button')
