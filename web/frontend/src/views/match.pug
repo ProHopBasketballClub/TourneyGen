@@ -1,0 +1,39 @@
+doctype html
+if page_rendered
+    html(lang='en')
+        head
+            title Tourney Gen - Match
+            link(rel="shortcut icon" href="./../resources/favicon.ico")
+            link(rel="stylesheet" href="./../css/tourneygen.css")
+            link(rel="stylesheet" href="./../css/match.css")
+        include logout.pug
+        body
+            div(class='home-container')
+                div(class='category-card')
+                    //- include errors/error_message.pug
+                    if match
+                        p(class='match-title')
+                            | #{match.name}
+                        div(class='league-view')
+                            a(href= '../league/' + match.league)
+                                | View league
+                    div(class='teams-section')
+                        if home_team
+                            div(id='home-team')
+                                p(class='team-title') 
+                                    | Home Team
+                                a(href = '../team/' + home_team.id class='team-name') 
+                                    | #{home_team.name}
+                        if away_team
+                            div(id='away-team')
+                                p(class='team-title') 
+                                    | Away Team
+                                a(href = '../team/' + away_team.id class='team-name') 
+                                    | #{away_team.name}
+
+                    div(class='button')
+                        a(href='/' data-toggle="modal" class='button' id = 'new-league') 
+                            | Home
+
+            if is_admin
+                include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
