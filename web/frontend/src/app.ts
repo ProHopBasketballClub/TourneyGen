@@ -1,11 +1,10 @@
-import { assertForOfStatement } from 'babel-types';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, league_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, match_get_all_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_delete_request, api_get_multiple_requests,  api_get_request, api_post_request,
      api_put_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
@@ -56,6 +55,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/league/:id', (req,res) => {
+    const teams = [];
+    const tournaments = [];
+    const matches = [];
     is_logged_in(req.cookies, (success) => {
         const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
@@ -72,35 +74,50 @@ app.get('/league/:id', (req,res) => {
                     teams: league_object.Teams,
                 };
                 const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
-                const teams = [];
-                const tournaments = [];
-                const matches = [];
 
                 const team_routes = [];
                 league.teams.forEach((team) => {
                     team_routes.push(backend_location + generate_get_route(team_route, {id: team}));
                 });
-                // This will make an api request to get a team object for each team id in the league
-                api_get_multiple_requests(team_routes, (response_object) => {
-                    if (response_object) {
-                        response_object.forEach((team) => {
-                            teams.push({ name: team.Name, id: team._id, league: team.League });
+                api_get_request(backend_location + match_get_all_route, (match_response) => {
+                    if (match_response) {
+                        match_response.forEach((match) => {
+                            if (match.League === league._id) {
+                                matches.push({
+                                    away: match.Away,
+                                    confirmed: match.confirmed,
+                                    home: match.Home,
+                                    id: match._id,
+                                    league: match.League,
+                                    name: match.Title,
+                                    tournament: match.Tournament,
+                                    });
+                            }
                         });
-                        // Sort team names alphabetically - not sure if this is best way
-                        // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
-                    res.render('leagues', {
-                        current_user,
-                        errors,
-                        is_admin,
-                        league,
-                        matches,
-                        page_rendered,
-                        teams,
-                        tournaments,
+
+                    // This will make an api request to get a team object for each team id in the league
+                    api_get_multiple_requests(team_routes, (response_object) => {
+                        if (response_object) {
+                            response_object.forEach((team) => {
+                                teams.push({ name: team.Name, id: team._id, league: team.League });
+                            });
+                            // Sort team names alphabetically - not sure if this is best way
+                            // but its better than a random order due to async.
+                            teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+                        }
+                        res.render('leagues', {
+                            current_user,
+                            errors,
+                            is_admin,
+                            league,
+                            matches,
+                            page_rendered,
+                            teams,
+                            tournaments,
+                        });
+                        errors = [];
                     });
-                    errors = [];
                 });
             }
         });
