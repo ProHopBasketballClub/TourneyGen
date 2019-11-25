@@ -85,7 +85,7 @@ app.get('/league/:id', (req,res) => {
                             if (match.League === league._id) {
                                 matches.push({
                                     away: match.Away,
-                                    confirmed: match.confirmed,
+                                    confirmed: match.Confirmed,
                                     home: match.Home,
                                     id: match._id,
                                     league: match.League,
@@ -135,6 +135,55 @@ app.get('/login', (req, res) => {
             errors,
         });
         errors = [];
+    });
+});
+
+app.get('/match/:id', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        let match = {};
+        let home_team = {};
+        let away_team = {};
+        const current_user = success.displayName;
+        const route = backend_location + generate_get_route(match_route, { id: req.params.id });
+        api_get_request(route, (match_object) => {
+            if (match_object) {
+                match = {
+                    away: match_object.Away,
+                    confirmed: match_object.Confirmed,
+                    home: match_object.Home,
+                    id: match_object._id,
+                    league: match_object.League,
+                    name: match_object.Title,
+                    tournament: match_object.Tournament,
+                };
+            }
+            const away_route = backend_location + generate_get_route(team_route, {id: match_object.Away});
+            const home_route = backend_location + generate_get_route(team_route, {id: match_object.Home});
+            const routes = [home_route, away_route];
+            api_get_multiple_requests(routes, (teams_callback) => {
+                console.log(teams_callback);
+                teams_callback.forEach((team) => {
+                    if (team._id === match_object.Home) {
+                        home_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                    } else if (team._id === match_object.Away) {
+                        away_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                    }
+                    console.log(home_team, away_team);
+                });
+                const page_rendered=true;
+                console.log(match);
+                res.render('match', {
+                    away_team,
+                    current_user,
+                    errors,
+                    home_team,
+                    match,
+                    page_rendered,
+                });
+            });
+        });
+    }, (failure) => {
+        res.redirect('/login');
     });
 });
 
