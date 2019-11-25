@@ -1,0 +1,23 @@
+extends ../../modal.pug
+
+block modal-content
+
+    div(class="modal-content" id="create-match-modal-content")
+        form(class="basic-form-column" action="/create_match" method="POST") 
+            input(type="hidden" name="leagueId" value=leagueId)
+            div(class="form-box")
+                h1(class="form-header" id="home-team-header")
+                    | Home Team:
+                select(name = "homeTeam" class = 'form-field')
+                    if modal_teams && modal_teams.length > 0
+                        for team in modal_teams
+                            option(value=team.id) #{team.name}
+                h1(class="form-header" id="away-team-header")
+                    | Away Team:
+                select(name = "awayTeam" class = 'form-field')
+                    if modal_teams && modal_teams.length > 0
+                        for team in modal_teams
+                            option(value=team.id) #{team.name}
+            div(class="form-box")
+                input(type="button" id="cancel-create-match" class="basic-button" value="Cancel")
+                input(type="submit" id="submit-create-match" class="basic-button" value="Submit")

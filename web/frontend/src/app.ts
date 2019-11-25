@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import ApiRequest from './api_request/api_request';
-import { league_get_all_route, league_route, team_get_all_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_get_multiple_requests } from './helpers/special_requests';
 import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from './helpers/verification';
 
@@ -64,7 +64,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/league/:id', (req,res) => {
-
     is_logged_in(req.cookies, (success) => {
         const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
@@ -83,6 +82,7 @@ app.get('/league/:id', (req,res) => {
                     name: league_object.Name,
                     teams: league_object.Teams,
                 };
+                const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
                 const teams = [];
                 const tournaments = [];
                 const matches = [];
@@ -108,6 +108,7 @@ app.get('/league/:id', (req,res) => {
                     res.render('leagues', {
                         current_user,
                         errors,
+                        is_admin,
                         league,
                         matches,
                         page_rendered,
@@ -301,6 +302,41 @@ app.post('/create_league', (req, res) => {
             // TODO: When we have front-end error handling, it should be reported here.
 
             res.redirect('/');
+        });
+    }, (failure) => {
+
+        res.redirect('/login');
+    });
+});
+
+app.post('/create_match', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const homeTeam = req.body.homeTeam;
+        const awayTeam = req.body.awayTeam;
+        const league = req.body.leagueId;
+
+        const match_request_route = backend_location + match_route;
+        const match_request_payload = {
+            Away: awayTeam,
+            Home: homeTeam,
+            League: league,
+        };
+        const match_request = new ApiRequest('POST', match_request_route, { params: null, body: match_request_payload });
+
+        match_request.send_request( (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the new league appears.
+                    res.redirect('back');
+                    return;
+                }
+            }
+
+            errors.push(backend_response.error);
+            // Error case handled here, all success cases above should have returned.
+            // TODO: When we have front-end error handling, it should be reported here.
+
+            res.redirect('back');
         });
     }, (failure) => {
 

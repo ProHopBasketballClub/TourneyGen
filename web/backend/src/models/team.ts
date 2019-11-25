@@ -1,8 +1,10 @@
 import {Request} from 'express';
 import {LeagueController} from '../controllers';
+import {TeamController} from '../controllers/team-controller';
 import {MongoDb} from '../db';
 import {DataReturnDTO} from './DTOs/dataReturnDTO';
 import {DataValidDTO} from './DTOs/dataValidDTO';
+import {League} from './league';
 
 export class Team {
 
@@ -23,8 +25,14 @@ export class Team {
         if (!req.body.Name || req.body.Name.length < 1) {
             return new DataValidDTO(false, 'A team must have a name');
         }
-        if ((await MongoDb.getByName('team', req.body.Name)).data) {
-            return new DataValidDTO(false, 'A team with this name already exists');
+        const league: League = (await MongoDb.getById(LeagueController.table, req.body.League)).data;
+        if (league.Teams) {
+            for (const id of league.Teams) {
+                const teamName = (await MongoDb.getById(TeamController.table, id)).data.Name;
+                if (req.body.Name === teamName) {
+                    return new DataValidDTO(false, 'A team with this name already exists in this league');
+                }
+            }
         }
         if (!req.body.Roster || req.body.Roster.length < 1) {
             return new DataValidDTO(false, 'A team requires at least 1 player');
@@ -66,7 +74,8 @@ export class Team {
             if (req.body.Name.length < 1) {
                 return new DataValidDTO(false, 'A team must have a name');
             }
-            if ((await MongoDb.getByName('team', req.body.Name)).data) {
+            const team: Team = (await MongoDb.getByName('team', req.body.Name)).data;
+            if (team && team._id !== req.query.id) {
                 return new DataValidDTO(false, 'A team with this name already exists');
             }
         }
