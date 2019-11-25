@@ -73,7 +73,7 @@ app.get('/league/:id', (req,res) => {
 
         request.send_request( (league_object) => {
             const page_rendered = true;
-            if(league_object._id === req.params.id) {
+            if (league_object && league_object._id === req.params.id) {
                 // TODO: getting a league object SHOULD return a list of teams, tournaments and matches
                 const league = {
                     _id: league_object._id,

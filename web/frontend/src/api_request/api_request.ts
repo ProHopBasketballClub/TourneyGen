@@ -70,31 +70,39 @@ export default class ApiRequest {
             the callback method with whatever response the backend
             gives.
         */
-        let data: string = '';
         let APIResponse;
         console.log('Submitting GET request to: ' + route);
 
         request({
             json: true,
-            method: 'DELETE',
+            method: 'GET',
             url: route,
-        }, (resp) => {
+        }, (error, get_response, get_body) => {
 
-            // A chunk of data has been recieved.
-            resp.on('data', (chunk) => {
-                data += chunk;
-            });
+            if (error) {
+                console.log(error);
+                return callback(null);
+            }
 
-            // The whole response has been received. return the data
-            resp.on('end', () => {
-                try {
-                    APIResponse = JSON.parse(data);
-                    APIResponse.status_code = resp.statusCode;
-                } catch (e) {
+            try {
+                if (get_response.statusCode === HttpStatus.OK) {
+                    APIResponse = get_body;
+                    APIResponse.status_code = get_body.statusCode;
+
+                    return callback(APIResponse);
+                } else if (get_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
+                    console.log('302 response: ', get_response);
+                    APIResponse = get_response;
+                    return callback(APIResponse);
+                } else {
+                    APIResponse = get_body;
+                    console.log(get_response.statusCode);
                     return callback(null);
                 }
-                return callback(APIResponse);
-            });
+            } catch (e) {
+                console.log(e);
+                return callback(null);
+            }
         }).on('error', (err) => {
             return callback(null);
         });
@@ -218,6 +226,11 @@ export default class ApiRequest {
     }
 
     private generate_get_route(route, args) {
+
+        if (!args) {
+            return route;
+        }
+
         let get_route = route + '?';
         for (const [key, value] of Object.entries(args)) {
             get_route += key.toString() + '=' + value.toString() + '&';
