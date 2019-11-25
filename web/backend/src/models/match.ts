@@ -45,9 +45,9 @@ export class Match {
                 return new DataValidDTO(false, 'A home team must be specified');
             }
         }
-        if (!req.body.Visitor) {
+        if (!req.body.Away) {
             if (req.body.Away.length < 1) {
-                return new DataValidDTO(false, 'A home away must be specified');
+                return new DataValidDTO(false, 'An away team must be specified');
             }
         }
     }
