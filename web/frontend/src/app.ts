@@ -1,4 +1,3 @@
-import { assertForOfStatement } from 'babel-types';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
@@ -6,9 +5,9 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import ApiRequest from './api_request/api_request';
-import { league_get_all_route, league_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_get_multiple_requests } from './helpers/special_requests';
-import { create_cookie, generate_auth_token, is_logged_in } from './helpers/verification';
+import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from './helpers/verification';
 
 const app = express();
 const DEFAULT_PORT = 3001;
@@ -26,6 +25,7 @@ let errors = [];
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
+        const current_user = success.displayName; // Move this.
 
         const request_route = backend_location + league_get_all_route;
         const request = new ApiRequest('GET', request_route, { params: null, body: null});
@@ -38,11 +38,25 @@ app.get('/', (req, res) => {
                 }
             });
 
-            res.render('home', {
-                errors,
-                leagues,
+            const all_team_request_route = backend_location + team_get_all_route;
+            const all_team_request = new ApiRequest('GET', all_team_request_route, { params: null, body: null });
+
+            all_team_request.send_request( (all_teams) => {
+                const teams = [];
+                all_teams.forEach((team) => {
+                    if(team.Owner === success._id) {
+                        teams.push({ name: team.Name, id: team._id });
+                    }
+                });
+                res.render('home', {
+                    current_user,
+                    errors,
+                    leagues,
+                    teams,
+                });
+                errors = [];
             });
-            errors = [];
+
         });
     }, (failure) => {
         res.redirect('/login');
@@ -52,7 +66,7 @@ app.get('/', (req, res) => {
 app.get('/league/:id', (req,res) => {
 
     is_logged_in(req.cookies, (success) => {
-
+        const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
         const route = backend_location + league_route;
         const params = { id: req.params.id };
@@ -85,13 +99,14 @@ app.get('/league/:id', (req,res) => {
                 api_get_multiple_requests(team_routes, (response_object) => {
                     if (response_object) {
                         response_object.forEach((team) => {
-                            teams.push(team);
+                            teams.push({ name: team.Name, id: team._id, league: team.League });
                         });
                         // Sort team names alphabetically - not sure if this is best way
                         // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.Name.toLowerCase() > b.Name.toLowerCase()) ? 1 : -1);
+                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
                     res.render('leagues', {
+                        current_user,
                         errors,
                         league,
                         matches,
@@ -133,26 +148,37 @@ app.get('/signup', (req, res) => {
 
 app.get('/team/:id', (req, res) => {
     is_logged_in(req.cookies, (success) => {
+        const current_user = success.displayName;
 
-        const route = backend_location + team_route;
-        const team_params = { id: req.params.id };
-        const team_request = new ApiRequest('GET', route, {params: team_params, body: null});
+        const team_request_route = backend_location + team_route;
+        const team_request_params = { id: req.params.id };
+        const team_request = new ApiRequest('GET', team_request_route, { params: team_request_params, body: null });
 
         team_request.send_request( (team_object) => {
             if(team_object._id === req.params.id) {
 
-                const owner_route = backend_location + user_route;
-                const owner_params = { id: team_object.Owner };
-                const owner_request = new ApiRequest('GET', owner_route, { params: owner_params, body: null});
+                const owner_request_route = backend_location + user_route;
+                const owner_request_params = { id: team_object.Owner };
+                const owner_request = new ApiRequest('GET', owner_request_route, { params: owner_request_params, body: null });
 
                 owner_request.send_request( (owner_object) =>  {
+
+                    const team_league_request_route = backend_location + league_route;
+                    const team_league_request_params = { id: team_object.League };
+                    const team_league_request = new ApiRequest('GET', team_league_request_route, { params: team_league_request_params, body: null});
+
+                    team_league_request.send_request( (league_object) => {
                         const team = {
-                            _id: team_object._id,
                             description: team_object.Description,
+                            id: team_object._id,
                             name: team_object.Name,
                             roster: team_object.Roster,
                         };
 
+                        const league = {
+                            id: league_object._id,
+                            name: league_object.Name,
+                        };
                         if (owner_object._id === team_object.Owner) {
                             const page_rendered=true;
                             const owner = {
@@ -163,14 +189,17 @@ app.get('/team/:id', (req, res) => {
                             // This allows the PUG page to only render admin tools if user owns the team
                             const is_admin = (owner && success && success._id && (owner._id === success._id));
                             res.render('team', {
+                                current_user,
                                 errors,
                                 is_admin,
+                                league,
                                 owner,
                                 page_rendered,
                                 team,
                             });
                             errors = [];
                         }
+                    });
                 });
             }
         });
@@ -420,6 +449,13 @@ app.post('/login', (req, res) => {
             res.redirect('/');
         });
     });
+});
+
+app.post('/logout', async (req, res) => {
+    destroy_cookie('tourneygen_srn', res, req.cookies);
+    destroy_cookie('tourneygen_auth', res, req.cookies);
+    destroy_cookie('tourneygen_user', res, req.cookies);
+    res.redirect('/login');
 });
 
 app.post('/signup', async (req, res) => {
