@@ -1,6 +1,6 @@
 
 #admin-panel {
-    position: absolute;
+    position: fixed;
     height: 400px;
     right: 0px;
     top: 22%;
