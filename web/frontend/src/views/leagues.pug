@@ -79,3 +79,10 @@ if page_rendered
             - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
             - var leagueId = league._id
             include modals/extensions/deleteLeague/modal.pug
+
+            - var modalId = "create-match-modal"
+            - var modalOpeners = [ "create-match" ]
+            - var modalClosers = [ "cancel-create-match", "submit-create-match" ]
+            - var leagueId = league._id
+            - var modal_teams = teams
+            include modals/extensions/createMatch/modal.pug

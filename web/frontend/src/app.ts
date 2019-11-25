@@ -5,7 +5,7 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
-import { league_get_all_route, league_route, team_get_all_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_delete_request, api_get_multiple_requests,  api_get_request, api_post_request,
      api_put_request, create_cookie, destroy_cookie, generate_auth_token, generate_get_route, is_logged_in } from './helpers/routing';
 
@@ -267,6 +267,39 @@ app.post('/create_league', (req, res) => {
             // TODO: When we have front-end error handling, it should be reported here.
 
             res.redirect('/');
+        });
+    }, (failure) => {
+
+        res.redirect('/login');
+    });
+});
+
+app.post('/create_match', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const homeTeam = req.body.homeTeam;
+        const awayTeam = req.body.awayTeam;
+        const league = req.body.leagueId;
+
+        const payload = {
+            Home: homeTeam,
+            Away: awayTeam,
+            League: league,
+        };
+
+        api_post_request(backend_location, match_route, payload, (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the new league appears.
+                    res.redirect('back');
+                    return;
+                }
+            }
+
+            errors.push(backend_response.error);
+            // Error case handled here, all success cases above should have returned.
+            // TODO: When we have front-end error handling, it should be reported here.
+
+            res.redirect('back');
         });
     }, (failure) => {
 
