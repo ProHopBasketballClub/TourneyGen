@@ -1,4 +1,5 @@
 import {Request} from 'express';
+import {LeagueController} from '../controllers';
 import {MongoDb} from '../db/mongo.db';
 import {DataValidDTO} from './DTOs/dataValidDTO';
 
@@ -17,6 +18,10 @@ export class League {
         }
         if (!req.body.Name || req.body.Name.length < 1) {
             return new DataValidDTO(false, 'A Name for the league is required');
+        }
+        const league: League = (await MongoDb.getByName(LeagueController.table, req.body.Name)).data;
+        if (league) {
+            return new DataValidDTO(false, 'A league with this name already exists');
         }
         if (!req.body.Description || req.body.Description.length < 1) {
             return new DataValidDTO(false, 'A Description is required');
@@ -40,6 +45,10 @@ export class League {
         if ('Name' in req.body) {
             if (req.body.Name.length < 1) {
                 return new DataValidDTO(false, 'A Name for the league is required');
+            }
+            const league: League = (await MongoDb.getByName(LeagueController.table, req.body.Name)).data;
+            if (league && req.query.id !== league._id) {
+                return new DataValidDTO(false, 'A league with this name already exists');
             }
         }
         if ('Description' in req.body) {

@@ -4,6 +4,7 @@ import {MongoDb} from '../db/mongo.db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
 import {TeamController} from './team-controller';
+import {RequestValidation} from './validation';
 
 /**
  * Controller defining the CRUD methods for league
@@ -125,6 +126,9 @@ export class LeagueController implements IController {
 
     // update an existing league object
     public async put(req: Request, res: Response) {
+        if (!await RequestValidation.RecordExistsWithBody(req, res, LeagueController.table)) {
+            return;
+        }
         const validLeague: DataValidDTO = await League.validateUpdate(req);
         if (!validLeague.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;
