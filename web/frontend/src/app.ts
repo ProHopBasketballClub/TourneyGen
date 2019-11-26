@@ -538,6 +538,6 @@ app.use((req, res) => {
 
     // respond with html page
 
-    res.render('404 not found');
+    res.render('404');
     return;
 });
