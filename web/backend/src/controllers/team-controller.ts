@@ -25,7 +25,7 @@ export class TeamController implements IController {
         const league: League = (await MongoDb.getById(LeagueController.table, team.League)).data;
         // Remove Team from league when deleted, if league still exists
         if (league) {
-            let index = -1; 
+            let index = -1;
             for (let i = 0; i < league.Teams.length; i++) {
                 if (JSON.stringify(league.Teams[i]) === JSON.stringify(req.query.id)) {
                     index = i;
