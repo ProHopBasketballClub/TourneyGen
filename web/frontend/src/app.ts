@@ -380,7 +380,7 @@ app.post('/delete_league', (req, res) => {
             if (backend_response) {
                 if (backend_response.status_code === HttpStatus.OK) {
                     // Redirect the user so that the changes appear.
-                    res.redirect('back'); // Go back to home
+                    res.redirect('back'); // Go back
                 }
             }
         });
