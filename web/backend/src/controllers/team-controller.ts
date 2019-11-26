@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
-import { LeagueController } from './league-controller';
+import {LeagueController} from './league-controller';
 import {RequestValidation} from './validation';
 
 export class TeamController implements IController {
@@ -15,11 +15,17 @@ export class TeamController implements IController {
             res.json({error: 'Id must be specified as a param of this request'});
             return;
         }
-        if ((await MongoDb.getById(TeamController.table, req.query.id)).data === null) {
+        const team: Team = (await MongoDb.getById(TeamController.table, req.query.id)).data;
+        if (!team) {
             res.statusCode = HttpStatus.NOT_FOUND;
             res.json({error: 'You cannot delete a team that does not exist'});
             return;
         }
+        const league: League = (await MongoDb.getById(LeagueController.table, team.League)).data;
+        // Remove Team from league when deleted
+        const index = league.Teams.indexOf(req.query.id, 0);
+        league.Teams.splice(index, 1);
+        await MongoDb.updateById(LeagueController.table, team.League, league);
         if (await MongoDb.deleteById(TeamController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
             res.json({Msg: 'Successfully Deleted team with id ' + req.query.id});
@@ -92,7 +98,7 @@ export class TeamController implements IController {
             res.json({error: isTeamValid.error});
             return;
         }
-        const team: Team = new Team(req.body.Roster, req.body.Owner, req.body.Name, req.body.Description,req.body.League);
+        const team: Team = new Team(req.body.Roster, req.body.Owner, req.body.Name, req.body.Description, req.body.League);
 
         // Get the league that owns this team
         const leagueTable = LeagueController.table;
@@ -117,7 +123,7 @@ export class TeamController implements IController {
             const teamList: string[] = leagueData.data.Teams ? leagueData.data.Teams : [];
             teamList.push(team._id);
 
-            if (await MongoDb.updateById(leagueTable, leagueId, { Teams: teamList })) {
+            if (await MongoDb.updateById(leagueTable, leagueId, {Teams: teamList})) {
                 res.statusCode = HttpStatus.OK;
                 res.json(team);
                 return;
