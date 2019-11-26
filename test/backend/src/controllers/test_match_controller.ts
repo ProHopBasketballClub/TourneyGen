@@ -86,7 +86,7 @@ describe('Match Controller', async function() {
     });
 
     it('it should Create a Match object', async () => {
-        const match = {Home: homeId, Away: awayId};
+        const match = {Home: homeId, Away: awayId, League: leagueId};
         const res = await chai.request(conn)
             .post(MATCH_ROOT)
             .send(match);
@@ -97,7 +97,7 @@ describe('Match Controller', async function() {
     });
 
     it('it should fail on no home id', async () => {
-        const match = {Away: awayId};
+        const match = {Away: awayId, League: leagueId};
         const res = await chai.request(conn)
             .post(MATCH_ROOT)
             .send(match);
@@ -107,7 +107,7 @@ describe('Match Controller', async function() {
     });
 
     it('it should fail no away id', async () => {
-        const match = {Home: homeId};
+        const match = {Home: homeId, League: leagueId};
         const res = await chai.request(conn)
             .post(MATCH_ROOT)
             .send(match);
@@ -182,7 +182,7 @@ describe('Match Controller', async function() {
     });
 
     it('it should Create a Match object', async () => {
-        const match = {Home: homeId, Away: awayId};
+        const match = {Home: homeId, Away: awayId, League: leagueId};
         const res = await chai.request(conn)
             .post(MATCH_ROOT)
             .send(match);

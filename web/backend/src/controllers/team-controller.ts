@@ -4,6 +4,7 @@ import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
 import { LeagueController } from './league-controller';
+import {RequestValidation} from './validation';
 
 export class TeamController implements IController {
     public static table: string = 'team';
@@ -133,6 +134,9 @@ export class TeamController implements IController {
     }
 
     public async put(req: Request, res: Response) {
+        if (!await RequestValidation.RecordExistsWithBody(req, res, TeamController.table)) {
+            return;
+        }
         const isValidTeam: DataValidDTO = await Team.validateUpdate(req);
         if (!isValidTeam.valid) {
             res.statusCode = HttpStatus.BAD_REQUEST;

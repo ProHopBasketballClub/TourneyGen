@@ -34,7 +34,7 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if matches && matches.length > 0
                                 for match in matches
-                                    a(href='/matches' class = 'list-item category-card-entry-list-item')
+                                    a(href='/match/' + match.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
                                                 | #{match.name}      
@@ -79,3 +79,10 @@ if page_rendered
             - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
             - var leagueId = league._id
             include modals/extensions/deleteLeague/modal.pug
+
+            - var modalId = "create-match-modal"
+            - var modalOpeners = [ "create-match" ]
+            - var modalClosers = [ "cancel-create-match", "submit-create-match" ]
+            - var leagueId = league._id
+            - var modal_teams = teams
+            include modals/extensions/createMatch/modal.pug

@@ -8,6 +8,11 @@ export class Match {
         if (!Object.keys(req.body).length) {
             return new DataValidDTO(false, 'A team object is required in the body of this request');
         }
+
+        if(!req.body.League) {
+           return new DataValidDTO(false, 'A league must be specified for this match');
+        }
+
         if (!req.body.Home || req.body.Home.length !== MongoDb.MONGO_ID_LEN) {
             return new DataValidDTO(false, 'A home team must be specified');
         }
@@ -40,18 +45,19 @@ export class Match {
                 return new DataValidDTO(false, 'A home team must be specified');
             }
         }
-        if (!req.body.Visitor) {
+        if (!req.body.Away) {
             if (req.body.Away.length < 1) {
-                return new DataValidDTO(false, 'A home away must be specified');
+                return new DataValidDTO(false, 'An away team must be specified');
             }
         }
     }
 
     public _id: string; // The match id
-    public Match: string;
+    public Title: string;
     public Home: string; // The id of the home team
     public Away: string; // The id of the away team
     public Victor: string; // The id of the winning team
+    public League: string; // The id of the league the match is in
     public Loser: string; // The id of the losing team
     public Home_Score: number;
     public Away_Score: number;
@@ -64,8 +70,9 @@ export class Match {
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
         this.Away = req.Away;
-        this.Match = homeTeam.Name + '-VS-' + awayTeam.Name;
+        this.Title = homeTeam.Name + ' VS ' + awayTeam.Name;
         this.Confirmed = false;
+        this.League = req.League;
 
         if (req.Tournament) {
             this.Tournament = req.Tournament;
