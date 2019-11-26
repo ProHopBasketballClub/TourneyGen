@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
-import { type } from 'os';
 import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
