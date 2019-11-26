@@ -26,9 +26,11 @@
     padding: 0.1px 41px;
     border-radius: 8px;
     box-shadow: 0px 0px 4px 0px #1a1a1a;
+    display: flex;
 }
 .category-card-entries p {
     text-decoration: none;
+
 }
 .category-card {
     background-color: #353535;
@@ -43,7 +45,7 @@
 
 .button {
     background-color: #212121;
-    color: black;
+    color: white;
     padding: 7px;
     text-align: center;
     display: inline-block;
@@ -127,4 +129,17 @@
 .basic-button {
     margin-top: 10px;
     margin-right: 10px;
+}
+
+.delete-team {
+    margin-left: auto;
+    height: 10px;
+    padding: 8px;
+    text-align: center;
+    justify-content: center;
+    padding-top: 22px;
+}
+
+.delete-team-button {
+    cursor: pointer;
 }
