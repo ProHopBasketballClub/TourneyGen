@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
+import { type } from 'os';
 import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, League, Team} from '../models';
 import {IController} from './controller.interface';
@@ -22,9 +23,19 @@ export class TeamController implements IController {
             return;
         }
         const league: League = (await MongoDb.getById(LeagueController.table, team.League)).data;
-        // Remove Team from league when deleted
-        const index = league.Teams.indexOf(req.query.id, 0);
-        league.Teams.splice(index, 1);
+        // Remove Team from league when deleted, if league still exists
+        if (league) {
+            let index = -1; 
+            for (let i = 0; i < league.Teams.length; i++) {
+                if (JSON.stringify(league.Teams[i]) === JSON.stringify(req.query.id)) {
+                    index = i;
+                }
+            }
+            // Remove league from league list if it is in there
+            if (index > -1 && index < league.Teams.length) {
+                league.Teams.splice(index, 1);
+            }
+        }
         await MongoDb.updateById(LeagueController.table, team.League, league);
         if (await MongoDb.deleteById(TeamController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
