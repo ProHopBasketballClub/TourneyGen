@@ -17,7 +17,7 @@ describe('Tournament Controller', async function() {
     let userId: string = '';
     let leagueId: string = '';
     let tourId: string = '';
-    let teamIds = [];
+    const teamIds = [];
     let serve; // A variable for the node app
     let conn; // The variable for the connection to the server
     const TIME_OUT: number = 20000;
