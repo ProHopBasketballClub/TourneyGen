@@ -19,7 +19,6 @@ a {
     whatever fills it up (needed for flex) */
 html {
     height: 100%;
-    background-color: #2a2a2a;
 }
 
 body {
