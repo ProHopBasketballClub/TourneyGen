@@ -25,7 +25,6 @@ export class TeamController implements IController {
         // Remove Team from league when deleted
         const index = league.Teams.indexOf(req.query.id, 0);
         league.Teams.splice(index, 1);
-        console.log(league.Teams);
         await MongoDb.updateById(LeagueController.table, team.League, league);
         if (await MongoDb.deleteById(TeamController.table, req.query.id)) {
             res.statusCode = HttpStatus.OK;
