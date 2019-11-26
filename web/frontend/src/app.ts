@@ -12,6 +12,7 @@ const app = express();
 const DEFAULT_PORT = 3001;
 const port = (env as any).env.PORT || DEFAULT_PORT;
 const backend_location = (env as any).env.BACKEND_LOCATION;
+const HTTP404 = 404;
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -531,4 +532,13 @@ app.post('/signup', async (req, res) => {
 
 app.listen(port,() => {
     return console.info(`Server is listening on port ${port}`);
+});
+
+app.use((req, res) => {
+    res.status(HTTP404);
+
+    // respond with html page
+
+    res.render('404');
+    return;
 });
