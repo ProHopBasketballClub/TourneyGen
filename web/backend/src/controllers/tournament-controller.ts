@@ -2,9 +2,10 @@ import {Request, Response} from 'express';
 import {BAD_REQUEST} from 'http-status-codes';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db';
-import {DataReturnDTO, DataValidDTO} from '../models';
+import {DataReturnDTO, DataValidDTO, League} from '../models';
 import {Tournament} from '../models/tournament';
 import {IController} from './controller.interface';
+import {LeagueController} from './league-controller';
 import {RequestValidation} from './validation';
 
 export class TournamentController implements IController {
@@ -90,7 +91,13 @@ export class TournamentController implements IController {
         if (await MongoDb.save(TournamentController.table, tournament)) {
             res.statusCode = HttpStatus.OK;
             res.json(tournament);
-            return;
+            const retLeague = await MongoDb.getById(LeagueController.table, tournament.League);
+            if (retLeague.valid) {
+                const league: League = retLeague.data;
+                league.Tournaments.push(tournament._id);
+                await MongoDb.updateById(LeagueController.table,tournament.League,league);
+                return;
+            }
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             res.json({error: 'Internal Server Error creation failed'});
@@ -110,7 +117,7 @@ export class TournamentController implements IController {
         }
         if (await MongoDb.updateById(TournamentController.table, req.query.id, req.body)) {
             res.statusCode = HttpStatus.OK;
-            res.json(await MongoDb.getById(TournamentController.table, req.query.id));
+            res.json((await MongoDb.getById(TournamentController.table, req.query.id)).data);
             return;
         } else {
             res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;

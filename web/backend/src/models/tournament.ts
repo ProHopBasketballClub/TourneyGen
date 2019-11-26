@@ -13,8 +13,8 @@ export class Tournament {
         if (!req.body.Name || req.body.Name.length < 1) {
             return new DataValidDTO(false, 'A name for the tournament is required');
         }
-        if (!req.body.Teams || req.body.Team.length < Tournament.MIN_TEAM_COUNT) {
-            return new DataValidDTO(false, 'A Tournament for the league is required');
+        if (!req.body.Teams || req.body.Teams.length < Tournament.MIN_TEAM_COUNT) {
+            return new DataValidDTO(false, '3 or more valid teams are required for a tournament');
         }
         if (!req.body.Description || req.body.Description.length < 1) {
             return new DataValidDTO(false, 'A Description for the tournament is required');
@@ -26,7 +26,7 @@ export class Tournament {
         if (!league.valid || !league.data) {
             return new DataValidDTO(false, 'A valid league id is required');
         }
-        if (!this.validTeamObject(req.body.Teams)) {
+        if (!await this.validTeamObject(req.body.Teams)) {
             return new DataValidDTO(false, 'One or more of the team ids provided is not valid');
         }
         // This checks to make sure tournament names are league unique
@@ -54,7 +54,7 @@ export class Tournament {
             }
         }
         if ('Teams' in req.body) {
-            if (req.body.Teams.length || !this.validTeamObject(req.body.Teams)) {
+            if (req.body.Teams.length < Tournament.MIN_TEAM_COUNT || !await this.validTeamObject(req.body.Teams)) {
                 return new DataValidDTO(false, 'One or more of the team ids provided is not valid');
             }
         }
@@ -64,14 +64,16 @@ export class Tournament {
         if ('Matches' in req.body) {
             return new DataValidDTO(false, 'Tournament matches are auto generated and cannot be changed');
         }
+
+        return new DataValidDTO(true, '');
     }
 
     private static async validTeamObject(teams: [string]): Promise<boolean> {
-        for (const t of teams) {
-            if (t.length !== MongoDb.MONGO_ID_LEN) {
+        for (const id of teams) {
+            if (id.length !== MongoDb.MONGO_ID_LEN) {
                 return false;
             }
-            const team = await MongoDb.getById(TeamController.table, t);
+            const team = await MongoDb.getById(TeamController.table, id);
             if (!team.valid || !team.data) {
                 return false;
             }
@@ -94,8 +96,8 @@ export class Tournament {
     }
 
     public _id: string;
-    public Teams: [string];
-    public Matches: [string];
+    public Teams: [] = [];
+    public Matches: [] = [];
     public League: string;
     public Name: string;
     public Description: string;
