@@ -14,7 +14,7 @@ export class Tournament {
             return new DataValidDTO(false, 'A name for the tournament is required');
         }
         if (!req.body.Teams || req.body.Teams.length < Tournament.MIN_TEAM_COUNT) {
-            return new DataValidDTO(false, '3 or more valid teams are required for a tournament');
+            return new DataValidDTO(false, Tournament.MIN_TEAM_COUNT + ' or more valid teams are required for a tournament');
         }
         if (!req.body.Description || req.body.Description.length < 1) {
             return new DataValidDTO(false, 'A Description for the tournament is required');

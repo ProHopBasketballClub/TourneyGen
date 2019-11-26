@@ -2,6 +2,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 import {MongoDb} from '../../../../web/backend/src/db';
+import {TestDatabase} from './testDatabase';
 
 // No ec6 import exists for these packages import must be done this way
 // tslint:disable-next-line:no-var-requires
@@ -27,7 +28,7 @@ describe('Tournament Controller', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+        await TestDatabase.start();
     });
 
     before(async () => {
