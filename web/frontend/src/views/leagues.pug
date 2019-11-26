@@ -43,8 +43,9 @@ if page_rendered
                             else
                                 div(class='category-card-entries')
                                     p No matches currently scheduled.
-                    a(href="" class="match-view-all-button")
-                        | View All Matches
+                    div(class='button')
+                            a(href='/' data-toggle="modal" class='button' id = 'new-league') 
+                                | View all matches
                     p
                         | Teams
                         div(class='category-card-entry-container')
