@@ -45,10 +45,6 @@ export default class ApiRequest {
         const route = this.generate_get_route(this.destination, this.request_params);
         const payload = this.request_body;
 
-        if (!(['GET', 'POST', 'PUT', 'DELETE'].includes(this.type))) {
-            console.error('Unable to submit a request of the type: "' + this.type + '".');
-            return callback(null);
-        }
         if (this.type === 'GET') {
             return this.api_get_request(route, callback);
 
@@ -62,7 +58,8 @@ export default class ApiRequest {
             return this.api_delete_request(route, callback);
         }
 
-        return callback(null);
+        console.error('Unable to submit a request of the type: "' + this.type + '".');
+        return callback({ error: 'Unable to process HTTP Request of type ' + this.type + '.'});
     }
 
     private api_get_request(route: string, callback) {
@@ -81,30 +78,37 @@ export default class ApiRequest {
 
             if (error) {
                 console.log(error);
-                return callback(null);
+                APIResponse = { error };
+                return callback(APIResponse);
             }
 
             try {
                 if (get_response.statusCode === HttpStatus.OK) {
                     APIResponse = get_body;
-                    APIResponse.status_code = get_body.statusCode;
+                    try {
+                        APIResponse.status_code = get_response.statusCode;
+                    } catch (object_error) {
+                        console.log('Received GET response body not of type json.');
+                        return callback({ error: 'Received GET response body not of type json.' });
+                    }
 
                     return callback(APIResponse);
                 } else if (get_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
                     console.log('302 response: ', get_response);
                     APIResponse = get_response;
+
                     return callback(APIResponse);
                 } else {
                     APIResponse = get_body;
-                    console.log(get_response.statusCode);
-                    return callback(null);
+
+                    console.log('Got response: ' + get_response.statusCode + ' for reason: ' + get_body.error);
+                    return callback(APIResponse);
                 }
             } catch (e) {
                 console.log(e);
-                return callback(null);
+                APIResponse = { error: e };
+                return callback(APIResponse);
             }
-        }).on('error', (err) => {
-            return callback(null);
         });
     }
 
@@ -128,7 +132,8 @@ export default class ApiRequest {
         }, (error, post_response, post_body) => {
             if (error) {
                 console.log(error);
-                return callback(null);
+                APIResponse = { error };
+                return callback(APIResponse);
             }
             try {
                 if (post_response.statusCode === HttpStatus.OK) {
@@ -141,12 +146,13 @@ export default class ApiRequest {
                     return callback(APIResponse);
                 } else {
                     APIResponse = post_body;
-                    console.log(post_response.statusCode);
-                    return callback(null);
+                    console.log('Got response: ' + post_response.statusCode + ' for reason: ' + post_body.error);
+                    return callback(APIResponse);
                 }
             } catch (e) {
                 console.log(e);
-                return callback(null);
+                APIResponse = { error: e };
+                return callback(APIResponse);
             }
         });
     }
@@ -163,14 +169,14 @@ export default class ApiRequest {
             json: true,
             method: 'DELETE',
             url,
-        }, (error, delete_response, post_body) => {
+        }, (error, delete_response, delete_body) => {
             if (error) {
                 console.log(error);
-                return callback(null);
-            }
+                APIResponse = { error };
+                return callback(APIResponse);            }
             try {
                 if (delete_response.statusCode === HttpStatus.OK) {
-                    APIResponse = post_body;
+                    APIResponse = delete_body;
                     APIResponse.status_code = delete_response.statusCode;
                     return callback(APIResponse);
                 } else if (delete_response.statusCode === HttpStatus.MOVED_TEMPORARILY) {
@@ -178,13 +184,13 @@ export default class ApiRequest {
                     APIResponse = delete_response;
                     return callback(APIResponse);
                 } else {
-                    console.log(delete_response.statusCode);
+                    console.log('Got response: ' + delete_response.statusCode + ' for reason: ' + delete_body.error);
                     return callback(null);
                 }
             } catch (e) {
                 console.log(e);
-                return callback(null);
-            }
+                APIResponse = { error: e };
+                return callback(APIResponse);            }
         });
     }
 
@@ -202,8 +208,8 @@ export default class ApiRequest {
 
             if (error) {
                 console.log(error);
-                return callback(null);
-            }
+                APIResponse = { error };
+                return callback(APIResponse);            }
             try {
                 if (put_response.statusCode === HttpStatus.OK) {
                     APIResponse = put_body;
@@ -215,13 +221,13 @@ export default class ApiRequest {
                     return callback(APIResponse);
                 } else {
                     APIResponse = put_body;
-                    console.log(put_response.statusCode);
+                    console.log('Got response: ' + put_response.statusCode + ' for reason: ' + put_body.error);
                     return callback(APIResponse);
                 }
             } catch (e) {
                 console.log(e);
-                return callback(null);
-            }
+                APIResponse = { error: e };
+                return callback(APIResponse);            }
         });
     }
 

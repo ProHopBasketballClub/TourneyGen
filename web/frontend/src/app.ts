@@ -88,14 +88,14 @@ app.get('/league/:id', (req,res) => {
                 };
                 const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
 
-                const team_routes = [];
+                const team_requests = [];
                 const team_request_route = backend_location + team_route;
-                league.teams.forEach((team) => {
+                for (const team of league.teams) {
                     const team_request_params = { id: team };
                     const team_request = new ApiRequest('GET', team_request_route, { params: team_request_params, body: null});
 
-                    team_routes.push(team_request);
-                });
+                    team_requests.push(team_request);
+                }
 
                 const match_request_route = backend_location + match_get_all_route;
                 const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
@@ -118,7 +118,7 @@ app.get('/league/:id', (req,res) => {
                     }
 
                     // This will make an api request to get a team object for each team id in the league
-                    api_get_multiple_requests(team_routes, (response_object) => {
+                    api_get_multiple_requests(team_requests, (response_object) => {
                         if (response_object) {
                             response_object.forEach((team) => {
                                 teams.push({ name: team.Name, owner:team.Owner, id: team._id, league: team.League });
@@ -313,8 +313,12 @@ app.post('/add_team', (req, res) => {
         user_request.send_request( (user_object) => {
             if (!user_object || !user_object._id || !user_object.email || !user_object.displayName) {
                 // User wasn't valid.
-                errors.push(user_object.error);
-                // TODO: When possible, pass that info along.
+                if (user_object) {
+                    errors.push(user_object.error);
+                } else {
+                    errors.push('Failed to find specified user.');
+                }
+                    // TODO: When possible, pass that info along.
                 res.redirect('back');
                 return;
             }
@@ -330,12 +334,10 @@ app.post('/add_team', (req, res) => {
             const team_request = new ApiRequest('POST', team_request_route, { params: null, body: team_request_payload });
 
             team_request.send_request( (backend_response) => {
-                if (backend_response) {
-                    if (backend_response.status_code === HttpStatus.OK) {
-                        // Redirect the user so that the new team appears.
-                        res.redirect('back');
-                        return;
-                    }
+                if (backend_response && backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the new team appears.
+                    res.redirect('back');
+                    return;
                 }
 
                 errors.push(backend_response.error);
@@ -563,6 +565,8 @@ app.post('/login', (req, res) => {
                 // When possible, pass that info along.
                 if (user_object) {
                     errors.push(user_object.error);
+                } else {
+                    errors.push('Failed to find specified user.');
                 }
                 res.redirect('/login');
                 return;
@@ -610,7 +614,11 @@ app.post('/signup', async (req, res) => {
         if (user_object && user_object.status_code === HttpStatus.OK) {
             res.redirect('/login');
         } else {
-            errors.push(user_object.error);
+            if (user_object) {
+                errors.push(user_object.error);
+            } else {
+                errors.push('Failed to create user.');
+            }
             res.redirect('/signup');
         }
     });

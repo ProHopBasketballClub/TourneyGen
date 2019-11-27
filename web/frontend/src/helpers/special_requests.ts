@@ -28,20 +28,25 @@ export function api_chained_request(requests: ApiRequest[], callback: (compiled_
 }
 
 export function api_get_multiple_requests(requests: ApiRequest[], callback) {
-    console.log('Submitting multiple GET requests');
+    console.log('Submitting ' + requests.length + ' GET requests from api_get_multiple_requests.');
     const result: object[] = [];
+    let request_number = 0;
 
-    if (requests.length < 0) {
-        return callback(null);
+    if (requests.length === 0) {
+        console.log('Found empty request list. Responding with no responses.');
+        return callback([]);
     }
 
     for (const req of requests) {
         req.send_request((response) => {
             result.push(response);
+            console.log('Submitting GET request #' + request_number + ' of ' + requests.length);
 
-            if (req === requests[requests.length - 1]) {
+            if (request_number === requests.length - 1) {
+                console.log('Sending responses to the GET requests.');
                 return callback(result);
             }
+            request_number++;
         });
     }
 }
