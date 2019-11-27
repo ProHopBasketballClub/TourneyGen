@@ -1,164 +1,14 @@
-import {assert, expect} from 'chai';
-import {response} from 'express';
+import { expect } from 'chai';
 import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
 import * as env from '../../../../web/frontend/env';
-import {user_route} from '../../../../web/frontend/src/constants/routes';
-import {
-    api_get_request,
-    api_post_request,
-    create_cookie,
-    destroy_cookie,
-    generate_auth_token,
-    generate_get_route,
-    is_logged_in,
-} from '../../../../web/frontend/src/helpers/routing';
+import { user_route } from '../../../../web/frontend/src/constants/routes';
+import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from '../../../../web/frontend/src/helpers/verification';
 
-const success = HttpStatus.OK; // Make tslint be quiet.
-const moved = HttpStatus.MOVED_TEMPORARILY;
 const backend_location = (env as any).env.BACKEND_LOCATION;
 
-describe('Test the routing helpers.', () => {
-
-    describe('Test api_get_request should call the callback with the correct parameters', () => {
-
-        const response_object = {
-            _id: '123abc',
-            displayName: 'user',
-            email: 'user@email.com',
-            status_code: success,
-        };
-
-        beforeEach('Stub out http.get', () => {
-            // Setup a nock interceptor to intercept the fake request being made.
-            nock('http://www.website.com')
-                .get('/the/backend')
-                .reply(success, response_object);
-        });
-        afterEach('Clean out the nock interceptors', () => {
-            nock.cleanAll();
-        });
-
-        it('Should call the callback method on success.', (done) => {
-            api_get_request('http://www.website.com/the/backend', (data) => {
-                expect(data).to.not.equal(null);
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should call the callback method on invalid URL.', (done) => {
-            api_get_request('http://invalidURL/invalid', (data) => {
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should call the callback method on invalid data returned', (done) => {
-            // Setup a nock interceptor to return invalid data.
-            nock('http://invalid.website.com')
-                .get('/the/backend')
-                .reply(success, '<!DOCTYPE html>');
-
-            api_get_request('http://invalid.website.com/the/backend', (data) => {
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should pass the correct APIResponse to the callback method on success.', (done) => {
-            api_get_request('http://www.website.com/the/backend', (data) => {
-                expect(data).to.eql(response_object); // eql for object equality check.
-                done();
-            });
-        });
-
-        it('Should pass null to the callback method on failure.', (done) => {
-            api_get_request('http://invalidURL/invalid', (data) => {
-                expect(data).to.equal(null);
-                done();
-            });
-        });
-    });
-
-    describe('Test api_post_request should call the callback with the correct parameters', () => {
-
-        const response_object = {
-            _id: '123abc',
-            displayName: 'user',
-            email: 'user@email.com',
-            status_code: success,
-        };
-
-        const route = 'http://www.website.com';
-        const path = '/the/backend';
-
-        const invalid_route = 'http://invalidURL';
-        const invalid_path = '/invalid';
-
-        const body = {
-            email: 'testing@gmail.com',
-            username: 'testing',
-        };
-
-        beforeEach('Stub out http.post', () => {
-            // Setup a nock interceptor to intercept the fake request being made.
-            nock(route)
-                .post(path)
-                .reply(success, response_object);
-        });
-        afterEach('Clean out the nock interceptors', () => {
-            nock.cleanAll();
-        });
-
-        it('Should call the callback method on success.', (done) => {
-            api_post_request(route, path, body, (data) => {
-                expect(data).to.not.equal(null);
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should call the callback method on 302', (done) => {
-            nock(route)
-                .get(path)
-                .reply(moved, '<!DOCTYPE html>');
-
-            api_post_request(route, path, body, (data) => {
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should call the callback method on invalid URL.', (done) => {
-
-            api_post_request(invalid_route, invalid_path, body, (data) => {
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should call the callback method on invalid data returned', (done) => {
-            // Setup a nock interceptor to return invalid data.
-            nock(invalid_route)
-                .get(path)
-                .reply(success, '<!DOCTYPE html>');
-
-            api_post_request(invalid_route, path, body, (data) => {
-                done(); // The callback was called!
-            });
-        });
-
-        it('Should pass the correct APIResponse to the callback method on success.', (done) => {
-            api_post_request(route, path, body, (data) => {
-                expect(data).to.eql(response_object); // eql for object equality check.
-                done();
-            });
-        });
-
-        it('Should pass null to the callback method on failure.', (done) => {
-            api_post_request(invalid_route, invalid_path, body, (data) => {
-                expect(data).to.equal(null);
-                done();
-            });
-        });
-    });
-
+describe('Test the verification functions', () => {
     describe('Test create_cookie should add the specified cookie to the response', () => {
 
         const call_args = [
@@ -204,7 +54,7 @@ describe('Test the routing helpers.', () => {
         });
     });
 
-    describe('Test generate_auth_tocken generates a token consistently for specific users', () => {
+    describe('Test generate_auth_token generates a token consistently for specific users', () => {
 
         const u1_name = 'UserA';
         const u1_email = 'UserA@tourneygen.theserverproject.com';
@@ -228,31 +78,6 @@ describe('Test the routing helpers.', () => {
         });
     });
 
-    describe('Test generate_get_route returns properly constructed route', () => {
-
-        const route = '/test/route';
-        const args1 = {arg1: 'val'};
-        const args2 = {arg1: 'val1', arg2: 'val2'};
-
-        it('Should return just the route when no arguments are passed', () => {
-            const expected = '/test/route';
-
-            expect(generate_get_route(route, {})).to.equal(expected);
-        });
-
-        it('Should return a route with a ?arg=val at the end when one parameter is passed', () => {
-            const expected = '/test/route?arg1=val';
-
-            expect(generate_get_route(route, args1)).to.equal(expected);
-        });
-
-        it('Should return a route with a ? and arg1=val&arg2=val2&...&argN=valN when more than one parameter is passed', () => {
-            const expected = '/test/route?arg1=val1&arg2=val2';
-
-            expect(generate_get_route(route, args2)).to.equal(expected);
-        });
-    });
-
     describe('Test is_logged_in calls success and failure callbacks correctly', () => {
 
         const srn = .1415926535;
@@ -261,7 +86,7 @@ describe('Test the routing helpers.', () => {
             _id: '123abc',
             displayName: 'user',
             email: 'user@email.com',
-            status_code: success,
+            status_code: HttpStatus.OK,
         };
 
         const valid_cookies = {
@@ -300,8 +125,8 @@ describe('Test the routing helpers.', () => {
         beforeEach('Stub out http.get', () => {
             // Setup a nock interceptor to intercept the fake request being made.
             nock(backend_location)
-                .get(generate_get_route(user_route, {displayName: 'user'}))
-                .reply(success, response_object);
+                .get(user_route + '?displayName=user')
+                .reply(HttpStatus.OK, response_object);
         });
         afterEach('Clean out the nock interceptors', () => {
             nock.cleanAll();
@@ -327,8 +152,8 @@ describe('Test the routing helpers.', () => {
 
         it('Should call the failure callback when the user does not exist in db with a reason', (done) => {
             nock(backend_location)
-                .get(generate_get_route(user_route, {displayName: 'invalid_user'}))
-                .reply(success, null);
+                .get(user_route + '?displayName=invalid_user')
+                .reply(HttpStatus.OK, null);
 
             is_logged_in(invalid_user_cookies, (sucessful_query) => {
                 // This is a fail state. Wait for a timeout.
