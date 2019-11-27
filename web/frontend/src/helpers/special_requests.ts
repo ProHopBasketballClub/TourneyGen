@@ -40,7 +40,6 @@ export function api_get_multiple_requests(requests: ApiRequest[], callback) {
     for (const req of requests) {
         req.send_request((response) => {
             result.push(response);
-            console.log('Submitting GET request #' + request_number + ' of ' + requests.length);
 
             if (request_number === requests.length - 1) {
                 console.log('Sending responses to the GET requests.');
