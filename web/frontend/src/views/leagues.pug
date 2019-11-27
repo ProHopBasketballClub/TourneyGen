@@ -46,43 +46,58 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if teams && teams.length > 0
                                 for team in teams
-                                    a(href='/team/' + team.id class = 'list-item category-card-entry-list-item')
-                                        div(class='category-card-entries')
+                                    div(class='category-card-entries')
+                                        a(href='/team/' + team.id class = 'list-item category-card-entry-list-item')
                                             p(class='category-list')
                                                 | #{team.name}      
+                                        if current_user._id == team.owner || current_user._id == league.owner
+                                            div(class = 'delete-team')
+                                                a(data-toggle="modal" class='category-list delete-team-button' id = team.id)
+                                                    | &times
+                                                        
                             else
                                 div(class='category-card-entries')
                                     p No teams currently exist.
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
-            if is_admin
+            if league.owner == current_user._id
                 include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
 
-            - var modalId = "add-team-modal"
-            - var modalOpeners = [ "add-team" ]
-            - var modalClosers = [ "cancel-add-team", "submit-add-team" ]
-            - var leagueId = league._id
-            include modals/extensions/addTeam/modal.pug
+                - var modalId = "add-team-modal"
+                - var modalOpeners = [ "add-team" ]
+                - var modalClosers = [ "cancel-add-team", "submit-add-team" ]
+                - var leagueId = league._id
+                include modals/extensions/addTeam/modal.pug
 
-            - var modalId = "edit-league-modal"
-            - var modalOpeners = [ "edit-league" ]
-            - var modalClosers = [ "cancel-edit-league", "submit-edit-league" ]
-            - var leagueId = league._id
-            - var leagueName = league.name
-            - var leagueDescription = league.description
-            - var leagueGameType = league.game_type
-            include modals/extensions/editLeague/modal.pug
+                - var modalId = "edit-league-modal"
+                - var modalOpeners = [ "edit-league" ]
+                - var modalClosers = [ "cancel-edit-league", "submit-edit-league" ]
+                - var leagueId = league._id
+                - var leagueName = league.name
+                - var leagueDescription = league.description
+                - var leagueGameType = league.game_type
+                include modals/extensions/editLeague/modal.pug
 
-            - var modalId = "delete-league-modal"
-            - var modalOpeners = [ "delete-league" ]
-            - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
-            - var leagueId = league._id
-            include modals/extensions/deleteLeague/modal.pug
+                - var modalId = "delete-league-modal"
+                - var modalOpeners = [ "delete-league" ]
+                - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
+                - var leagueId = league._id
+                include modals/extensions/deleteLeague/modal.pug
 
-            - var modalId = "create-match-modal"
-            - var modalOpeners = [ "create-match" ]
-            - var modalClosers = [ "cancel-create-match", "submit-create-match" ]
-            - var leagueId = league._id
-            - var modal_teams = teams
-            include modals/extensions/createMatch/modal.pug
+                - var modalId = "create-match-modal"
+                - var modalOpeners = [ "create-match" ]
+                - var modalClosers = [ "cancel-create-match", "submit-create-match" ]
+                - var leagueId = league._id
+                - var modal_teams = teams
+                include modals/extensions/createMatch/modal.pug
+
+            if teams && teams.length > 0
+                for team in teams
+                    if current_user._id == team.owner || current_user._id == league.owner
+                        -var modalId = "delete-team-modal" + team.id
+                        -var teamId = team.id
+                        -var teamName = team.name
+                        -var modalOpeners = team.id
+                        -var modalClosers = [ "cancel-delete-team", 'submit-delete-team' + team.id]
+                        include modals/extensions/deleteTeam/modal.pug
