@@ -493,12 +493,12 @@ app.post('/edit_league', (req, res) => {
         const league_request = new ApiRequest('PUT', league_request_route, { params: leauge_request_params, body: league_request_payload});
 
         league_request.send_request( (backend_response) => {
-            if (backend_response) {
-                if (backend_response.status_code === HttpStatus.OK) {
-                    // Redirect the user so that the changes appear.
-                    res.redirect('back'); // Go back to the refferer.
-                }
+            if (backend_response && backend_response.error) {
+                errors.push(backend_response.error);
+            } else if (!backend_response) {
+                errors.push('Something went wrong. Please try again.');
             }
+            res.redirect('back'); // Go back to the refferer.
         });
 
     }, (failure) => {
@@ -531,12 +531,12 @@ app.post('/edit_team', (req, res) => {
         const team_request = new ApiRequest('PUT', team_request_route, {params: team_request_param, body: team_request_payload});
 
         team_request.send_request( (backend_response) => {
-            if (backend_response) {
-                if (backend_response.status_code === HttpStatus.OK) {
-                    // Redirect the user so that the changes appear.
-                    res.redirect('back'); // Go back to the refferer.
-                }
+            if (backend_response && backend_response.error) {
+                errors.push(backend_response.error);
+            } else if (!backend_response) {
+                errors.push('Something went wrong. Please try again.');
             }
+            res.redirect('back'); // Go back to the refferer.
         });
 
     }, (failure) => {
