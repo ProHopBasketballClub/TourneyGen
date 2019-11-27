@@ -90,6 +90,12 @@ export class MatchController implements IController {
         const awayTeam: Team = (await MongoDb.getById('team', req.body.Away)).data;
         const match: Match = new Match(req.body, homeTeam, awayTeam);
         if (await MongoDb.save(MatchController.table, match)) {
+            const homeMatchList: string[] = homeTeam.Matches ? homeTeam.Matches : [];
+            homeMatchList.push(match._id);
+            const awayMatchList: string[] = awayTeam.Matches ? awayTeam.Matches : [];
+            awayMatchList.push(match._id);
+            await MongoDb.updateById(TeamController.table, homeTeam._id, {Matches: homeMatchList});
+            await MongoDb.updateById(TeamController.table, awayTeam._id, {Matches: awayMatchList});
             res.statusCode = HttpStatus.OK;
             res.json(match);
             return;

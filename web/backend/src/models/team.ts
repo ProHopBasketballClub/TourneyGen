@@ -1,5 +1,6 @@
 import {Request} from 'express';
 import {LeagueController} from '../controllers';
+import {MatchController} from '../controllers/match-controller';
 import {TeamController} from '../controllers/team-controller';
 import {MongoDb} from '../db';
 import {DataReturnDTO} from './DTOs/dataReturnDTO';
@@ -92,24 +93,69 @@ export class Team {
         return new DataValidDTO(true, '');
     }
 
+    public static async delete(teamId) {
+        const team = await MongoDb.getById(TeamController.table, teamId);
+        for (const matchId of team.data.Matches) {
+            const match = await MongoDb.getById(MatchController.table, matchId);
+            if (match.data.Confirmed) {
+                // Home was deleted
+                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
+                    const title = JSON.stringify(match.data.Title);
+                    const titleArr = title.split(' ', 1);
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = 'Deleted VS ' + titleArr[2];
+                } else {
+                    // Away was deleted
+                    let title = match.data.Title;
+                    title = title.split(' ', 1);
+                    match.data.Title = title[0] + ' VS Deleted';
+                }
+                await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
+            } else {
+                // Home was deleted
+                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
+                    const title = match.data.Title;
+                    const titleArr = title.split(' ');
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = 'Deleted VS ' + titleArr[2];
+                    match.data.Victor = match.data.Away;
+                    match.data.Home_Score = 1;
+                    match.data.Away_Score = -1;
+                    match.data.Confirmed = true;
+                } else {
+                    // Away was deleted
+                    let title = match.data.Title;
+                    title = title.split(' ', 1);
+                    match.data.Title = title[0] + ' VS Deleted';
+                    match.data.Victor = match.data.Home;
+                    match.data.Home_Score = -1;
+                    match.data.Away_Score = 1;
+                    match.data.Confirmed = true;
+                }
+                await MongoDb.updateById(MatchController.table, matchId, match.data);
+            }
+        }
+    }
+
     public _id: string;
     public Roster: [string]; // The list of players on this team
-    public Wins: number;
-    public Losses: number;
-    public Ties: number;
-    public Rating: number; // The MMR of the team
+    public Wins: number = 0;
+    public Losses: number = 0;
+    public Ties: number = 0;
+    public Rating: number = -1; // The MMR of the team
     public Owner: string; // The user id of the owner
     public Name: string; // The name of the team
     public Description: string;
     public Logo: string; // The logo image id for mongo
     public Upcoming_Matches: [string]; // List of upcoming matches
     public League: string;
+    public Matches = [];
 
-    constructor(roster: [string], owner: string, name: string, description: string, legaue: string) {
+    constructor(roster: [string], owner: string, name: string, description: string, league: string) {
         this.Roster = roster;
         this.Owner = owner;
         this.Name = name;
         this.Description = description;
-        this.League = legaue;
+        this.League = league;
     }
 }
