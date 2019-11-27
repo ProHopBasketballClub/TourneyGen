@@ -70,7 +70,7 @@ export class League {
     public Description: string;
     public Logo: Uint8Array; // This will store images as bytes
     public Game_type: string;// The game that this league plays
-    public Tournaments: string[];// This will hold the UIDs of tournaments in this league
+    public Tournaments: string[] = [];// This will hold the UIDs of tournaments in this league
     public Teams: string[] = []; // This will hold the UIDs of teams in this league
 
     constructor(owner: string, name: string, description: string, game_type: string) {
