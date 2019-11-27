@@ -627,3 +627,12 @@ app.post('/signup', async (req, res) => {
 app.listen(port,() => {
     return console.info(`Server is listening on port ${port}`);
 });
+
+app.use((req, res) => {
+    res.status(HttpStatus.NOT_FOUND);
+
+    // respond with html page
+
+    res.render('404');
+    return;
+});
