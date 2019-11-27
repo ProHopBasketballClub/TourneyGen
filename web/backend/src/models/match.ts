@@ -53,7 +53,7 @@ export class Match {
     }
 
     public _id: string; // The match id
-    public Match: string;
+    public Title: string;
     public Home: string; // The id of the home team
     public Away: string; // The id of the away team
     public Victor: string; // The id of the winning team
@@ -70,7 +70,7 @@ export class Match {
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
         this.Away = req.Away;
-        this.Match = homeTeam.Name + '-VS-' + awayTeam.Name;
+        this.Title = homeTeam.Name + ' VS ' + awayTeam.Name;
         this.Confirmed = false;
         this.League = req.League;
 

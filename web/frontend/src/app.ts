@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import ApiRequest from './api_request/api_request';
-import { league_get_all_route, league_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, match_get_all_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_get_multiple_requests } from './helpers/special_requests';
 import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from './helpers/verification';
 
@@ -64,6 +64,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/league/:id', (req,res) => {
+    const teams = [];
+    const tournaments = [];
+    const matches = [];
     is_logged_in(req.cookies, (success) => {
         const current_user = success.displayName;
         // this value ensures the HTML page is rendered before variables are used
@@ -83,9 +86,6 @@ app.get('/league/:id', (req,res) => {
                     teams: league_object.Teams,
                 };
                 const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
-                const teams = [];
-                const tournaments = [];
-                const matches = [];
 
                 const team_routes = [];
                 const team_request_route = backend_location + team_route;
@@ -95,27 +95,49 @@ app.get('/league/:id', (req,res) => {
 
                     team_routes.push(team_request);
                 });
-                // This will make an api request to get a team object for each team id in the league
-                api_get_multiple_requests(team_routes, (response_object) => {
-                    if (response_object) {
-                        response_object.forEach((team) => {
-                            teams.push({ name: team.Name, id: team._id, league: team.League });
+
+                const match_request_route = backend_location + match_get_all_route;
+                const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
+
+                match_request.send_request( (match_response) => {
+                    if (match_response) {
+                        match_response.forEach((match) => {
+                            if (match.League === league._id) {
+                                matches.push({
+                                    away: match.Away,
+                                    confirmed: match.Confirmed,
+                                    home: match.Home,
+                                    id: match._id,
+                                    league: match.League,
+                                    name: match.Title,
+                                    tournament: match.Tournament,
+                                    });
+                            }
                         });
-                        // Sort team names alphabetically - not sure if this is best way
-                        // but its better than a random order due to async.
-                        teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
                     }
-                    res.render('leagues', {
-                        current_user,
-                        errors,
-                        is_admin,
-                        league,
-                        matches,
-                        page_rendered,
-                        teams,
-                        tournaments,
+
+                    // This will make an api request to get a team object for each team id in the league
+                    api_get_multiple_requests(team_routes, (response_object) => {
+                        if (response_object) {
+                            response_object.forEach((team) => {
+                                teams.push({ name: team.Name, id: team._id, league: team.League });
+                            });
+                            // Sort team names alphabetically - not sure if this is best way
+                            // but its better than a random order due to async.
+                            teams.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+                        }
+                        res.render('leagues', {
+                            current_user,
+                            errors,
+                            is_admin,
+                            league,
+                            matches,
+                            page_rendered,
+                            teams,
+                            tournaments,
+                        });
+                        errors = [];
                     });
-                    errors = [];
                 });
             }
         });
@@ -133,6 +155,61 @@ app.get('/login', (req, res) => {
             errors,
         });
         errors = [];
+    });
+});
+
+app.get('/match/:id', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        let match = {};
+        let home_team = {};
+        let away_team = {};
+        const current_user = success.displayName;
+
+        const match_request_route = backend_location + match_route;
+        const match_request_params = { id: req.params.id };
+        const match_request = new ApiRequest('GET', match_request_route, { params: match_request_params, body: null});
+
+        match_request.send_request( (match_object) => {
+            if (match_object) {
+                match = {
+                    away: match_object.Away,
+                    confirmed: match_object.Confirmed,
+                    home: match_object.Home,
+                    id: match_object._id,
+                    league: match_object.League,
+                    name: match_object.Title,
+                    tournament: match_object.Tournament,
+                };
+            }
+
+            const team_request_route = backend_location + team_route;
+            const home_team_request_params = { id: match_object.Home };
+            const away_team_request_params = { id: match_object.Away };
+            const home_team_request = new ApiRequest('GET', team_request_route, { params: home_team_request_params, body: null });
+            const away_team_request = new ApiRequest('GET', team_request_route, { params: away_team_request_params, body: null });
+
+            const requests = [home_team_request, away_team_request];
+            api_get_multiple_requests(requests, (teams_callback) => {
+                teams_callback.forEach((team) => {
+                    if (team._id === match_object.Home) {
+                        home_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                    } else if (team._id === match_object.Away) {
+                        away_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                    }
+                });
+                const page_rendered=true;
+                res.render('match', {
+                    away_team,
+                    current_user,
+                    errors,
+                    home_team,
+                    match,
+                    page_rendered,
+                });
+            });
+        });
+    }, (failure) => {
+        res.redirect('/login');
     });
 });
 

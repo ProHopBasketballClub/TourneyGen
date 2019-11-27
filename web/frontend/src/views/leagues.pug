@@ -34,7 +34,7 @@ if page_rendered
                         div(class='category-card-entry-container')
                             if matches && matches.length > 0
                                 for match in matches
-                                    a(href='/matches' class = 'list-item category-card-entry-list-item')
+                                    a(href='/match/' + match.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
                                                 | #{match.name}      
