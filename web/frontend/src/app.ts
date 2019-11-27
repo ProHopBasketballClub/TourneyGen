@@ -489,8 +489,8 @@ app.post('/edit_league', (req, res) => {
             Name: leagueName,
             Owner: leagueOwner,
         };
-        const leauge_request_params = { id: leagueId };
-        const league_request = new ApiRequest('PUT', league_request_route, { params: leauge_request_params, body: league_request_payload});
+        const league_request_params = { id: leagueId };
+        const league_request = new ApiRequest('PUT', league_request_route, { params: league_request_params, body: league_request_payload});
 
         league_request.send_request( (backend_response) => {
             if (backend_response && backend_response.error) {
