@@ -25,7 +25,7 @@ let errors = [];
 
 app.get('/', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-        const current_user = success.displayName; // Move this.
+        const current_user = success;
 
         const request_route = backend_location + league_get_all_route;
         const request = new ApiRequest('GET', request_route, { params: null, body: null});
@@ -68,7 +68,7 @@ app.get('/league/:id', (req,res) => {
     const tournaments = [];
     const matches = [];
     is_logged_in(req.cookies, (success) => {
-        const current_user = success.displayName;
+        const current_user = success;
         // this value ensures the HTML page is rendered before variables are used
         const route = backend_location + league_route;
         const params = { id: req.params.id };
@@ -83,6 +83,7 @@ app.get('/league/:id', (req,res) => {
                     description: league_object.Description,
                     game_type: league_object.Game_type,
                     name: league_object.Name,
+                    owner: league_object.Owner,
                     teams: league_object.Teams,
                 };
                 const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
@@ -120,7 +121,7 @@ app.get('/league/:id', (req,res) => {
                     api_get_multiple_requests(team_routes, (response_object) => {
                         if (response_object) {
                             response_object.forEach((team) => {
-                                teams.push({ name: team.Name, id: team._id, league: team.League });
+                                teams.push({ name: team.Name, owner:team.Owner, id: team._id, league: team.League });
                             });
                             // Sort team names alphabetically - not sure if this is best way
                             // but its better than a random order due to async.
@@ -163,7 +164,7 @@ app.get('/match/:id', (req, res) => {
         let match = {};
         let home_team = {};
         let away_team = {};
-        const current_user = success.displayName;
+        const current_user = success;
 
         const match_request_route = backend_location + match_route;
         const match_request_params = { id: req.params.id };
@@ -226,7 +227,7 @@ app.get('/signup', (req, res) => {
 
 app.get('/team/:id', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-        const current_user = success.displayName;
+        const current_user = success;
 
         const team_request_route = backend_location + team_route;
         const team_request_params = { id: req.params.id };
@@ -250,6 +251,7 @@ app.get('/team/:id', (req, res) => {
                             description: team_object.Description,
                             id: team_object._id,
                             name: team_object.Name,
+                            owner: team_object.Owner,
                             roster: team_object.Roster,
                         };
 
@@ -433,11 +435,32 @@ app.post('/delete_league', (req, res) => {
             if (backend_response) {
                 if (backend_response.status_code === HttpStatus.OK) {
                     // Redirect the user so that the changes appear.
-                    res.redirect('/'); // Go back to home
+                    res.redirect('back'); // Go back
                 }
             }
         });
 
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
+app.post('/delete_team', (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        const teamId = req.body.teamId ? req.body.teamId : '';
+
+        const team_request_route = backend_location + team_route;
+        const team_request_params = { id: teamId };
+        const team_request = new ApiRequest('DELETE', team_request_route, { params: team_request_params, body: null});
+
+        team_request.send_request( (backend_response) => {
+            if (backend_response) {
+                if (backend_response.status_code === HttpStatus.OK) {
+                    // Redirect the user so that the changes appear.
+                    res.redirect('/'); // Go back to home
+                }
+            }
+        });
     }, (failure) => {
         res.redirect('/login');
     });

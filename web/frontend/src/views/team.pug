@@ -36,22 +36,21 @@ if page_rendered
                         a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                             | Home
                         //- Todo: Make this return to league view
-            if is_admin
+            if current_user._id == owner._id
                 include adminpanels/extensions/team-adminpanel.pug
 
-            - var modalId = "edit-team-modal"
-            - var modalOpeners = [ "edit-team" ]
-            - var modalClosers = [ "cancel-edit-team", "submit-edit-team" ]
-            - var teamId = team.id
-            - var teamName = team.name
-            - var teamDescription = team.description
-            - var teamRoster = String(team.roster).trim('[', ']')
+                - var modalId = "edit-team-modal"
+                - var modalOpeners = [ "edit-team" ]
+                - var modalClosers = [ "cancel-edit-team", "submit-edit-team" ]
+                - var teamId = team.id
+                - var teamName = team.name
+                - var teamDescription = team.description
+                - var teamRoster = String(team.roster).trim('[', ']')
 
-            include modals/extensions/editTeam/modal.pug
+                include modals/extensions/editTeam/modal.pug
 
-            //- Hasn't been implemented yet, can use this to start it
-            //- - var modalId = "delete-league-modal"
-            //- - var modalOpeners = [ "delete-league" ]
-            //- - var modalClosers = [ "cancel-delete-league", "submit-delete-league" ]
-            //- - var leagueId = league._id
-            //- include modals/extensions/deleteLeague/modal.pug
+                - var modalId = "delete-team-modal"
+                - var modalOpeners = [ "delete-team" ]
+                - var modalClosers = [ "cancel-delete-team" + team.id , "submit-delete-team" ]
+                - var teamId = team.id
+                include modals/extensions/deleteTeam/modal.pug
