@@ -29,7 +29,7 @@ export class Team {
         if (league.Teams) {
             for (const id of league.Teams) {
                 const teamName = (await MongoDb.getById(TeamController.table, id)).data.Name;
-                if (req.body.Name === teamName && JSON.stringify(req.query.id) !== id) {
+                if (req.body.Name === teamName) {
                     return new DataValidDTO(false, 'A team with this name already exists in this league');
                 }
             }
