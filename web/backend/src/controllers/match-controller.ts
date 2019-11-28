@@ -239,6 +239,7 @@ export class MatchController implements IController {
                 if (!await MongoDb.updateById(MatchController.table, match._id, {Confirmed: true})) {
                     return new DataValidDTO(false, 'Internal Server error confirmation not set');
                 }
+                await Team.updateStats(match);
             }
             return new DataValidDTO(true, '');
         }
