@@ -101,13 +101,13 @@ export class Team {
         const loser: Team = (await MongoDb.getById(TeamController.table, match.Loser)).data;
         const elos = EloService.calculateElo(victor, loser);
         await MongoDb.updateById(TeamController.table, match.Victor, {Wins: victor.Wins + 1, Rating: elos.Victor});
-        await MongoDb.updateById(TeamController.table, match.Loser, {Losses: victor.Losses + 1, Rating: elos.Loser});
+        await MongoDb.updateById(TeamController.table, match.Loser, {Losses: loser.Losses + 1, Rating: elos.Loser});
     }
 
     public _id: string;
     public Roster: [string]; // The list of players on this team
-    public Wins: number;
-    public Losses: number;
+    public Wins: number = 0;
+    public Losses: number = 0;
     public Rating: number = EloService.ELO_INITIAL_VALUE; // The MMR of the team
     public Owner: string; // The user id of the owner
     public Name: string; // The name of the team

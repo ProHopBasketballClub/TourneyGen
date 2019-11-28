@@ -2,6 +2,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 import {MongoDb} from '../../../../web/backend/src/db';
+import {EloService} from '../../../../web/backend/src/services/elo-service';
 import {TestDatabase} from './testDatabase';
 
 // No ec6 import exists for these packages import must be done this way
@@ -194,12 +195,26 @@ describe('Match Controller', async function() {
 
     it('it should Report a match', async () => {
         const result = {Victor: homeId, Loser: awayId, Away_Score: 420, Home_Score: 69, Updated_By: homeId};
-        const res = await chai.request(conn)
+        let res = await chai.request(conn)
             .put(MATCH_ROOT + '/report')
             .send(result)
             .query({id: matchId});
         res.status.should.equal(HttpStatus.OK);
         res.body.should.be.a('object');
+
+        res = await chai.request(conn)
+            .get('/api/team').query({id: homeId});
+
+        res.body.Rating.should.be.above(EloService.ELO_INITIAL_VALUE);
+        res.body.Wins.should.equal(1);
+        res.body.Losses.should.equal(0);
+
+        res = await chai.request(conn)
+            .get('/api/team').query({id: awayId});
+
+        res.body.Rating.should.be.below(EloService.ELO_INITIAL_VALUE);
+        res.body.Wins.should.equal(0);
+        res.body.Losses.should.equal(1);
 
     });
 
@@ -215,12 +230,27 @@ describe('Match Controller', async function() {
 
     it('it should resolve a conflict', async () => {
         const result = {Victor: homeId, Loser: awayId, Away_Score: 420, Home_Score: 69, Updated_By: homeId};
-        const res = await chai.request(conn)
+        let res = await chai.request(conn)
             .put(MATCH_ROOT + '/resolve')
             .send(result)
             .query({id: matchId, Owner: userId});
         res.status.should.equal(HttpStatus.OK);
         res.body.should.be.a('object');
+
+        res = await chai.request(conn)
+            .get('/api/team').query({id: homeId});
+        res.body.Rating.should.be.above(EloService.ELO_INITIAL_VALUE);
+        // tslint:disable-next-line:no-magic-numbers
+        res.body.Wins.should.equal(2);
+        res.body.Losses.should.equal(0);
+
+        res = await chai.request(conn)
+            .get('/api/team').query({id: awayId});
+        res.body.Rating.should.be.below(EloService.ELO_INITIAL_VALUE);
+        res.body.Wins.should.equal(0);
+        // tslint:disable-next-line:no-magic-numbers
+        res.body.Losses.should.equal(2);
+
     });
 
 });
