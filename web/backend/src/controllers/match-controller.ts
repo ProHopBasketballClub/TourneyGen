@@ -174,6 +174,8 @@ export class MatchController implements IController {
         };
 
         if (await MongoDb.updateById(MatchController.table, req.query.id, result)) {
+            const match: Match = (await MongoDb.getById(MatchController.table, req.query.id)).data;
+            await Team.updateStats(match);
             res.statusCode = HttpStatus.OK;
             res.json({Msg: 'The conflict has been resolved and the match has been confirmed'});
             return;
@@ -245,6 +247,7 @@ export class MatchController implements IController {
                 if (!await MongoDb.updateById(MatchController.table, match._id, {Confirmed: true})) {
                     return new DataValidDTO(false, 'Internal Server error confirmation not set');
                 }
+                await Team.updateStats(match);
             }
             return new DataValidDTO(true, '');
         }

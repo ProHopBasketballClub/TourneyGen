@@ -3,9 +3,11 @@ import {LeagueController} from '../controllers';
 import {MatchController} from '../controllers/match-controller';
 import {TeamController} from '../controllers/team-controller';
 import {MongoDb} from '../db';
+import {EloService} from '../services/elo-service';
 import {DataReturnDTO} from './DTOs/dataReturnDTO';
 import {DataValidDTO} from './DTOs/dataValidDTO';
 import {League} from './league';
+import {Match} from './match';
 
 export class Team {
 
@@ -93,6 +95,16 @@ export class Team {
         return new DataValidDTO(true, '');
     }
 
+    public static async updateStats(match: Match) {
+
+        // Update the Winning team
+        const victor: Team = (await MongoDb.getById(TeamController.table, match.Victor)).data;
+        const loser: Team = (await MongoDb.getById(TeamController.table, match.Loser)).data;
+        const elos = EloService.calculateElo(victor, loser);
+        await MongoDb.updateById(TeamController.table, match.Victor, {Wins: victor.Wins + 1, Rating: elos.Victor});
+        await MongoDb.updateById(TeamController.table, match.Loser, {Losses: loser.Losses + 1, Rating: elos.Loser});
+    }
+
     public static async delete(teamId) {
         const team = await MongoDb.getById(TeamController.table, teamId);
         for (const matchId of team.data.Matches) {
@@ -141,8 +153,7 @@ export class Team {
     public Roster: [string]; // The list of players on this team
     public Wins: number = 0;
     public Losses: number = 0;
-    public Ties: number = 0;
-    public Rating: number = -1; // The MMR of the team
+    public Rating: number = EloService.ELO_INITIAL_VALUE; // The MMR of the team
     public Owner: string; // The user id of the owner
     public Name: string; // The name of the team
     public Description: string;
