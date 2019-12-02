@@ -434,13 +434,15 @@ app.post('/delete_league', (req, res) => {
         const league_request = new ApiRequest('DELETE', league_request_route, { params: league_request_params, body: null});
 
         league_request.send_request( (backend_response) => {
-            if (backend_response) {
-                if (backend_response.status_code === HttpStatus.OK) {
-                    // Redirect the user so that the changes appear.
-                    res.redirect('back'); // Go back
-                }
+            if (backend_response && backend_response.error) {
+                errors.push(backend_response.error);
+                res.redirect('back');
+            } else if (!backend_response) {
+                errors.push('Something went wrong. Please try again.');
+                res.redirect('back');
             }
-        });
+            res.redirect('/');
+        }); 
 
     }, (failure) => {
         res.redirect('/login');
@@ -498,6 +500,7 @@ app.post('/edit_league', (req, res) => {
             } else if (!backend_response) {
                 errors.push('Something went wrong. Please try again.');
             }
+            
             res.redirect('back'); // Go back to the refferer.
         });
 
