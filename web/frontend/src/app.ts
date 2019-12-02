@@ -442,7 +442,7 @@ app.post('/delete_league', (req, res) => {
                 res.redirect('back');
             }
             res.redirect('/');
-        }); 
+        });
 
     }, (failure) => {
         res.redirect('/login');
@@ -500,7 +500,7 @@ app.post('/edit_league', (req, res) => {
             } else if (!backend_response) {
                 errors.push('Something went wrong. Please try again.');
             }
-            
+
             res.redirect('back'); // Go back to the refferer.
         });
 
