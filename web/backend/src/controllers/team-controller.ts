@@ -21,6 +21,7 @@ export class TeamController implements IController {
             res.json({error: 'You cannot delete a team that does not exist'});
             return;
         }
+        await Team.delete(req.query.id);
         const league: League = (await MongoDb.getById(LeagueController.table, team.League)).data;
         // Remove Team from league when deleted, if league still exists
         if (league) {

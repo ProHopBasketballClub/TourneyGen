@@ -222,7 +222,7 @@ describe('Team Controller', async function() {
         res.status.should.equal(HttpStatus.NOT_FOUND);
         res.body.should.be.a('object');
     });
-    it('it should fail to Delete a team', async () => {
+    it('it should Delete a team', async () => {
         const res = await chai.request(conn)
             .delete(TEAM_ROOT)
             .query({id:teamId});
