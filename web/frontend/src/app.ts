@@ -160,7 +160,7 @@ app.get('/league/:leagueId/matches', (req, res) => {
         request.send_request((league_object) => {
             
             const page_rendered = true;
-            if (league_object && league_object._id === req.params.id) {
+            if (league_object && league_object._id === req.params.leagueId) {
                 // TODO: getting a league object SHOULD return a list of teams, tournaments and matches
                 const league = {
                     _id: league_object._id,
@@ -170,11 +170,13 @@ app.get('/league/:leagueId/matches', (req, res) => {
                     owner: league_object.Owner,
                     teams: league_object.Teams,
                 };
-                const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
+                const is_admin = (league_object && success && success._id && (league_object.Owner === success._id));
                 
                 const match_request_route = backend_location + match_get_all_route;
                 const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
+                
                 match_request.send_request( (match_response) => {
+                    
                     if (match_response) {
                         match_response.forEach((match) => {
                             if (match.League === league._id) {
@@ -188,17 +190,17 @@ app.get('/league/:leagueId/matches', (req, res) => {
                                     tournament: match.Tournament,
                                 });
                             }
-                            res.render('matches', {
-                                current_user,
-                                errors,
-                                is_admin,
-                                league,
-                                matches,
-                                page_rendered,
-                            });
-                            errors = [];
                         });
                     }
+                    res.render('matches', {
+                        current_user,
+                        errors,
+                        is_admin,
+                        league,
+                        matches,
+                        page_rendered,
+                    });
+                    errors = [];
                 });
             }
                 

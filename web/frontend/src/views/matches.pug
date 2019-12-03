@@ -3,9 +3,9 @@ if page_rendered
     html(lang='en')
         head
             title Tourney Gen - Matches
-            link(rel="shortcut icon" href="./../resources/favicon.ico")
-            link(rel="stylesheet" href="./../css/tourneygen.css")
-            link(rel="stylesheet" href="./../css/leagues.css")
+            link(rel="shortcut icon" href="./../../../resources/favicon.ico")
+            link(rel="stylesheet" href="./../../../css/tourneygen.css")
+            link(rel="stylesheet" href="./../../../css/leagues.css")
         include logout.pug
         body
             div(class='home-container')
@@ -17,18 +17,6 @@ if page_rendered
                         | #{league.game_type}
                     p(id="league-description") 
                         | #{league.description}
-                    p
-                        | Tournaments
-                        div(class='category-card-entry-container')
-                            if tournaments && tournaments.length > 0
-                                for tourney in tournaments
-                                    a(href='/leagues' class = 'list-item category-card-entry-list-item')
-                                        div(class='category-card-entries')
-                                            p(class='category-list')
-                                                | #{tourney.name}      
-                            else
-                                div(class='category-card-entries')
-                                    p No tournaments currently scheduled.
                     p
                         | Matches
                         div(class='category-card-entry-container')

@@ -32,9 +32,11 @@ if page_rendered
                     p
                         | Matches
                         div(class='category-card-entry-container')
+                            - var match_num = 0
                             if matches && matches.length > 0
-                                each match, index in matches
-                                    if index === 5
+                                each match in matches
+                                    - match_num+=1
+                                    if match_num === 6
                                         - break
                                     a(href='/match/' + match.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
@@ -43,9 +45,10 @@ if page_rendered
                             else
                                 div(class='category-card-entries')
                                     p No matches currently scheduled.
-                    div(class='button')
-                            a(href='/league/' + league._id + '/matches/' data-toggle="modal" class='button' id = 'new-league') 
-                                | View all matches
+                    if match_num === 6
+                        div(class='button')
+                                a(href='/league/' + league._id + '/matches/' data-toggle="modal" class='button' id = 'new-league') 
+                                    | View all matches
                     p
                         | Teams
                         div(class='category-card-entry-container')
