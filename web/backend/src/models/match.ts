@@ -59,8 +59,8 @@ export class Match {
     public Victor: string; // The id of the winning team
     public League: string; // The id of the league the match is in
     public Loser: string; // The id of the losing team
-    public Home_Score: number;
-    public Away_Score: number;
+    public Home_Score: number = 0;
+    public Away_Score: number = 0;
     public Confirmed: boolean;
     public In_Conflict: boolean; // If the match result is contested
     public Fill_From: [number, number];
