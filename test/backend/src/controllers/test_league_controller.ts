@@ -13,7 +13,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 chai.should();
 
-describe('League Controller', async function() {
+describe('League Controller',  function() {
     let userId: string = '';
     let leagueId: string = '';
     let leagueName: string = '';
