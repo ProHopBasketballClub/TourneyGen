@@ -120,7 +120,7 @@ export class Team {
                     let title = match.data.Title;
                     title = title.split(' ', 1);
                     // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = title[0] + ' VS' + title[2] + ' (Deleted)';
+                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
                 }
                 await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
             } else if (match.data) {
@@ -140,7 +140,7 @@ export class Team {
                     let title = match.data.Title;
                     title = title.split(' ');
                     // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = title[0] + ' VS ' + title[2] + '(Deleted)';
+                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
                     match.data.Victor = match.data.Home;
                     match.data.Loser = match.data.Away;
                     match.data.Home_Score = 1;
