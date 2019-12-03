@@ -1,6 +1,7 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
+import {TestDatabase} from './testDatabase';
 
 // The root of the user api
 const USER_ROOT: string = '/api/user';
@@ -26,7 +27,7 @@ describe('User Controller tests', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        process.env.DB_CONNECTION_STRING = await mongoUnit.start();
+        await TestDatabase.start();
     });
 
     after(async () => {
@@ -159,13 +160,13 @@ describe('User Controller tests', async function() {
 // Attempts to get a user by email
 // Expects a User objects an a 200
     it('It should get a user by email', async () => {
-    const res = await chai.request(conn)
-        .get(USER_ROOT)
-        .query({email: 'a@b.ca'});
+        const res = await chai.request(conn)
+            .get(USER_ROOT)
+            .query({email: 'a@b.ca'});
 
-    res.should.have.status(HttpStatus.OK);
-    res.body.displayName.should.equal('eetar253');
-});
+        res.should.have.status(HttpStatus.OK);
+        res.body.displayName.should.equal('eetar253');
+    });
 
 // Attempts to get a user by id
 // Expects a User objects an a 200
