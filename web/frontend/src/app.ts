@@ -112,7 +112,7 @@ app.get('/league/:id', (req,res) => {
                                     league: match.League,
                                     name: match.Title,
                                     tournament: match.Tournament,
-                                    });
+                                });
                             }
                         });
                     }
@@ -147,6 +147,67 @@ app.get('/league/:id', (req,res) => {
         res.redirect('/login');
     });
 });
+
+app.get('/league/:leagueId/matches', (req, res) => {
+    const matches = [];
+    is_logged_in(req.cookies, (success) => {
+        const current_user = success;
+        // this value ensures the HTML page is rendered before variables are used
+        const route = backend_location + league_route;
+        const league_request_params = { id: req.params.leagueId };
+        const request = new ApiRequest('GET', route, { params: league_request_params, body: null });
+        
+        request.send_request((league_object) => {
+            
+            const page_rendered = true;
+            if (league_object && league_object._id === req.params.id) {
+                // TODO: getting a league object SHOULD return a list of teams, tournaments and matches
+                const league = {
+                    _id: league_object._id,
+                    description: league_object.Description,
+                    game_type: league_object.Game_type,
+                    name: league_object.Name,
+                    owner: league_object.Owner,
+                    teams: league_object.Teams,
+                };
+                const is_admin = (league_object && success && success._id && (league_object.Owner=== success._id));
+                
+                const match_request_route = backend_location + match_get_all_route;
+                const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
+                match_request.send_request( (match_response) => {
+                    if (match_response) {
+                        match_response.forEach((match) => {
+                            if (match.League === league._id) {
+                                matches.push({
+                                    away: match.Away,
+                                    confirmed: match.Confirmed,
+                                    home: match.Home,
+                                    id: match._id,
+                                    league: match.League,
+                                    name: match.Title,
+                                    tournament: match.Tournament,
+                                });
+                            }
+                            res.render('matches', {
+                                current_user,
+                                errors,
+                                is_admin,
+                                league,
+                                matches,
+                                page_rendered,
+                            });
+                            errors = [];
+                        });
+                    }
+                });
+            }
+                
+        });
+    }, (failure) => {
+        res.redirect('/login');
+    });
+});
+
 
 app.get('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {

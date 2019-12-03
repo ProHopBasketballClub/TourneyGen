@@ -1,0 +1,43 @@
+doctype html
+if page_rendered
+    html(lang='en')
+        head
+            title Tourney Gen - Matches
+            link(rel="shortcut icon" href="./../resources/favicon.ico")
+            link(rel="stylesheet" href="./../css/tourneygen.css")
+            link(rel="stylesheet" href="./../css/leagues.css")
+        include logout.pug
+        body
+            div(class='home-container')
+                div(class='category-card')
+                    include errors/error_message.pug
+                    p(class='category-card-title')
+                        | Matches for #{league.name}
+                    p(id="league-game-type") 
+                        | #{league.game_type}
+                    p(id="league-description") 
+                        | #{league.description}
+                    p
+                        | Tournaments
+                        div(class='category-card-entry-container')
+                            if tournaments && tournaments.length > 0
+                                for tourney in tournaments
+                                    a(href='/leagues' class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{tourney.name}      
+                            else
+                                div(class='category-card-entries')
+                                    p No tournaments currently scheduled.
+                    p
+                        | Matches
+                        div(class='category-card-entry-container')
+                            if matches && matches.length > 0
+                                each match in matches
+                                    a(href='/match/' + match.id class = 'list-item category-card-entry-list-item')
+                                        div(class='category-card-entries')
+                                            p(class='category-list')
+                                                | #{match.name}      
+                            else
+                                div(class='category-card-entries')
+                                    p No matches currently scheduled.
