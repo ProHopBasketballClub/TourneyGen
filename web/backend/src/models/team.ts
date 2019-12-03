@@ -96,7 +96,6 @@ export class Team {
     }
 
     public static async updateStats(match: Match) {
-
         // Update the Winning team
         const victor: Team = (await MongoDb.getById(TeamController.table, match.Victor)).data;
         const loser: Team = (await MongoDb.getById(TeamController.table, match.Loser)).data;
@@ -109,7 +108,7 @@ export class Team {
         const team = await MongoDb.getById(TeamController.table, teamId);
         for (const matchId of team.data.Matches) {
             const match = await MongoDb.getById(MatchController.table, matchId);
-            if (match.data.Confirmed) {
+            if (match.data && match.data.Confirmed) {
                 // Home was deleted
                 if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
                     const title = JSON.stringify(match.data.Title);
@@ -123,7 +122,7 @@ export class Team {
                     match.data.Title = title[0] + ' VS Deleted';
                 }
                 await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
-            } else {
+            } else if (match.data) {
                 // Home was deleted
                 if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
                     const title = match.data.Title;
@@ -131,6 +130,7 @@ export class Team {
                     // tslint:disable-next-line:no-magic-numbers
                     match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
                     match.data.Victor = match.data.Away;
+                    match.data.Loser = match.data.Home;
                     match.data.Home_Score = -1;
                     match.data.Away_Score = 1;
                     match.data.Confirmed = true;
@@ -141,11 +141,13 @@ export class Team {
                     // tslint:disable-next-line:no-magic-numbers
                     match.data.Title = title[0] + ' VS ' + title[2] + '(Deleted)';
                     match.data.Victor = match.data.Home;
+                    match.data.Loser = match.data.Away;
                     match.data.Home_Score = 1;
                     match.data.Away_Score = -1;
                     match.data.Confirmed = true;
                 }
                 await MongoDb.updateById(MatchController.table, matchId, match.data);
+                await this.updateStats(match.data);
             }
         }
     }
