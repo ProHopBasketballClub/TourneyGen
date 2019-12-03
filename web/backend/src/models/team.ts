@@ -1,5 +1,6 @@
 import {Request} from 'express';
 import {LeagueController} from '../controllers';
+import {MatchController} from '../controllers/match-controller';
 import {TeamController} from '../controllers/team-controller';
 import {MongoDb} from '../db';
 import {EloService} from '../services/elo-service';
@@ -95,13 +96,61 @@ export class Team {
     }
 
     public static async updateStats(match: Match) {
-
         // Update the Winning team
         const victor: Team = (await MongoDb.getById(TeamController.table, match.Victor)).data;
         const loser: Team = (await MongoDb.getById(TeamController.table, match.Loser)).data;
         const elos = EloService.calculateElo(victor, loser);
         await MongoDb.updateById(TeamController.table, match.Victor, {Wins: victor.Wins + 1, Rating: elos.Victor});
         await MongoDb.updateById(TeamController.table, match.Loser, {Losses: loser.Losses + 1, Rating: elos.Loser});
+    }
+
+    public static async delete(teamId) {
+        const team = await MongoDb.getById(TeamController.table, teamId);
+        for (const matchId of team.data.Matches) {
+            const match = await MongoDb.getById(MatchController.table, matchId);
+            if (match.data && match.data.Confirmed) {
+                // Home was deleted
+                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
+                    const title = JSON.stringify(match.data.Title);
+                    const titleArr = title.split(' ', 1);
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
+                } else {
+                    // Away was deleted
+                    let title = match.data.Title;
+                    title = title.split(' ', 1);
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
+                }
+                await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
+            } else if (match.data) {
+                // Home was deleted
+                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
+                    const title = match.data.Title;
+                    const titleArr = title.split(' ');
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
+                    match.data.Victor = match.data.Away;
+                    match.data.Loser = match.data.Home;
+                    match.data.Home_Score = -1;
+                    match.data.Away_Score = 1;
+                    match.data.Confirmed = true;
+                } else {
+                    // Away was deleted
+                    let title = match.data.Title;
+                    title = title.split(' ');
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
+                    match.data.Victor = match.data.Home;
+                    match.data.Loser = match.data.Away;
+                    match.data.Home_Score = 1;
+                    match.data.Away_Score = -1;
+                    match.data.Confirmed = true;
+                }
+                await MongoDb.updateById(MatchController.table, matchId, match.data);
+                await this.updateStats(match.data);
+            }
+        }
     }
 
     public _id: string;
@@ -115,12 +164,13 @@ export class Team {
     public Logo: string; // The logo image id for mongo
     public Upcoming_Matches: [string]; // List of upcoming matches
     public League: string;
+    public Matches = [];
 
-    constructor(roster: [string], owner: string, name: string, description: string, legaue: string) {
+    constructor(roster: [string], owner: string, name: string, description: string, league: string) {
         this.Roster = roster;
         this.Owner = owner;
         this.Name = name;
         this.Description = description;
-        this.League = legaue;
+        this.League = league;
     }
 }
