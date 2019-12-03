@@ -134,7 +134,8 @@ export class MongoDb {
     // The mongo driver
     private client: MongoClient;
     // This is passed in the compose file and should be the auto generated mongo URI
-    private connectionString: string = process.env.DB_CONNECTION_STRING;
+    private connectionString: string = 'mongodb://localhost:27017/test'
+;
 
     private dbName = 'tourneyData';
 
