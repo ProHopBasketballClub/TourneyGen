@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
-import {TestDatabase} from './testDatabase';
+
 
 // The root of the user api
 const USER_ROOT: string = '/api/user';
@@ -27,7 +27,6 @@ describe('User Controller tests', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        await TestDatabase.start();
     });
 
     after(async () => {

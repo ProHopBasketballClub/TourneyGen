@@ -1,3 +1,4 @@
 --recursive
 --timeout 200
 --inline-diffs
+--strict

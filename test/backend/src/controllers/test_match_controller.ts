@@ -3,7 +3,7 @@ import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 import {MongoDb} from '../../../../web/backend/src/db';
 import {EloService} from '../../../../web/backend/src/services/elo-service';
-import {TestDatabase} from './testDatabase';
+import before = Mocha.before;
 
 // No ec6 import exists for these packages import must be done this way
 // tslint:disable-next-line:no-var-requires
@@ -30,7 +30,6 @@ describe('Match Controller', async function() {
     before(async () => {
         serve = new App();
         conn = await serve.express.listen();
-        await TestDatabase.start();
     });
 
     before(async () => {
