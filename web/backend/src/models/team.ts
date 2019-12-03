@@ -114,12 +114,13 @@ export class Team {
                     const title = JSON.stringify(match.data.Title);
                     const titleArr = title.split(' ', 1);
                     // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = 'Deleted VS ' + titleArr[2];
+                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
                 } else {
                     // Away was deleted
                     let title = match.data.Title;
                     title = title.split(' ', 1);
-                    match.data.Title = title[0] + ' VS Deleted';
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = title[0] + ' VS' + title[2] + ' (Deleted)';
                 }
                 await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
             } else if (match.data) {
