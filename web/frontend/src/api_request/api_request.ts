@@ -113,11 +113,11 @@ export default class ApiRequest {
     }
 
     private api_post_request(route: string, body: object, callback) {
-        /* Sends an HTTP GET request to the passed route, calling
+        /* Sends an HTTP POST request to the passed route, calling
             the callback method with whatever response the backend
             gives.
 
-            route: localhost:3001/singup --- backend_loaction
+            route: localhost:3001/signup --- backend_location
         */
 
         let APIResponse;
@@ -164,6 +164,7 @@ export default class ApiRequest {
         */
         // let data: string = '';
         let APIResponse;
+        console.log('submitting DELETE request to: ' + route);
         const url = route;
         request({
             json: true,
