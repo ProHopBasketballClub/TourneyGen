@@ -30,6 +30,7 @@ export class LeagueController implements IController {
         }
 
         await leagueObject.data.Teams.forEach(async (teamId) => {
+            await Team.delete(teamId);
             await MongoDb.deleteById(TeamController.table, teamId);
         });
 
