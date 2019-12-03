@@ -2,7 +2,6 @@ import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 
-
 // The root of the user api
 const USER_ROOT: string = '/api/user';
 

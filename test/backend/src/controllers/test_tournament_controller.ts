@@ -3,7 +3,6 @@ import * as mongoUnit from 'mongo-unit';
 import {App} from '../../../../web/backend/src/app';
 import {MongoDb} from '../../../../web/backend/src/db';
 
-
 // No ec6 import exists for these packages import must be done this way
 // tslint:disable-next-line:no-var-requires
 const chai = require('chai');

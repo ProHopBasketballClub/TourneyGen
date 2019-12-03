@@ -1,7 +1,10 @@
 import * as mongoUnit from 'mongo-unit';
 
+// tslint:disable-next-line:no-var-requires
 const Mocha = require('mocha');
+// tslint:disable-next-line:no-var-requires
 const fs = require('fs');
+// tslint:disable-next-line:no-var-requires
 const path = require('path');
 const files = ['test/backend/src/controllers/test_league_controller.js','test/backend/src/controllers/test_match_controller.js'];
 
