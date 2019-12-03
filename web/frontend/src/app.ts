@@ -156,9 +156,9 @@ app.get('/league/:leagueId/matches', (req, res) => {
         const route = backend_location + league_route;
         const league_request_params = { id: req.params.leagueId };
         const request = new ApiRequest('GET', route, { params: league_request_params, body: null });
-        
+
         request.send_request((league_object) => {
-            
+
             const page_rendered = true;
             if (league_object && league_object._id === req.params.leagueId) {
                 // TODO: getting a league object SHOULD return a list of teams, tournaments and matches
@@ -171,12 +171,12 @@ app.get('/league/:leagueId/matches', (req, res) => {
                     teams: league_object.Teams,
                 };
                 const is_admin = (league_object && success && success._id && (league_object.Owner === success._id));
-                
+
                 const match_request_route = backend_location + match_get_all_route;
                 const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
-                
+
                 match_request.send_request( (match_response) => {
-                    
+
                     if (match_response) {
                         match_response.forEach((match) => {
                             if (match.League === league._id) {
@@ -203,13 +203,12 @@ app.get('/league/:leagueId/matches', (req, res) => {
                     errors = [];
                 });
             }
-                
+
         });
     }, (failure) => {
         res.redirect('/login');
     });
 });
-
 
 app.get('/login', (req, res) => {
     is_logged_in(req.cookies, (success) => {
