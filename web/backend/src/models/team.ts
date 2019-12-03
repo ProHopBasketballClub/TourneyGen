@@ -129,19 +129,20 @@ export class Team {
                     const title = match.data.Title;
                     const titleArr = title.split(' ');
                     // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = 'Deleted VS ' + titleArr[2];
+                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
                     match.data.Victor = match.data.Away;
-                    match.data.Home_Score = 1;
-                    match.data.Away_Score = -1;
+                    match.data.Home_Score = -1;
+                    match.data.Away_Score = 1;
                     match.data.Confirmed = true;
                 } else {
                     // Away was deleted
                     let title = match.data.Title;
-                    title = title.split(' ', 1);
-                    match.data.Title = title[0] + ' VS Deleted';
+                    title = title.split(' ');
+                    // tslint:disable-next-line:no-magic-numbers
+                    match.data.Title = title[0] + ' VS ' + title[2] + '(Deleted)';
                     match.data.Victor = match.data.Home;
-                    match.data.Home_Score = -1;
-                    match.data.Away_Score = 1;
+                    match.data.Home_Score = 1;
+                    match.data.Away_Score = -1;
                     match.data.Confirmed = true;
                 }
                 await MongoDb.updateById(MatchController.table, matchId, match.data);
