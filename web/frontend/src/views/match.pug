@@ -10,10 +10,22 @@ if page_rendered
         body
             div(class='home-container')
                 div(class='category-card')
-                    //- include errors/error_message.pug
+                    include errors/error_message.pug
                     if match
                         p(class='match-title')
                             | #{match.name}
+                        if match.home_score && match.away_score
+                            p(class='match-score')
+                                | #{match.home_score} - #{match.away_score}
+                            if (match.in_conflict)
+                                p(class='match-pending')
+                                    | Match has conflicting reported scores; league owner has been notified.
+                            else if match.confirmed == false
+                                p(class='match-pending')
+                                    | Match still waiting for second report.
+                        else 
+                            p(class='match-score')
+                                | Match not yet completed 
                         div(class='league-view')
                             a(href= '../league/' + match.league)
                                 | View league
@@ -24,16 +36,40 @@ if page_rendered
                                     | Home Team
                                 a(href = '../team/' + home_team.id class='team-name') 
                                     | #{home_team.name}
+                                p(class='team-record')
+                                    | Record: #{home_team.wins} - #{home_team.losses}
+                                p(class='team-rating')
+                                    | Rating: #{home_team.rating}
                         if away_team
                             div(id='away-team')
                                 p(class='team-title') 
                                     | Away Team
                                 a(href = '../team/' + away_team.id class='team-name') 
                                     | #{away_team.name}
+                                p(class='team-record')
+                                    | Record: #{away_team.wins} - #{away_team.losses}
+                                p(class='team-rating')
+                                    | Rating: #{away_team.rating}
 
                     div(class='button')
                         a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                             | Home
 
-            if is_admin
-                include adminpanels/extensions/league-adminpanel/league-adminpanel.pug
+            if (current_user._id == home_team.owner) || (current_user._id == away_team.owner)
+                if (!match.in_conflict)
+                    include adminpanels/extensions/match-adminpanel/match-adminpanel.pug
+                
+                -var reporter;
+                if (current_user._id == home_team.owner)
+                    - reporter = home_team.id
+                else
+                    - reporter = away_team.id
+                - var modalId = "report-result-modal"
+                - var homeTeamId = home_team.id
+                - var awayTeamId = away_team.id
+                - var homeTeamName = home_team.name
+                - var awayTeamName = away_team.name
+                - var matchId = match.id
+                - var modalOpeners = [ "report-match"]
+                - var modalClosers = [ "cancel-report-result", "submit-report-result" ]
+                include modals/extensions/reportResult/modal.pug
