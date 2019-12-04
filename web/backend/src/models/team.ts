@@ -7,7 +7,7 @@ import {EloService} from '../services/elo-service';
 import {DataReturnDTO} from './DTOs/dataReturnDTO';
 import {DataValidDTO} from './DTOs/dataValidDTO';
 import {League} from './league';
-import {Match} from './match';
+import {Match, Match_Status} from './match';
 
 export class Team {
 
@@ -107,48 +107,39 @@ export class Team {
     public static async delete(teamId) {
         const team = await MongoDb.getById(TeamController.table, teamId);
         for (const matchId of team.data.Matches) {
-            const match = await MongoDb.getById(MatchController.table, matchId);
-            if (match.data && match.data.Confirmed) {
+            const match: Match = (await MongoDb.getById(MatchController.table, matchId)).data;
+            if (match && match.Status === Match_Status.Confirmed) {
+                const titleArr = match.Title.split(' VS ', 1);
                 // Home was deleted
-                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
-                    const title = JSON.stringify(match.data.Title);
-                    const titleArr = title.split(' ', 1);
-                    // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
+                if (JSON.stringify(match.Home) === JSON.stringify(teamId)) {
+                    match.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[1];
                 } else {
                     // Away was deleted
-                    let title = match.data.Title;
-                    title = title.split(' ', 1);
-                    // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
+                    match.Title = titleArr[0] + ' VS ' + titleArr[1] + ' (Deleted)';
                 }
-                await MongoDb.updateById(MatchController.table, matchId, {Title: match.data.Title});
-            } else if (match.data) {
+                await MongoDb.updateById(MatchController.table, matchId, {Title: match.Title});
+            } else if (match) {
                 // Home was deleted
-                if (JSON.stringify(match.data.Home) === JSON.stringify(teamId)) {
-                    const title = match.data.Title;
-                    const titleArr = title.split(' ');
+                const titleArr = match.Title.split(' VS ', 1);
+                if (JSON.stringify(match.Home) === JSON.stringify(teamId)) {
                     // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[2];
-                    match.data.Victor = match.data.Away;
-                    match.data.Loser = match.data.Home;
-                    match.data.Home_Score = -1;
-                    match.data.Away_Score = 1;
-                    match.data.Confirmed = true;
+                    match.Title = titleArr[0] + ' (Deleted) VS ' + titleArr[1];
+                    match.Victor = match.Away;
+                    match.Loser = match.Home;
+                    match.Home_Score = -1;
+                    match.Away_Score = 1;
+                    match.Status = Match_Status.Confirmed;
                 } else {
                     // Away was deleted
-                    let title = match.data.Title;
-                    title = title.split(' ');
-                    // tslint:disable-next-line:no-magic-numbers
-                    match.data.Title = title[0] + ' VS ' + title[2] + ' (Deleted)';
-                    match.data.Victor = match.data.Home;
-                    match.data.Loser = match.data.Away;
-                    match.data.Home_Score = 1;
-                    match.data.Away_Score = -1;
-                    match.data.Confirmed = true;
+                    match.Title = titleArr[0] + ' VS ' + titleArr[1] + ' (Deleted)';
+                    match.Victor = match.Home;
+                    match.Loser = match.Away;
+                    match.Home_Score = 1;
+                    match.Away_Score = -1;
+                    match.Status = Match_Status.Confirmed;
                 }
-                await MongoDb.updateById(MatchController.table, matchId, match.data);
-                await this.updateStats(match.data);
+                await MongoDb.updateById(MatchController.table, matchId, match);
+                await this.updateStats(match);
             }
         }
     }
