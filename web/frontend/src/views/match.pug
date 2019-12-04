@@ -34,12 +34,16 @@ if page_rendered
                             div(id='home-team')
                                 p(class='team-title') 
                                     | Home Team
-                                a(href = '../team/' + home_team.id class='team-name') 
-                                    | #{home_team.name}
-                                p(class='team-record')
-                                    | Record: #{home_team.wins} - #{home_team.losses}
-                                p(class='team-rating')
-                                    | Rating: #{home_team.rating}
+                                if (home_team.name)
+                                    a(href = '../team/' + home_team.id class='team-name') 
+                                        | #{home_team.name}
+                                    p(class='team-record')
+                                        | Record: #{home_team.wins} - #{home_team.losses}
+                                    p(class='team-rating')
+                                        | Rating: #{home_team.rating}
+                                else 
+                                    p(class='team-name')
+                                        | Deleted Team
                         if away_team
                             div(id='away-team')
                                 p(class='team-title') 
@@ -55,7 +59,7 @@ if page_rendered
                         a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                             | Home
 
-            if (current_user._id == home_team.owner) || (current_user._id == away_team.owner)
+            if ((current_user._id == home_team.owner) && (match.updated_by != home_team.id)) || ((current_user._id == away_team.owner) && (match.updated_by != away_team.id))
                 if (!match.in_conflict && !match.confirmed)
                     include adminpanels/extensions/match-adminpanel/match-adminpanel.pug
                 

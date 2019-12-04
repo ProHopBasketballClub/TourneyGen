@@ -188,6 +188,9 @@ app.get('/match/:id', (req, res) => {
                     match.home_score = match_object.Home_Score;
                     match.away_score = match_object.Away_Score;
                 }
+                if (match_object.Updated_By) {
+                    match.updated_by = match_object.Updated_By;
+                }
             }
 
             const team_request_route = backend_location + team_route;
