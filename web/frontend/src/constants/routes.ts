@@ -5,3 +5,4 @@ export const team_route = '/Api/team';
 export const team_get_all_route = '/Api/team/all';
 export const match_route = '/Api/match';
 export const match_get_all_route = '/Api/match/all';
+export const report_result_route = '/Api/match/report';
