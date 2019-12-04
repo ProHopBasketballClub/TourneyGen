@@ -134,7 +134,7 @@ export class Team {
                     match.data.Loser = match.data.Home;
                     match.data.Home_Score = -1;
                     match.data.Away_Score = 1;
-                    match.data.Confirmed = true;
+                    match.data.Status = 'Confirmed';
                 } else {
                     // Away was deleted
                     let title = match.data.Title;
@@ -145,7 +145,7 @@ export class Team {
                     match.data.Loser = match.data.Away;
                     match.data.Home_Score = 1;
                     match.data.Away_Score = -1;
-                    match.data.Confirmed = true;
+                    match.data.Status = 'Confirmed';
                 }
                 await MongoDb.updateById(MatchController.table, matchId, match.data);
                 await this.updateStats(match.data);
