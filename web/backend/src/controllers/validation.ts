@@ -1,8 +1,8 @@
 import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db';
-import {DataReturnDTO, Team} from '../models';
-import {Match} from '../models/match';
+import {DataReturnDTO} from '../models';
+import {Match, Match_Status} from '../models/match';
 import {MatchController} from './match-controller';
 
 export class RequestValidation {
@@ -62,12 +62,12 @@ export class RequestValidation {
             return false;
         }
         const match: Match = retrievedMatch.data;
-        if (!req.query.Owner && match.In_Conflict) {
+        if (!req.query.Owner && match.Status === Match_Status.Conflicted) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'This match is in a conflict only a league owner can resolve this'});
             return false;
         }
-        if (match.Confirmed) {
+        if (match.Status === Match_Status.Confirmed) {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'This match has been confirmed. It cannot be edited'});
             return;

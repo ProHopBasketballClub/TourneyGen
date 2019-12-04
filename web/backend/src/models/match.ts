@@ -9,8 +9,8 @@ export class Match {
             return new DataValidDTO(false, 'A team object is required in the body of this request');
         }
 
-        if(!req.body.League) {
-           return new DataValidDTO(false, 'A league must be specified for this match');
+        if (!req.body.League) {
+            return new DataValidDTO(false, 'A league must be specified for this match');
         }
 
         if (!req.body.Home || req.body.Home.length !== MongoDb.MONGO_ID_LEN) {
@@ -61,23 +61,28 @@ export class Match {
     public Loser: string; // The id of the losing team
     public Home_Score: number = 0;
     public Away_Score: number = 0;
-    public Confirmed: boolean;
-    public In_Conflict: boolean; // If the match result is contested
     public Fill_From: [number, number];
     public Tournament: string; // The id of the tournament the match is in. Not required
     public Updated_By: string;
+    public Status: Match_Status;
 
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
         this.Away = req.Away;
         this.Title = homeTeam.Name + ' VS ' + awayTeam.Name;
-        this.Confirmed = false;
         this.League = req.League;
-
+        this.Status = Match_Status.In_progress;
         if (req.Tournament) {
             this.Tournament = req.Tournament;
         } else {
             this.Tournament = 'Not part of a Tournament';
         }
     }
+}
+
+export enum Match_Status {
+    In_progress,
+    Pending_report,
+    Confirmed,
+    Conflicted,
 }
