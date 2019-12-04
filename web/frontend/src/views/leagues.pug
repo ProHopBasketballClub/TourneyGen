@@ -41,13 +41,16 @@ if page_rendered
                                         div(class='category-card-entries')
                                             p(class='category-list')
                                                 | #{match.name}    
-                                            if match.confirmed  
+                                            if match.status == 'Confirmed'  
                                                 p(class='finished-match')
                                                     | Completed
-                                            else if match.in_conflict
+                                            else if match.status == 'Pending Update'
+                                                 p(class='pending-match')
+                                                    | Waiting for second report
+                                            else if match.status == 'Conflicted'
                                                 p(class='conflicting-match')
                                                     | Unresolved Conflict
-                                            else if !match.confirmed
+                                            else if match.status == 'In_Progress'
                                                 p(class='match-in-progress')
                                                     | In progress
                             else
