@@ -253,4 +253,31 @@ describe('Match Controller', async function() {
 
     });
 
+    it('it should delete a Team and update a Match object', async () => {
+        const match = {Home: homeId, Away: awayId, League: leagueId};
+        let res = await chai.request(conn)
+            .post(MATCH_ROOT)
+            .send(match);
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+        matchId = res.body._id;
+        const resTeam = await chai.request(conn)
+            .get('/api/team')
+            .query({id: homeId});
+        resTeam.status.should.equal(HttpStatus.OK);
+        resTeam.body.should.be.a('object');
+        res = await chai.request(conn)
+            .delete('/api/team')
+            .query({id: awayId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.should.be.a('object');
+        res = await chai.request(conn)
+            .get('/api/team')
+            .query({id: homeId});
+        res.status.should.equal(HttpStatus.OK);
+        res.body.Rating.should.be.above(resTeam.body.Rating);
+        res.body.should.be.a('object');
+
+    });
+
 });

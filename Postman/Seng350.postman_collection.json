@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b647853f-b22e-40e0-b330-f0f9cc0f59ec",
+		"_postman_id": "9eb2f4bd-9e69-4713-b3a5-0d5400c8ecd1",
 		"name": "Seng350",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,10 +13,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/todo",
 							"protocol": "http",
@@ -79,10 +75,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/user?displayName=eetar2",
 							"protocol": "http",
@@ -162,7 +154,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://172.28.1.1:34345/api/user?id=5d89306443e4b99b65f56956",
+							"raw": "http://172.28.1.1:34345/api/user?id=5dabca4c180386bb8f42dbe8",
 							"protocol": "http",
 							"host": [
 								"172",
@@ -178,7 +170,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "5d89306443e4b99b65f56956"
+									"value": "5dabca4c180386bb8f42dbe8"
 								}
 							]
 						}
@@ -190,10 +182,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/user/all",
 							"protocol": "http",
@@ -223,10 +211,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/league?Name=yes",
 							"protocol": "http",
@@ -263,10 +247,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/league/all",
 							"protocol": "http",
@@ -300,7 +280,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"Name\":\"T1\",\n\t\"Description\":\"The first tournament\",\n\t\"Game_type\":\"R7\",\n\t\"Owner\": \"5dab8d68069d95a8643dac5c\"\n\t\n}"
+							"raw": "{\n\t\"Name\":\"T1\",\n\t\"Description\":\"The first tournament\",\n\t\"Game_type\":\"R7\",\n\t\"Owner\": \"5ddf051da87cd94e08a0aff9\"\n\t\n}"
 						},
 						"url": {
 							"raw": "http://172.28.1.1:34345/api/league",
@@ -387,6 +367,478 @@
 								{
 									"key": "id",
 									"value": "5dab9829f241cb661579ab9d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Team",
+			"item": [
+				{
+					"name": "Get Team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/team?name=yes",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"team"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "yes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Owner\":\"5ddf051da87cd94e08a0aff9\",\n\t\"Roster\":[\"Ethan\"],\n\t\"Description\":\"Yes\",\n\t\"Name\":\"b\",\n\t\"League\":\"5ddf052ca87cd924e8a0affa\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/team",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"team"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Team",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\":\"Si\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/team?id=5db8b87bf680d649da3b3102",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"team"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5db8b87bf680d649da3b3102"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Alll Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/team/all",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"team",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/team?id=5ddf08e01b561a919aecabf7",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"team"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5ddf08e01b561a919aecabf7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Match",
+			"item": [
+				{
+					"name": "Get All Match",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/all",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Match",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Home\":\"5ddf08e01b561a919aecabf7\",\n\t\"Away\":\"5ddf0545a87cd94132a0affb\",\n\t\"League\":\"5ddf052ca87cd924e8a0affa\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Match",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Match",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Match",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Report Match Result",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Victor\":\"5dcb55fc4ae494a7a289bc94\",\n\t\"Home_Score\":430,\n\t\"Away_Score\":69,\n\t\"Loser\":\"5dcb56074ae494adad89bc95\",\n\t\"Updated_By\":\"5dcb56074ae494adad89bc95\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/report?id=5dd1c759f63d335d904c05f9",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								"report"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5dd1c759f63d335d904c05f9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resolve Conflict",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Victor\":\"5dcb55fc4ae494a7a289bc94\",\n\t\"Home_Score\":430,\n\t\"Away_Score\":69,\n\t\"Loser\":\"5dcb56074ae494adad89bc95\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/match/resolve?Owner=5db8b7972bc78e60bf18e31c&id=5dd1c759f63d335d904c05f9",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"match",
+								"resolve"
+							],
+							"query": [
+								{
+									"key": "Owner",
+									"value": "5db8b7972bc78e60bf18e31c"
+								},
+								{
+									"key": "id",
+									"value": "5dd1c759f63d335d904c05f9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tournament",
+			"item": [
+				{
+					"name": "Create Tournament",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Teams\":[\"5ddc9beb443a80d4d41b3144\",\"5ddc9bf0443a8031841b3145\",\"5ddc9bf5443a80dd451b3146\"],\n\t\"League\":\"5ddc9bcd443a8080721b3143\",\n\t\"Name\":\"Big T\",\n\t\"Description\":\"Yes\"\n}"
+						},
+						"url": {
+							"raw": "http://172.28.1.1:34345/api/tournament",
+							"protocol": "http",
+							"host": [
+								"172",
+								"28",
+								"1",
+								"1"
+							],
+							"port": "34345",
+							"path": [
+								"api",
+								"tournament"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Tournaments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tournament",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tournament",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Teams\":[\"5ddc9beb443a80d4d41b3144\",\"5ddc9bf0443a8031841b3145\",\"5ddc9bf5443a80dd451b3146\"]\n}"
+						},
+						"url": {
+							"raw": "?id=5ddc9cc24d00b67eef601699",
+							"query": [
+								{
+									"key": "id",
+									"value": "5ddc9cc24d00b67eef601699"
 								}
 							]
 						}
