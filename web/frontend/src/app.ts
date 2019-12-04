@@ -109,9 +109,9 @@ app.get('/league/:id', (req,res) => {
                                     confirmed: match.Confirmed,
                                     home: match.Home,
                                     id: match._id,
-                                    in_conflict: match.In_Conflict ? match.In_Conflict : false,
                                     league: match.League,
                                     name: match.Title,
+                                    status: match.Status,
                                     tournament: match.Tournament,
                                 });
                             }
@@ -240,17 +240,17 @@ app.get('/match/:id', (req, res) => {
                     confirmed: match_object.Confirmed,
                     home: match_object.Home,
                     id: match_object._id,
-                    in_conflict: match_object.In_Conflict ? match_object.In_Conflict : false,
                     league: match_object.League,
                     name: match_object.Title,
+                    status: match_object.Status,
                     tournament: match_object.Tournament,
                 };
 
-                if (match_object.Home_Score) {
+                if ('Home_Score' in match_object) {
                     match.home_score = match_object.Home_Score;
                     match.away_score = match_object.Away_Score;
                 }
-                if (match_object.Updated_By) {
+                if ('Updated_By' in match_object) {
                     match.updated_by = match_object.Updated_By;
                 }
             }
