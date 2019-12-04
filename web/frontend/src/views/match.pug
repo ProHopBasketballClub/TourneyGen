@@ -56,7 +56,7 @@ if page_rendered
                             | Home
 
             if (current_user._id == home_team.owner) || (current_user._id == away_team.owner)
-                if (!match.in_conflict)
+                if (!match.in_conflict && !match.confirmed)
                     include adminpanels/extensions/match-adminpanel/match-adminpanel.pug
                 
                 -var reporter;
