@@ -101,7 +101,7 @@ app.get('/league/:id', (req,res) => {
                 const match_request = new ApiRequest('GET', match_request_route, { params: null, body: null });
 
                 match_request.send_request( (match_response) => {
-                    if (match_response) {
+                    if (match_response && !match_response.error) {
                         match_response.forEach((match) => {
                             if (match.League === league._id) {
                                 matches.push({
