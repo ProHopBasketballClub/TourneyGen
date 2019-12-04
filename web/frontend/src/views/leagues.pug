@@ -40,7 +40,16 @@ if page_rendered
                                     a(href='/match/' + match.id class = 'list-item category-card-entry-list-item')
                                         div(class='category-card-entries')
                                             p(class='category-list')
-                                                | #{match.name}      
+                                                | #{match.name}    
+                                            if match.confirmed  
+                                                p(class='finished-match')
+                                                    | Completed
+                                            else if match.in_conflict
+                                                p(class='conflicting-match')
+                                                    | Unresolved Conflict
+                                            else if !match.confirmed
+                                                p(class='match-in-progress')
+                                                    | In progress
                             else
                                 div(class='category-card-entries')
                                     p No matches currently scheduled.
@@ -106,5 +115,5 @@ if page_rendered
                         -var teamId = team.id
                         -var teamName = team.name
                         -var modalOpeners = team.id
-                        -var modalClosers = [ "cancel-delete-team", 'submit-delete-team' + team.id]
+                        -var modalClosers = [ 'cancel-delete-team' + team.id, 'submit-delete-team' + team.id]
                         include modals/extensions/deleteTeam/modal.pug
