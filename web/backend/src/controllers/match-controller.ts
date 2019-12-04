@@ -211,6 +211,7 @@ export class MatchController implements IController {
             Away_Score: req.body.Away_Score,
             Home_Score: req.body.Home_Score,
             Loser: req.body.Loser,
+            Status: 'Pending Update',
             Updated_By: req.body.Updated_By,
             Victor: req.body.Victor,
         };
