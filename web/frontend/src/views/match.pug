@@ -14,18 +14,20 @@ if page_rendered
                     if match
                         p(class='match-title')
                             | #{match.name}
-                        //- if match.home_score && match.away_score
                         p(class='match-score')
                             | #{match.home_score} - #{match.away_score}
                         if (match.status == 'Conflicted')
                             p(class='match-pending')
                                 | Match has conflicting reported scores; league owner has been notified.
-                        if match.status == 'Pending Update'
+                        else if match.status == 'Pending Update'
                             p(class='match-pending')
                                 | Match still waiting for second report.
-                        if match.status == 'In_Progress'
+                        else if match.status == 'In_Progress'
                             p(class='match-pending')
                                 | Match not yet completed 
+                        else if match.status == 'Confirmed'
+                            p(class='match-pending')
+                                | Match Complete
                         div(class='league-view')
                             a(href= '../league/' + match.league)
                                 | View league
