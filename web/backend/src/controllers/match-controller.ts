@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import {MongoDb} from '../db';
 import {DataReturnDTO, DataValidDTO, Team} from '../models';
-import {Match, Match_Status} from '../models/match';
+import {Match} from '../models/match';
 import {IController} from './controller.interface';
 import {LeagueController} from './league-controller';
 import {TeamController} from './team-controller';
@@ -141,7 +141,7 @@ export class MatchController implements IController {
             return;
         }
         const retrievedMatch = await MongoDb.getById(MatchController.table, req.query.id);
-        if (retrievedMatch.data.Status !== Match_Status.Conflicted) {
+        if (retrievedMatch.data.Status !== 'Conflicted') {
             res.statusCode = HttpStatus.BAD_REQUEST;
             res.json({error: 'This match is not in conflict. A team can update it'});
             return;
@@ -167,7 +167,7 @@ export class MatchController implements IController {
             Away_Score: req.body.Away_Score,
             Home_Score: req.body.Home_Score,
             Loser: req.body.Loser,
-            Status: Match_Status.Confirmed,
+            Status: 'Confirmed',
             Updated_By: 'Owner',
             Victor: req.body.Victor,
 
@@ -224,16 +224,16 @@ export class MatchController implements IController {
     }
 
     private async checkConflict(match: Match, matchReq): Promise<DataValidDTO> {
-        if (match.Status === Match_Status.Conflicted) {
+        if (match.Status === 'Conflicted') {
             return new DataValidDTO(false, 'This match is in a conflict it can only be updated by a league owner');
         }
 
         if (match.Away_Score !== matchReq.body.Away_Score) {
-            await MongoDb.updateById(MatchController.table, matchReq.query.id, {Status: Match_Status.Conflicted});
+            await MongoDb.updateById(MatchController.table, matchReq.query.id, {Status: 'Conflicted'});
             return new DataValidDTO(false, 'Away Score do not match. This match has been marked as conflicted');
         }
         if (match.Home_Score !== matchReq.body.Home_Score) {
-            await MongoDb.updateById(MatchController.table, matchReq.query.id, {Status: Match_Status.Conflicted});
+            await MongoDb.updateById(MatchController.table, matchReq.query.id, {Status: 'Conflicted'});
             return new DataValidDTO(false, 'Home Scores do not match. This match has been marked as conflicted');
         }
         if (match.Victor) {
@@ -244,7 +244,7 @@ export class MatchController implements IController {
                 return new DataValidDTO(false, 'Losers do not match. This match has been marked as conflicted');
             }
             if (matchReq.body.Updated_By !== match.Updated_By) {
-                if (!await MongoDb.updateById(MatchController.table, match._id, {Status: Match_Status.Confirmed})) {
+                if (!await MongoDb.updateById(MatchController.table, match._id, {Status: 'Confirmed'})) {
                     return new DataValidDTO(false, 'Internal Server error confirmation not set');
                 }
                 await Team.updateStats(match);

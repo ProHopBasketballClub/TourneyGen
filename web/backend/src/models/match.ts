@@ -64,25 +64,18 @@ export class Match {
     public Fill_From: [number, number];
     public Tournament: string; // The id of the tournament the match is in. Not required
     public Updated_By: string;
-    public Status: Match_Status;
+    public Status: string;
 
     constructor(req, homeTeam, awayTeam) {
         this.Home = req.Home;
         this.Away = req.Away;
         this.Title = homeTeam.Name + ' VS ' + awayTeam.Name;
         this.League = req.League;
-        this.Status = Match_Status.In_progress;
+        this.Status = 'In_Progress';
         if (req.Tournament) {
             this.Tournament = req.Tournament;
         } else {
             this.Tournament = 'Not part of a Tournament';
         }
     }
-}
-
-export enum Match_Status {
-    In_progress,
-    Pending_report,
-    Confirmed,
-    Conflicted,
 }
