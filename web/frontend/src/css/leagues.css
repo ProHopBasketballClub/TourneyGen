@@ -27,6 +27,7 @@
     border-radius: 8px;
     box-shadow: 0px 0px 4px 0px #1a1a1a;
     display: flex;
+    justify-content: space-between;
 }
 .category-card-entries p {
     text-decoration: none;
@@ -142,4 +143,19 @@
 
 .delete-team-button {
     cursor: pointer;
+}
+
+.finished-match{
+    color: green;
+    margin-top: 29px;
+}
+
+.conflicting-match{
+    color: red;
+    margin-top: 29px;
+}
+
+.match-in-progress{
+    color: orange;
+    margin-top: 29px;
 }
