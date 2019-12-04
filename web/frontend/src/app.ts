@@ -636,9 +636,6 @@ app.post('/report_result', async (req, res) => {
         } else {
             loser = homeTeamId;
         }
-        // const teamDescription = req.body.teamDescription;
-        // const textRoster = req.body.teamRoster;
-        // const teamId = req.body.teamId ? req.body.teamId : '';
 
         const report_request_route = backend_location + report_result_route;
         const report_request_params = { id: matchId };
