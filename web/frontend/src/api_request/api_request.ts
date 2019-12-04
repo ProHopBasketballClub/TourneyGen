@@ -240,7 +240,9 @@ export default class ApiRequest {
 
         let get_route = route + '?';
         for (const [key, value] of Object.entries(args)) {
-            get_route += key.toString() + '=' + value.toString() + '&';
+            if (key && value) {
+                get_route += key.toString() + '=' + value.toString() + '&';
+            }
         }
 
         // Don't return the last &.

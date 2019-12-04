@@ -17,18 +17,21 @@ if page_rendered
                         | #{league.game_type}
                     p(id="league-description") 
                         | #{league.description}
-                    p
-                        | Tournaments
-                        div(class='category-card-entry-container')
-                            if tournaments && tournaments.length > 0
-                                for tourney in tournaments
-                                    a(href='/leagues' class = 'list-item category-card-entry-list-item')
-                                        div(class='category-card-entries')
-                                            p(class='category-list')
-                                                | #{tourney.name}      
-                            else
-                                div(class='category-card-entries')
-                                    p No tournaments currently scheduled.
+                    // This is the display tournament code. Once they have been added, the
+                    // coming soon code should be replaced with this. 
+                    //p
+                    //    | Tournaments                 
+      
+                    //    div(class='category-card-entry-container')
+                    //        if tournaments && tournaments.length > 0
+                    //            for tourney in tournaments
+                    //                a(href='/leagues' class = 'list-item category-card-entry-list-item')
+                    //                    div(class='category-card-entries')
+                    //                        p(class='category-list')
+                    //                            | #{tourney.name}      
+                    //        else
+                    //            div(class='category-card-entries')
+                    //                 p No tournaments currently scheduled.
                     p
                         | Matches
                         div(class='category-card-entry-container')
@@ -66,6 +69,10 @@ if page_rendered
                             else
                                 div(class='category-card-entries')
                                     p No teams currently exist.
+                    p
+                        | Tournaments are coming soon! If you're interested in this feature
+                        | please send an email to Ross-Alexandra@outlook.com to be notified
+                        | of its arrival.
                     div(class='button')
                             a(href='/' data-toggle="modal" class='button' id = 'new-league') 
                                 | Home
