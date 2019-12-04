@@ -14,17 +14,17 @@ if page_rendered
                     if match
                         p(class='match-title')
                             | #{match.name}
-                        if match.home_score && match.away_score
-                            p(class='match-score')
-                                | #{match.home_score} - #{match.away_score}
-                            if (match.in_conflict)
-                                p(class='match-pending')
-                                    | Match has conflicting reported scores; league owner has been notified.
-                            else if match.confirmed == false
-                                p(class='match-pending')
-                                    | Match still waiting for second report.
-                        else 
-                            p(class='match-score')
+                        //- if match.home_score && match.away_score
+                        p(class='match-score')
+                            | #{match.home_score} - #{match.away_score}
+                        if (match.status == 'Conflicted')
+                            p(class='match-pending')
+                                | Match has conflicting reported scores; league owner has been notified.
+                        if match.status == 'Pending Update'
+                            p(class='match-pending')
+                                | Match still waiting for second report.
+                        if match.status == 'In_Progress'
+                            p(class='match-pending')
                                 | Match not yet completed 
                         div(class='league-view')
                             a(href= '../league/' + match.league)
@@ -60,7 +60,7 @@ if page_rendered
                             | Home
 
             if ((current_user._id == home_team.owner) && (match.updated_by != home_team.id)) || ((current_user._id == away_team.owner) && (match.updated_by != away_team.id))
-                if (!match.in_conflict && !match.confirmed)
+                if (!match.status == 'Conflicted' && !match.status == 'Confirmed')
                     include adminpanels/extensions/match-adminpanel/match-adminpanel.pug
                 
                 -var reporter;
