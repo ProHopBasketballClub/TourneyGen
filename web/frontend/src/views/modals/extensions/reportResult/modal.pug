@@ -1,0 +1,32 @@
+extends ../../modal.pug
+
+block modal-content
+    style
+        include modal.css
+    if (homeTeamId && awayTeamId)
+        div(class="modal-content" id="report-result-modal-content")
+            form(class="basic-form-column" action="/report_result" method="POST") 
+                input(type="hidden" name="homeTeamId" value=homeTeamId)
+                input(type="hidden" name="awayTeamId" value=awayTeamId)
+                input(type="hidden" name="matchId" value=matchId)
+                input(type="hidden" name="reporter" value=reporter)
+                div(class="form-box")
+                    h1(class="form-header" id="team-name-header")
+                        | Winner 
+                    select(name = "winner" class = 'form-field')        
+                        option(value=homeTeamId) #{homeTeamName}
+                        option(value=awayTeamId) #{awayTeamName}
+                div(class="form-box")
+                    p(class="form-text" id="team-description-text")
+                        | Home Team Score 
+                    p(class='team-name')
+                        |(#{homeTeamName})
+                    input(type="number" id="team-game-type-field" class="form-field" name="homeTeamScore" )
+                    p(class="form-text")
+                        | Away Team Score  
+                    p(class='team-name')
+                        |(#{awayTeamName})
+                    input(type="number" id="team-game-type-field" class="form-field" name="awayTeamScore" )
+                div(class="form-box")
+                    input(type="button" id="cancel-report-result" class="basic-button" value="Cancel")
+                    input(type="submit" id="submit-report-result" class="basic-button" value="Report")
