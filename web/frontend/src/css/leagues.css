@@ -1,17 +1,17 @@
-.home-container{
+.home-container {
     display: flex;
     align-items: center;
     flex-direction: column;
     text-align: center;
     justify-content: space-between;
-    
+
 }
 
-.category-card-entry-container{
+.category-card-entry-container {
     margin-bottom: 20px;
 }
 
-.category-list{
+.category-list {
     font-size: 24px;
 }
 
@@ -29,10 +29,12 @@
     display: flex;
     justify-content: space-between;
 }
+
 .category-card-entries p {
     text-decoration: none;
 
 }
+
 .category-card {
     background-color: #353535;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
@@ -62,7 +64,7 @@
     size: 15px;
 }
 
-.category-card-entry-list-item{
+.category-card-entry-list-item {
     text-decoration: none;
 }
 
@@ -124,7 +126,7 @@
 .form-field {
     border-radius: 12px;
     padding: 8px 12px;
-    font-size: 18px;    
+    font-size: 18px;
 }
 
 .basic-button {
@@ -145,22 +147,22 @@
     cursor: pointer;
 }
 
-.finished-match{
+.finished-match {
     color: green;
     margin-top: 29px;
 }
 
-.conflicting-match{
+.conflicting-match {
     color: red;
     margin-top: 29px;
 }
 
-.match-in-progress{
-    color: orange;
+.match-in-progress {
+    color: white;
     margin-top: 29px;
 }
 
 .pending-match {
-    color: white;
+    color: orange;
     margin-top: 29px;
 }
