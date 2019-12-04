@@ -14,23 +14,28 @@ if page_rendered
             div(class='home-container')
                 div(class='category-card')
                     include errors/error_message.pug
-                    p(class='category-card-title')
-                        | #{team.name}
-                    p(id="team-description") 
-                        | #{team.description}
-                    p(id="team-owner") 
-                        | Owner:
-                        | #{owner.name}
-                    p(id="league")
-                        | League: 
-                        a(href='/league/' + league.id)
-                            | #{league.name}
-                    p(id="team-roster") 
-                        | Roster:
-                        br
-                        for member in team.roster
-                            | #{member}
+                    div
+                        p(class='category-card-title')
+                            | #{team.name}
+                        p(id="team-description") 
+                            | #{team.description}
+                        p(id="team-owner") 
+                            | Owner:
+                            | #{owner.name}
+                        p(id="league")
+                            | League: 
+                            a(href='/league/' + league.id)
+                                | #{league.name}
+                        p(id="team-roster") 
+                            | Roster:
                             br
+                            for member in team.roster
+                                | #{member}
+                                br
+                        p(id="team-record")
+                            | Record: #{team.wins} - #{team.losses}
+                        p(id="team-rating")
+                            | ELO: #{team.rating}
 
                     div(class='button')
                         a(href='/' data-toggle="modal" class='button' id = 'new-league') 
@@ -54,3 +59,4 @@ if page_rendered
                 - var modalClosers = [ "cancel-delete-team" + team.id , "submit-delete-team" ]
                 - var teamId = team.id
                 include modals/extensions/deleteTeam/modal.pug
+                

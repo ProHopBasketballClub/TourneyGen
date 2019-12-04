@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as path from 'path';
 import * as env from '../env';
 import ApiRequest from './api_request/api_request';
-import { league_get_all_route, league_route, match_get_all_route, match_route, team_get_all_route, team_route, user_route } from './constants/routes';
+import { league_get_all_route, league_route, match_get_all_route, match_route, report_result_route, team_get_all_route, team_route, user_route } from './constants/routes';
 import { api_get_multiple_requests } from './helpers/special_requests';
 import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from './helpers/verification';
 
@@ -109,6 +109,7 @@ app.get('/league/:id', (req,res) => {
                                     confirmed: match.Confirmed,
                                     home: match.Home,
                                     id: match._id,
+                                    in_conflict: match.In_Conflict ? match.In_Conflict : false,
                                     league: match.League,
                                     name: match.Title,
                                     tournament: match.Tournament,
@@ -161,7 +162,7 @@ app.get('/login', (req, res) => {
 
 app.get('/match/:id', (req, res) => {
     is_logged_in(req.cookies, (success) => {
-        let match = {};
+        let match = {} as any;
         let home_team = {};
         let away_team = {};
         const current_user = success;
@@ -177,10 +178,19 @@ app.get('/match/:id', (req, res) => {
                     confirmed: match_object.Confirmed,
                     home: match_object.Home,
                     id: match_object._id,
+                    in_conflict: match_object.In_Conflict ? match_object.In_Conflict : false,
                     league: match_object.League,
                     name: match_object.Title,
                     tournament: match_object.Tournament,
                 };
+
+                if (match_object.Home_Score) {
+                    match.home_score = match_object.Home_Score;
+                    match.away_score = match_object.Away_Score;
+                }
+                if (match_object.Updated_By) {
+                    match.updated_by = match_object.Updated_By;
+                }
             }
 
             const team_request_route = backend_location + team_route;
@@ -193,11 +203,15 @@ app.get('/match/:id', (req, res) => {
             api_get_multiple_requests(requests, (teams_callback) => {
                 teams_callback.forEach((team) => {
                     if (team._id === match_object.Home) {
-                        home_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                        home_team = {description: team.Description, id: team._id, losses: team.Losses, name: team.Name, owner: team.Owner,
+                            rating: team.Rating, roster: team.Roster,  wins: team.Wins };
                     } else if (team._id === match_object.Away) {
-                        away_team = {id: team._id, name: team.Name, description: team.Description, roster: team.Roster};
+                        away_team = {description: team.Description, id: team._id, losses: team.Losses, name: team.Name, owner: team.Owner,
+                            rating: team.Rating, roster: team.Roster,  wins: team.Wins };
                     }
+
                 });
+
                 const page_rendered=true;
                 res.render('match', {
                     away_team,
@@ -207,6 +221,7 @@ app.get('/match/:id', (req, res) => {
                     match,
                     page_rendered,
                 });
+                errors = [];
             });
         });
     }, (failure) => {
@@ -250,9 +265,13 @@ app.get('/team/:id', (req, res) => {
                         const team = {
                             description: team_object.Description,
                             id: team_object._id,
+                            losses: team_object.Losses,
                             name: team_object.Name,
                             owner: team_object.Owner,
+                            rating: team_object.Rating,
                             roster: team_object.Roster,
+                            wins: team_object.Wins,
+
                         };
 
                         const league = {
@@ -599,6 +618,47 @@ app.post('/logout', async (req, res) => {
     destroy_cookie('tourneygen_auth', res, req.cookies);
     destroy_cookie('tourneygen_user', res, req.cookies);
     res.redirect('/login');
+});
+
+app.post('/report_result', async (req, res) => {
+    is_logged_in(req.cookies, (success) => {
+        // const teamOwner = success._id;
+        const winner = req.body.winner;
+        let loser;
+        const homeTeamId = req.body.homeTeamId;
+        const awayTeamId = req.body.awayTeamId;
+        const homeTeamScore = req.body.homeTeamScore;
+        const awayTeamScore = req.body.awayTeamScore;
+        const matchId = req.body.matchId ? req.body.matchId : '';
+        const reporter = req.body.reporter ? req.body.reporter : '';
+        if (winner === homeTeamId) {
+            loser = awayTeamId;
+        } else {
+            loser = homeTeamId;
+        }
+
+        const report_request_route = backend_location + report_result_route;
+        const report_request_params = { id: matchId };
+        const report_request_payload = {
+            Away_Score: awayTeamScore,
+            Home_Score: homeTeamScore,
+            Loser: loser,
+            Updated_By: reporter,
+            Victor: winner,
+        };
+        const report_request = new ApiRequest('PUT', report_request_route, {params: report_request_params, body: report_request_payload});
+        report_request.send_request( (backend_response) => {
+            if (backend_response && backend_response.error) {
+                errors.push(backend_response.error);
+            } else if (!backend_response) {
+                errors.push('Something went wrong. Please try again.');
+            }
+            res.redirect('back'); // Go back to the refferer.
+        });
+
+    }, (failure) => {
+        res.redirect('/login');
+    });
 });
 
 app.post('/signup', async (req, res) => {
