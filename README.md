@@ -89,6 +89,12 @@ sudo-docker-compose build
 In order to build the server images run this should only be done if there are changes to the compose file or the Dockerfile.
 If you setup docker differently than is set out in this document, then you may not need to use sudo.
 
+If this is your first time running the docker you must create a docker volume for the mongodb.
+```commandline
+docker volume create mongoData
+```
+
+
 In order to start the Server run. The output will be the port the backend is running on.
 ```commandline
 sudo docker-compose up
