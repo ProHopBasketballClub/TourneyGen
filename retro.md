@@ -1,4 +1,4 @@
-\# Team 3-9 Project Retrospective
+# Team 3-9 Project Retrospective
 For our software architecture course, team 3-9 developed a league management web-app called TourneyGen. 
 This web-app has two basic flows for users. 
 
