@@ -42,3 +42,35 @@ Marks deducted:
 
 (explaining why marks were deducted)
 -----
+# Milestone 4 24 / 30
+
+## Marking Guide
+
+- code compiles
+- code conventions/CI from above (commented, code style, design principles)
+- working demo
+- clear explanation of what user stories were satisfied in this iteration
+- design as implemented follows design doc, or change rationale is present in README
+- async is async when necessary
+- TSLint does not complain
+- test suite present/part of CI
+- test coverage reasonable and meaningful
+- explanation of how you are automating testing 3 QAS from your list in M1
+- explanation of integration testing and CI pipeline
+
+
+Marks deducted:
+
+- Not enough code comment. (-2)
+- Test coverage could be a little higher. (-2)
+- QASs implementation report. (-2)
+
+
+## Notes M4
+
+(explaining why marks were deducted)
+-----
+
+ - All the controllers are not commented. Services are not commented at all. This reduces one of the QASs called **Learnability/Readability**
+ - Controllers and models could be covered more in terms of test code.
+ - Could not see the implementation report of 3 QASs in the M4 report.
