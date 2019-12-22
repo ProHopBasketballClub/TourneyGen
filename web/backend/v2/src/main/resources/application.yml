@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: "/api"
+  port: 34345
 
 spring:
   jackson:
