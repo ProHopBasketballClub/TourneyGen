@@ -1,8 +1,8 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
-import {App} from '../../../../web/backend/src/app';
-import {MongoDb} from '../../../../web/backend/src/db';
-import {EloService} from '../../../../web/backend/src/services/elo-service';
+import {App} from '../../../../web/backend/v1/src/app';
+import {MongoDb} from '../../../../web/backend/v1/src/db';
+import {EloService} from '../../../../web/backend/v1/src/services/elo-service';
 import {TestDatabase} from './testDatabase';
 
 // No ec6 import exists for these packages import must be done this way
