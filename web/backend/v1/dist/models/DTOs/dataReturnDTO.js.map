@@ -1,1 +1,0 @@
-{"version":3,"file":"dataReturnDTO.js","sourceRoot":"","sources":["../../../src/models/DTOs/dataReturnDTO.ts"],"names":[],"mappings":";;AAAA,MAAa,aAAa;IAItB,YAAY,KAAc,EAAC,IAAS;QAChC,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;IACrB,CAAC;CAEJ;AATD,sCASC"}
