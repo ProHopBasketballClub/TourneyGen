@@ -7,7 +7,7 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:backend": "(cd web/backend/v1 && tsc)",
     "build:frontend": "(cd web/frontend && tsc && pug -O env.js src)",
-    "clean:backend": "rm -r web/backend/dist/",
+    "clean:backend": "rm -r web/backend/v1/dist/",
     "clean:frontend": "find web/frontend/ -name '*.js' -type f -delete && find web/frontend/ -name '*.html' -type f -delete",
     "lint": "./node_modules/.bin/tslint -c tslint.json $(find web/ -name '*.ts' -type f && find test/ -name '*.ts' -type f) --fix",
     "test": "npm run test:backend && npm run test:frontend",
