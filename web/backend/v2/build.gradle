@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id "com.diffplug.gradle.spotless" version "3.26.0"
 }
 
 group = 'com.TourneyGen'
@@ -10,6 +11,13 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+}
+
+
+spotless{
+    java{
+        googleJavaFormat()
+    }
 }
 
 dependencies {
@@ -22,6 +30,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    compile group: 'com.diffplug.spotless', name: 'spotless-plugin-gradle', version: '3.26.0'
 
 }
 

@@ -1,4 +1,3 @@
 package com.tourneygen.web.Models.Repositories;
 
-public interface MatchRepository {
-}
+public interface MatchRepository {}

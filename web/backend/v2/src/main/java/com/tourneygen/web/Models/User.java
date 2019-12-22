@@ -1,7 +1,6 @@
 package com.tourneygen.web.Models;
 
 import com.google.gson.Gson;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,7 +24,7 @@ public class User {
   public User() {}
 
   // Test Constructor
-  public User(String displayName,String email){
+  public User(String displayName, String email) {
     this.displayName = displayName;
     this.email = email;
   }
@@ -51,17 +50,16 @@ public class User {
   }
 
   @Override
-  public boolean equals(Object o){
-    User cmp = (User)o;
+  public boolean equals(Object o) {
+    User cmp = (User) o;
     return cmp.email.equals(this.email) && this.displayName.equals(cmp.displayName);
   }
 
-  public String toJson(){
-    return new Gson().toJson(this,User.class);
+  public String toJson() {
+    return new Gson().toJson(this, User.class);
   }
 
-  public static User fromJson(String data){
-    return new Gson().fromJson(data,User.class);
+  public static User fromJson(String data) {
+    return new Gson().fromJson(data, User.class);
   }
-
 }
