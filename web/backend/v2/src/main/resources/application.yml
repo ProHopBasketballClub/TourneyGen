@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: "/api"
+
+spring:
+  jackson:
+    mapper:
+      accept_case_insensitive_properties: true
