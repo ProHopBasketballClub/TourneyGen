@@ -19,7 +19,7 @@ public class User {
   @Column(unique = true)
   private String displayName;
 
-  @Email @NotBlank private String email;
+  @Email @NotBlank(message = "is required") private String email;
 
   public User() {}
 
