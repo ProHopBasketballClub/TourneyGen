@@ -3,6 +3,8 @@ package com.tourneygen.web.Controllers;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +62,13 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     Map<String, String> json = new HashMap<>();
     json.put("error", "Required request body is missing");
     return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(EmptyResultDataAccessException.class)
+  protected ResponseEntity<Object> handelEmptyResultDataAccessException() {
+    Map<String, String> json = new HashMap<>();
+    json.put("error", "The requested data could not be found");
+    return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
