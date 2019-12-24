@@ -182,7 +182,7 @@ build/Release
 node_modules/*
 
 # Ingore the compiled source.
-web/backend/v1/dist/*
+web/backend/dist/*
 
 # Ignore IDE specific folders.
 .idea/*
