@@ -4,8 +4,8 @@ EXPOSE ${PORT}
 # Do general setup of container.
 COPY package.json package.json
 RUN npm install
-RUN mkdir -p web/frontend
-COPY web/frontend/ web/frontend
+RUN mkdir -p web/v1/frontend
+COPY web/v1/frontend/ web/v1/frontend
 
 # Create args for and populate .env file.
 ARG ENVIRONMENT=docker
