@@ -1,5 +1,7 @@
 package com.tourneygen.web.Models;
 
+import com.tourneygen.web.Models.DTOs.LeagueDTO;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -80,5 +82,15 @@ public class League {
 
   public Long getId() {
     return id;
+  }
+
+  public void merge(LeagueDTO leagueDTO) {
+    this.game_type = leagueDTO.getGame_type() == null ? this.game_type : leagueDTO.getGame_type();
+    this.description =
+        leagueDTO.getDescription() == null ? this.description : leagueDTO.getDescription();
+    this.name = leagueDTO.getName() == null ? this.name : leagueDTO.getName();
+    this.teams = leagueDTO.getTeams() == null ? this.teams : leagueDTO.getTeams();
+    this.tournaments =
+        leagueDTO.getTournaments() == null ? this.tournaments : leagueDTO.getTournaments();
   }
 }
