@@ -3,7 +3,6 @@ package com.tourneygen.web.Controllers;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

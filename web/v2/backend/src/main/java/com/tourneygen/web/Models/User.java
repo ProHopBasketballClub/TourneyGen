@@ -2,7 +2,6 @@ package com.tourneygen.web.Models;
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.UserDTO;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -73,7 +72,7 @@ public class User {
   }
 
   public void merge(UserDTO userDTO) {
-    if (userDTO.getDisplayName() != null ) {
+    if (userDTO.getDisplayName() != null) {
       this.displayName = userDTO.getDisplayName();
     }
     if (userDTO.getEmail() != null) {

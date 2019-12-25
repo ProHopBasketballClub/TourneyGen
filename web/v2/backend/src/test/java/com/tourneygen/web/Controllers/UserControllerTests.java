@@ -1,15 +1,11 @@
 package com.tourneygen.web.Controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.User;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -76,7 +71,9 @@ public class UserControllerTests {
     user = userRepository.save(user);
 
     RequestBuilder request =
-            delete("/user").contentType(MediaType.APPLICATION_JSON).param("id",user.getId().toString());
+        delete("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("id", user.getId().toString());
     MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
 
     assert userRepository.findAll().size() == 0;
