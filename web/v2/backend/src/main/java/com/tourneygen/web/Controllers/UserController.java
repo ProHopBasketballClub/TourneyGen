@@ -1,5 +1,6 @@
 package com.tourneygen.web.Controllers;
 
+import com.tourneygen.web.Models.DTOs.UserDTO;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.User;
 import java.util.Collections;
@@ -7,6 +8,8 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
@@ -26,10 +29,15 @@ public class UserController {
             userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
 
-  @RequestMapping(
-      value = "/user",
-      method = {RequestMethod.POST, RequestMethod.PUT})
+  @PostMapping(value = "/user")
   public User saveUser(@Valid @RequestBody User user) {
+    return userRepository.save(user);
+  }
+
+  @PutMapping(value = "/user")
+  public User updateUser(@Valid @RequestBody UserDTO userDTO) {
+    User user = userRepository.findById(userDTO.getId()).orElseThrow(EntityNotFoundException::new);
+    user.merge(userDTO);
     return userRepository.save(user);
   }
 
