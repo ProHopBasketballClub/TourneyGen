@@ -1,6 +1,6 @@
 import * as HttpStatus from 'http-status-codes';
 import * as mongoUnit from 'mongo-unit';
-import {App} from '../../../../web/backend/src/v1/app';
+import {App} from '../../../../web/v1/backend/src/app';
 import {TestDatabase} from './testDatabase';
 
 // The root of the user api
