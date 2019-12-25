@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
-import ApiRequest from '../../../../web/frontend/src/api_request/api_request';
+import ApiRequest from '../../../../web/v1/frontend/src/api_request/api_request';
 
 describe('Test the ApiRequest\'s public methods', () => {
     describe('Test ApiRequest GET requests should call the callback with the correct parameters', () => {

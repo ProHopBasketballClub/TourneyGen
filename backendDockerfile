@@ -3,9 +3,9 @@ EXPOSE ${PORT}
 
 COPY package.json package.json
 RUN npm install
-RUN mkdir -p web/backend
-COPY web/backend/ web/backend
+RUN mkdir -p web/backend/
+COPY web/v1/backend/ web/v1/backend
 
 RUN npm run build:backend
 
-CMD ["node", "web/backend/dist/"]
+CMD ["node", "web/v1/backend/dist/"]

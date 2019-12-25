@@ -2,9 +2,9 @@ import { expect } from 'chai';
 import * as HttpStatus from 'http-status-codes';
 import * as nock from 'nock';
 import * as sinon from 'sinon';
-import * as env from '../../../../web/frontend/env';
-import { user_route } from '../../../../web/frontend/src/constants/routes';
-import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from '../../../../web/frontend/src/helpers/verification';
+import * as env from '../../../../web/v1/frontend/env';
+import { user_route } from '../../../../web/v1/frontend/src/constants/routes';
+import { create_cookie, destroy_cookie, generate_auth_token, is_logged_in } from '../../../../web/v1/frontend/src/helpers/verification';
 
 const backend_location = (env as any).env.BACKEND_LOCATION;
 
