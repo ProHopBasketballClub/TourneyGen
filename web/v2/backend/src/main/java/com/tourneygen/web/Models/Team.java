@@ -1,3 +1,14 @@
 package com.tourneygen.web.Models;
 
-public class Team {}
+import javax.persistence.*;
+
+@Entity
+public class Team {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne
+    private League league;
+}
