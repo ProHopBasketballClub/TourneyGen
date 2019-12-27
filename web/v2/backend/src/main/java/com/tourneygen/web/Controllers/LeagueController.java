@@ -1,8 +1,10 @@
 package com.tourneygen.web.Controllers;
 
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
+import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
+import com.tourneygen.web.Models.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,30 +17,46 @@ import java.util.List;
 public class LeagueController {
 
   private LeagueRepository leagueRepository;
+  private UserRepository userRepository;
 
   @Autowired
-  public LeagueController(LeagueRepository leagueRepository) {
+  public LeagueController(LeagueRepository leagueRepository, UserRepository userRepository) {
     this.leagueRepository = leagueRepository;
+    this.userRepository = userRepository;
   }
 
   @GetMapping(value = "/league")
-  public List<League> getLeague(@RequestParam(name = "id", defaultValue = "-1") long id) {
+  public List<LeagueDTO> getLeague(@RequestParam(name = "id", defaultValue = "-1") long id) {
     return id < 0
-        ? leagueRepository.findAll()
+        ? LeagueDTO.findAll(leagueRepository.findAll())
         : Collections.singletonList(
-            leagueRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+            new LeagueDTO(
+                leagueRepository
+                    .findById(id)
+                    .orElseThrow(
+                        () ->
+                            new EntityNotFoundException("League with id " + id + " was not found"))));
   }
 
   @PostMapping(value = "/league")
-  public League createLeague(@Valid @RequestBody League league) {
-    return leagueRepository.save(league);
+  public LeagueDTO createLeague(@RequestBody LeagueDTO leagueDTO) {
+    League league = new League();
+    league.create(leagueDTO, userRepository);
+    league = leagueRepository.save(league);
+    leagueDTO.setId(league.getId());
+    return leagueDTO;
   }
 
   @PutMapping(value = "/league")
-  public League updateLeague(@Valid @RequestBody LeagueDTO leagueDTO) {
+  public League updateLeague(@Valid @RequestBody LeagueUpdateDTO leagueDTO) {
     League league =
-        leagueRepository.findById(leagueDTO.getId()).orElseThrow(EntityNotFoundException::new);
-    league.merge(leagueDTO);
+        leagueRepository
+            .findById(leagueDTO.getId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "League with id " + leagueDTO.getId() + " was not found"));
+    league.merge(leagueDTO,userRepository);
     return leagueRepository.save(league);
   }
 

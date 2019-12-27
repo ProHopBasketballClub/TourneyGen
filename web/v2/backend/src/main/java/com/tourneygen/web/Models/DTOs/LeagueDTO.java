@@ -1,19 +1,26 @@
 package com.tourneygen.web.Models.DTOs;
 
 import com.tourneygen.web.Models.League;
+import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.Team;
 import com.tourneygen.web.Models.Tournament;
 import com.tourneygen.web.Models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.ManyToOne;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeagueDTO {
 
-  @NotNull private Long id;
+  private Long id;
 
-  @ManyToOne private User owner;
+  @NotNull private Long owner;
 
   @Size(min = 1, max = League.MAX_LEAGUE_NAME_SIZE)
   public String name;
@@ -24,15 +31,42 @@ public class LeagueDTO {
   @Size(min = 1)
   private String game_type;
 
-  private Tournament[] tournaments;
+  private long[] tournaments = new long[1];
 
-  private Team[] teams;
+  private long[] teams = new long[1];
 
-  public User getOwner() {
-    return owner;
+  public LeagueDTO(League league) {
+    this.owner = league.getOwner().getId();
+    this.name = league.name;
+    this.game_type = league.game_type;
+    List<Long> tournamentId =
+        Arrays.stream(league.getTournaments()).map(Tournament::getId).collect(Collectors.toList());
+    List<Long> teamId =
+        Arrays.stream(league.getTeams()).map(Team::getId).collect(Collectors.toList());
+    this.tournaments = tournamentId.stream().mapToLong(l -> l).toArray();
+    this.teams = teamId.stream().mapToLong(l -> l).toArray();
+  }
+
+  public static List<LeagueDTO> findAll(List<League> leagues) {
+    ArrayList<LeagueDTO> list = new ArrayList<>(leagues.size());
+    for (League league : leagues) {
+      list.add(new LeagueDTO(league));
+    }
+    return list;
+  }
+
+  public User getOwner(UserRepository userRepository) {
+    return userRepository
+        .findById(owner)
+        .orElseThrow(
+            () -> new EntityNotFoundException("Owner with id " + owner + " was not found"));
   }
 
   public void setOwner(User owner) {
+    this.owner = owner.getId();
+  }
+
+  public void setOwner(long owner) {
     this.owner = owner;
   }
 
@@ -60,25 +94,33 @@ public class LeagueDTO {
     this.game_type = game_type;
   }
 
-  public Tournament[] getTournaments() {
+  public long[] getTournaments() {
     return tournaments;
   }
 
-  public void setTournaments(Tournament[] tournaments) {
+  public void setTournaments(long[] tournaments) {
     this.tournaments = tournaments;
   }
 
-  public Team[] getTeams() {
+  public long[] getTeams() {
     return teams;
   }
 
-  public void setTeams(Team[] teams) {
+  public void setTeams(long[] teams) {
     this.teams = teams;
+  }
+
+  public long getOwner() {
+    return owner;
   }
 
   public LeagueDTO() {}
 
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }

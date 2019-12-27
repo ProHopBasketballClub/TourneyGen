@@ -1,6 +1,10 @@
 package com.tourneygen.web.Models;
 
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
+import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
+import com.tourneygen.web.Models.Repositories.LeagueRepository;
+import com.tourneygen.web.Models.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,7 +16,7 @@ public class League {
   public static final int MAX_LEAGUE_NAME_SIZE = 50;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne @NotNull private User owner;
@@ -84,13 +88,31 @@ public class League {
     return id;
   }
 
-  public void merge(LeagueDTO leagueDTO) {
-    this.game_type = leagueDTO.getGame_type() == null ? this.game_type : leagueDTO.getGame_type();
+  public void merge(LeagueUpdateDTO leagueUpdateDTO, UserRepository userRepository) {
+    this.owner =
+        leagueUpdateDTO.getOwner() == null
+            ? this.owner
+            : userRepository
+                .findById(leagueUpdateDTO.getOwner())
+                .orElseThrow(
+                    () -> new EntityNotFoundException("User with id " + id + " was not found"));
+
+    this.name = leagueUpdateDTO.getName() == null ? this.name : leagueUpdateDTO.getName();
     this.description =
-        leagueDTO.getDescription() == null ? this.description : leagueDTO.getDescription();
-    this.name = leagueDTO.getName() == null ? this.name : leagueDTO.getName();
-    this.teams = leagueDTO.getTeams() == null ? this.teams : leagueDTO.getTeams();
-    this.tournaments =
-        leagueDTO.getTournaments() == null ? this.tournaments : leagueDTO.getTournaments();
+        leagueUpdateDTO.getDescription() == null
+            ? this.description
+            : leagueUpdateDTO.getDescription();
+    this.game_type =
+        leagueUpdateDTO.getGame_type() == null ? this.game_type : leagueUpdateDTO.getGame_type();
+
+    // TODO Update Teams and Tournaments here after they are created
+  }
+
+  public void create(LeagueDTO leagueDTO, UserRepository userRepository) {
+    this.owner = leagueDTO.getOwner(userRepository);
+    this.game_type = leagueDTO.getGame_type();
+    this.description = leagueDTO.getDescription();
+    this.name = leagueDTO.getName();
+    // TODO Update Teams and Tournaments here after they are created
   }
 }

@@ -52,6 +52,13 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  protected ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+    Map<String, String> json = new HashMap<>();
+    json.put("error", ex.getLocalizedMessage());
+    return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
       HttpMessageNotReadableException ex,
@@ -71,9 +78,9 @@ public class ErrorController extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  protected ResponseEntity<Object> handleEntityNotFound() {
+  protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
     Map<String, String> json = new HashMap<>();
-    json.put("error", "The requested data could not be found");
+    json.put("error", ex.getMessage());
     return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.NOT_FOUND);
   }
 }

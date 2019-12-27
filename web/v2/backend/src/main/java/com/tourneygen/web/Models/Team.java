@@ -11,4 +11,8 @@ public class Team {
 
     @ManyToOne
     private League league;
+
+    public Long getId() {
+        return id;
+    }
 }
