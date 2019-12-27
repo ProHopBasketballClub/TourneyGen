@@ -1,5 +1,6 @@
 package com.tourneygen.web.Models.DTOs;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.Team;
@@ -31,20 +32,35 @@ public class LeagueDTO {
   @Size(min = 1)
   private String game_type;
 
-  private long[] tournaments = new long[1];
+  private Long[] tournaments = new Long[1];
 
-  private long[] teams = new long[1];
+  private Long[] teams = new Long[1];
 
   public LeagueDTO(League league) {
     this.owner = league.getOwner().getId();
-    this.name = league.name;
-    this.game_type = league.game_type;
-    List<Long> tournamentId =
-        Arrays.stream(league.getTournaments()).map(Tournament::getId).collect(Collectors.toList());
-    List<Long> teamId =
-        Arrays.stream(league.getTeams()).map(Team::getId).collect(Collectors.toList());
-    this.tournaments = tournamentId.stream().mapToLong(l -> l).toArray();
-    this.teams = teamId.stream().mapToLong(l -> l).toArray();
+    this.name = league.getName();
+    this.game_type = league.getGame_type();
+    this.description = league.getDescription();
+    if (league.getTournaments() != null) {
+      List<Long> tournamentId =
+          Arrays.stream(league.getTournaments())
+              .map(Tournament::getId)
+              .collect(Collectors.toList());
+      this.tournaments = tournamentId.toArray(this.tournaments);
+    }
+    if (league.getTeams() != null) {
+      List<Long> teamId =
+          Arrays.stream(league.getTeams()).map(Team::getId).collect(Collectors.toList());
+      this.teams = teamId.toArray(this.teams);
+    }
+  }
+
+  // Testing Constructor
+  public LeagueDTO(String name, User owner, String game_type, String description) {
+    this.name = name;
+    this.owner = owner.getId();
+    this.game_type = game_type;
+    this.description = description;
   }
 
   public static List<LeagueDTO> findAll(List<League> leagues) {
@@ -94,19 +110,19 @@ public class LeagueDTO {
     this.game_type = game_type;
   }
 
-  public long[] getTournaments() {
+  public Long[] getTournaments() {
     return tournaments;
   }
 
-  public void setTournaments(long[] tournaments) {
+  public void setTournaments(Long[] tournaments) {
     this.tournaments = tournaments;
   }
 
-  public long[] getTeams() {
+  public Long[] getTeams() {
     return teams;
   }
 
-  public void setTeams(long[] teams) {
+  public void setTeams(Long[] teams) {
     this.teams = teams;
   }
 
@@ -122,5 +138,13 @@ public class LeagueDTO {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, LeagueDTO.class);
+  }
+
+  public static LeagueDTO fromJson(String src) {
+    return new Gson().fromJson(src, LeagueDTO.class);
   }
 }

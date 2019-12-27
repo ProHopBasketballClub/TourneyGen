@@ -1,79 +1,110 @@
 package com.tourneygen.web.Models.DTOs;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.League;
+import com.tourneygen.web.Models.Team;
+import com.tourneygen.web.Models.Tournament;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeagueUpdateDTO {
 
-    @NotNull
-    private long id;
+  @NotNull private long id;
 
-    @Size(min = 1, max = League.MAX_LEAGUE_NAME_SIZE)
-    private String name;
+  @Size(min = 1, max = League.MAX_LEAGUE_NAME_SIZE)
+  private String name;
 
-    private Long owner;
+  private Long owner;
 
-    @Size(min = 1)
-    private String description;
+  @Size(min = 1)
+  private String description;
 
-    @Size(min = 1)
-    private String game_type;
+  @Size(min = 1)
+  private String game_type;
 
-    private long[] teams;
+  private Long[] teams = new Long[1];
 
-    private long[] tournaments;
+  private Long[] tournaments = new Long[1];
 
-    public String getName() {
-        return name;
+  public LeagueUpdateDTO() {}
+
+  public LeagueUpdateDTO(League league) {
+    this.id = league.getId();
+    this.owner = league.getOwner().getId();
+    this.name = league.getName();
+    this.game_type = league.getGame_type();
+    this.description = league.getDescription();
+    if (league.getTournaments() != null) {
+      List<Long> tournamentId =
+          Arrays.stream(league.getTournaments())
+              .map(Tournament::getId)
+              .collect(Collectors.toList());
+      this.tournaments = tournamentId.toArray(this.tournaments);
     }
-
-    public void setName(String name) {
-        this.name = name;
+    if (league.getTeams() != null) {
+      List<Long> teamId =
+          Arrays.stream(league.getTeams()).map(Team::getId).collect(Collectors.toList());
+      this.teams = teamId.toArray(this.teams);
     }
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getGame_type() {
-        return game_type;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setGame_type(String game_type) {
-        this.game_type = game_type;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public long getId() {
-        return id;
-    }
+  public String getGame_type() {
+    return game_type;
+  }
 
-    public Long getOwner() {
-        return owner;
-    }
+  public void setGame_type(String game_type) {
+    this.game_type = game_type;
+  }
 
-    public void setOwner(long owner) {
-        this.owner = owner;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public long[] getTournaments() {
-        return tournaments;
-    }
+  public Long getOwner() {
+    return owner;
+  }
 
-    public void setTournaments(long[] tournaments) {
-        this.tournaments = tournaments;
-    }
+  public void setOwner(long owner) {
+    this.owner = owner;
+  }
 
-    public long[] getTeams() {
-        return teams;
-    }
+  public Long[] getTournaments() {
+    return tournaments;
+  }
 
-    public void setTeams(long[] teams) {
-        this.teams = teams;
-    }
+  public void setTournaments(Long[] tournaments) {
+    this.tournaments = tournaments;
+  }
+
+  public Long[] getTeams() {
+    return teams;
+  }
+
+  public void setTeams(Long[] teams) {
+    this.teams = teams;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, LeagueUpdateDTO.class);
+  }
 }

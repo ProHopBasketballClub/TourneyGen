@@ -1,9 +1,11 @@
 package com.tourneygen.web.Models;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
 import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
+import org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.AbstractFutureOrPresentInstantBasedValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -22,19 +24,26 @@ public class League {
   @ManyToOne @NotNull private User owner;
 
   @Size(min = 1, max = MAX_LEAGUE_NAME_SIZE)
-  public String name;
+  private String name;
 
   @Size(min = 1)
-  public String description;
+  private String description;
 
   @Size(min = 1)
-  public String game_type;
+  private String game_type;
 
-  @ManyToOne public Tournament[] tournaments;
+  @ManyToOne private Tournament[] tournaments;
 
-  @ManyToOne public Team[] teams;
+  @ManyToOne private Team[] teams;
 
   public League() {}
+
+  public League(String name, User owner, String game_type, String description) {
+    this.name = name;
+    this.owner = owner;
+    this.game_type = game_type;
+    this.description = description;
+  }
 
   public Team[] getTeams() {
     return teams;
@@ -114,5 +123,13 @@ public class League {
     this.description = leagueDTO.getDescription();
     this.name = leagueDTO.getName();
     // TODO Update Teams and Tournaments here after they are created
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, League.class);
+  }
+
+  public static League fromJson(String src) {
+    return new Gson().fromJson(src, League.class);
   }
 }
