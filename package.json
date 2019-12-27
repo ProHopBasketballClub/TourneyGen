@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build:frontend && npm run build:backend",
+    "lintv2":"(cd web/v2/backend/ && ./gradlew spotlessApply)",
     "build:backend": "(cd web/v1/backend/ && tsc)",
     "build:frontend": "(cd web/v1/frontend && tsc && pug -O env.js src)",
     "clean:backend": "rm -r web/v1/backend/dist/",
@@ -74,7 +75,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint",
+      "pre-commit": "npm run lintv2"
     }
   }
 }

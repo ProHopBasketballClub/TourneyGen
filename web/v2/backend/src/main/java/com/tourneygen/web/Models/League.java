@@ -3,13 +3,8 @@ package com.tourneygen.web.Models;
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
 import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
-import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
-import org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.AbstractFutureOrPresentInstantBasedValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

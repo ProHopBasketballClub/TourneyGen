@@ -5,13 +5,12 @@ import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LeagueController {
@@ -35,7 +34,8 @@ public class LeagueController {
                     .findById(id)
                     .orElseThrow(
                         () ->
-                            new EntityNotFoundException("League with id " + id + " was not found"))));
+                            new EntityNotFoundException(
+                                "League with id " + id + " was not found"))));
   }
 
   @PostMapping(value = "/league")
@@ -56,7 +56,7 @@ public class LeagueController {
                 () ->
                     new EntityNotFoundException(
                         "League with id " + leagueDTO.getId() + " was not found"));
-    league.merge(leagueDTO,userRepository);
+    league.merge(leagueDTO, userRepository);
     return leagueRepository.save(league);
   }
 

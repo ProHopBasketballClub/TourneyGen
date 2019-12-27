@@ -25,8 +25,7 @@ public class User {
   @NotBlank(message = "is required")
   private String email;
 
-  @ManyToOne
-  private League[] leagues;
+  @ManyToOne private League[] leagues;
 
   public User() {}
 

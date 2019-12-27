@@ -4,12 +4,11 @@ import com.google.gson.Gson;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Team;
 import com.tourneygen.web.Models.Tournament;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class LeagueUpdateDTO {
 

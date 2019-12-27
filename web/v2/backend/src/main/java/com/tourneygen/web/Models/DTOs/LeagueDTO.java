@@ -6,16 +6,13 @@ import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.Team;
 import com.tourneygen.web.Models.Tournament;
 import com.tourneygen.web.Models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class LeagueDTO {
 
