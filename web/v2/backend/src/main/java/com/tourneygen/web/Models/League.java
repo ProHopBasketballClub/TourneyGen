@@ -1,4 +1,3 @@
 package com.tourneygen.web.Models;
 
-public class League {
-}
+public class League {}
