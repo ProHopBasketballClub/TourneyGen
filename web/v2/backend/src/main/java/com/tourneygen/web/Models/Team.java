@@ -5,13 +5,16 @@ import com.tourneygen.web.Models.DTOs.TeamUpdateDTO;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Services.EloService;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-@Entity
+@Entity(name = "Team")
 public class Team {
 
   @Id
@@ -21,15 +24,21 @@ public class Team {
   @ElementCollection(targetClass = String.class)
   private Set<String> roster;
 
-  @Size private int wins = 0;
+  @Min(value = 0, message = "wins must be positive")
+  private int wins = 0;
 
-  @Size private int losses = 0;
+  @Min(value = 0, message = "wins must be positive")
+  private int losses = 0;
 
-  @Size private int ties;
+  @Min(value = 0, message = "wins must be positive")
+  private int ties;
 
   @NotNull private float rating = EloService.ELO_INITIAL_VALUE;
 
-  @NotNull @ManyToOne private User owner;
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JoinColumn(name = "User_id")
+  private User owner;
 
   @NotBlank private String name;
 

@@ -1,5 +1,6 @@
 package com.tourneygen.web.Models.DTOs;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.Team;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,5 +109,13 @@ public class TeamDTO {
 
   public void setLeague(long league) {
     this.league = league;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, TeamDTO.class);
+  }
+
+  public static TeamDTO fromJson(String src) {
+    return new Gson().fromJson(src, TeamDTO.class);
   }
 }
