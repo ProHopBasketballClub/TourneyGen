@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
 import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.Repositories.UserRepository;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
 public class League {

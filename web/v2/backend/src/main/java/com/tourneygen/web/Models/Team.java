@@ -5,9 +5,6 @@ import com.tourneygen.web.Models.DTOs.TeamUpdateDTO;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Services.EloService;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -44,7 +41,7 @@ public class Team {
 
   @ManyToOne @JoinColumn @NotNull League league;
 
-  @OneToManygit Set<Match> matches;
+  @OneToMany Set<Match> matches;
 
   public Team() {}
 
