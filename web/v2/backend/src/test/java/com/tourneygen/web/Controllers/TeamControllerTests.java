@@ -102,7 +102,6 @@ public class TeamControllerTests {
     teamToSave.setRoster(roster);
     teamRepository.save(teamToSave);
 
-
     RequestBuilder request = get("/team").contentType(MediaType.APPLICATION_JSON).param("id", "-1");
     MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
     TeamDTO[] userList =

@@ -13,9 +13,11 @@ public class TeamUpdateDTO {
 
   private Set<String> roster;
 
-  @Min(value = 0) private int wins = 0;
+  @Min(value = 0)
+  private int wins = 0;
 
-  @Min(value = 0) private int losses = 0;
+  @Min(value = 0)
+  private int losses = 0;
 
   private Long owner;
 
