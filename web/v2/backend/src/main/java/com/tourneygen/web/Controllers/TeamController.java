@@ -6,6 +6,7 @@ import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.MatchRepository;
 import com.tourneygen.web.Models.Repositories.TeamRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
+import com.tourneygen.web.Models.Services.TeamService;
 import com.tourneygen.web.Models.Team;
 import java.util.Collections;
 import java.util.List;
@@ -25,23 +26,33 @@ public class TeamController {
 
   private LeagueRepository leagueRepository;
 
+  private TeamService teamService;
+
   @Autowired
   public TeamController(
       UserRepository userRepository,
       TeamRepository teamRepository,
       MatchRepository matchRepository,
-      LeagueRepository leagueRepository) {
+      LeagueRepository leagueRepository,
+      TeamService teamService) {
     this.userRepository = userRepository;
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.leagueRepository = leagueRepository;
+    this.teamService = teamService;
   }
 
   @GetMapping(value = "/team")
   public List<TeamDTO> getTeams(@RequestParam(name = "id", defaultValue = "-1") long id) {
     return id < 0
         ? TeamDTO.findAll(teamRepository.findAll())
-        : Collections.singletonList(new TeamDTO(teamRepository.findById(id)));
+        : Collections.singletonList(
+            new TeamDTO(
+                teamRepository
+                    .findById(id)
+                    .orElseThrow(
+                        () ->
+                            new EntityNotFoundException("Team with id " + id + " was not found"))));
   }
 
   @PostMapping(value = "/team")
@@ -66,7 +77,7 @@ public class TeamController {
 
   @DeleteMapping(value = "/team")
   public String deleteTeam(@RequestParam(name = "id") long id) {
-    teamRepository.deleteById(id);
+    teamService.deleteTeam(id);
     return "Successfully deleted team with id " + id;
   }
 }

@@ -7,6 +7,8 @@ import com.tourneygen.web.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class LeagueServiceImpl implements LeagueService {
 
@@ -20,7 +22,12 @@ public class LeagueServiceImpl implements LeagueService {
   }
 
   @Override
-  public void deleteLeague(League league) {
+  public void deleteLeague(long id) {
+    League league =
+        leagueRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new EntityNotFoundException("League with id " + id + " was not found"));
     User user = league.getOwner();
     user.getLeagues().remove(league);
     userRepository.save(user);

@@ -111,6 +111,27 @@ public class TeamControllerTests {
     assert userList[0].getName().equals("Team 1");
   }
 
+  @Test
+  public void deleteTeam_ThenSucceed() throws Exception {
+    Team teamToSave = new Team();
+    teamToSave.setName("Team 1");
+    teamToSave.setDescription("Bois");
+    teamToSave.setOwner(user);
+    teamToSave.setLeague(league);
+    Set<String> roster = new HashSet<>();
+    roster.add("eetar1");
+    teamToSave.setRoster(roster);
+    teamToSave = teamRepository.save(teamToSave);
+
+    RequestBuilder request =
+        delete("/team")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("id", teamToSave.getId().toString());
+    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+
+    assert teamRepository.findAll().size() == 0;
+  }
+
   @BeforeEach
   private void createUserLeague() {
     user = new User();

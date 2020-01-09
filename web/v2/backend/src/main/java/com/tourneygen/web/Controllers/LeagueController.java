@@ -68,7 +68,7 @@ public class LeagueController {
 
   @DeleteMapping(value = "/league")
   public String deleteLeague(@RequestParam(name = "id") long id) {
-    leagueService.deleteLeague(leagueRepository.findById(id).orElseThrow());
+    leagueService.deleteLeague(id);
     return "Successfully Deleted league with id " + id;
   }
 }

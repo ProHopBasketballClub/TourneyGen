@@ -94,4 +94,12 @@ public class User {
   public void setLeagues(Set<League> leagues) {
     this.leagues = leagues;
   }
+
+  public Set<Team> getTeams() {
+    return Teams;
+  }
+
+  public void setTeams(Set<Team> teams) {
+    Teams = teams;
+  }
 }
