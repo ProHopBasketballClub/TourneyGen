@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -25,7 +26,8 @@ public class User {
   @NotBlank(message = "is required")
   private String email;
 
-  @ManyToOne private League[] leagues;
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<League> leagues;
 
   public User() {}
 

@@ -16,7 +16,7 @@ public class League {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne @NotNull private User owner;
+  @ManyToOne @JoinColumn @NotNull private User owner;
 
   @Size(min = 1, max = MAX_LEAGUE_NAME_SIZE)
   private String name;
