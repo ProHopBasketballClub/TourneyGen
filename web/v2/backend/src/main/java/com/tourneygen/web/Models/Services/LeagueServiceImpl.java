@@ -4,10 +4,9 @@ import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.User;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class LeagueServiceImpl implements LeagueService {
