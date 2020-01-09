@@ -45,9 +45,7 @@ public class LeagueUpdateDTO {
       this.tournaments = tournamentId.toArray(this.tournaments);
     }
     if (league.getTeams() != null) {
-      List<Long> teamId =
-          Arrays.stream(league.getTeams()).map(Team::getId).collect(Collectors.toList());
-      this.teams = teamId.toArray(this.teams);
+      List<Long> teamId = league.getTeams().stream().map(Team::getId).collect(Collectors.toList());
     }
   }
 

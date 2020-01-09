@@ -8,6 +8,7 @@ import com.tourneygen.web.Services.EloService;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -21,8 +22,8 @@ public class Team {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ElementCollection(targetClass = String.class)
-  private Set<String> roster;
+  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+  private Set<String> roster = new HashSet<>();
 
   @Min(value = 0, message = "wins must be positive")
   private int wins = 0;
@@ -35,18 +36,15 @@ public class Team {
 
   @NotNull private float rating = EloService.ELO_INITIAL_VALUE;
 
-  @ManyToOne
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  @JoinColumn(name = "User_id")
-  private User owner;
+  @ManyToOne @JoinColumn private User owner;
 
   @NotBlank private String name;
 
   @NotBlank private String description;
 
-  @ManyToOne @NotNull League league;
+  @ManyToOne @JoinColumn @NotNull League league;
 
-  @ManyToOne Match[] matches;
+  @OneToManygit Set<Match> matches;
 
   public Team() {}
 

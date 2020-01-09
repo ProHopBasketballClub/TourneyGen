@@ -29,7 +29,8 @@ public class User {
   @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<League> leagues;
 
-  @ManyToOne private Team[] Teams;
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<Team> Teams;
 
   public User() {}
 
