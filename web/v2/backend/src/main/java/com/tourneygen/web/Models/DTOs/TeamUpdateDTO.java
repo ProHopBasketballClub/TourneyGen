@@ -1,7 +1,9 @@
 package com.tourneygen.web.Models.DTOs;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.Team;
 import java.util.Set;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -11,9 +13,9 @@ public class TeamUpdateDTO {
 
   private Set<String> roster;
 
-  @Size private int wins = 0;
+  @Min(value = 0) private int wins = 0;
 
-  @Size private int losses = 0;
+  @Min(value = 0) private int losses = 0;
 
   private Long owner;
 
@@ -87,6 +89,14 @@ public class TeamUpdateDTO {
 
   public void setLeague(Long league) {
     this.league = league;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, TeamUpdateDTO.class);
+  }
+
+  public TeamUpdateDTO fromJson(String src) {
+    return new Gson().fromJson(src, TeamUpdateDTO.class);
   }
 
   public TeamUpdateDTO() {}

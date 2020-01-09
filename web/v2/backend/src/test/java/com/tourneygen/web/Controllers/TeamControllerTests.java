@@ -1,9 +1,11 @@
 package com.tourneygen.web.Controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.TeamDTO;
+import com.tourneygen.web.Models.DTOs.TeamUpdateDTO;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.TeamRepository;
@@ -60,6 +62,54 @@ public class TeamControllerTests {
     teamList = teamRepository.findAll();
 
     assert teamList.size() == 1;
+  }
+
+  @Test
+  void updateTeam_ThenSucceed() throws Exception {
+    Team teamToSave = new Team();
+    teamToSave.setName("Team 1");
+    teamToSave.setDescription("Bois");
+    teamToSave.setOwner(user);
+    teamToSave.setLeague(league);
+    Set<String> roster = new HashSet<>();
+    roster.add("eetar1");
+    teamToSave.setRoster(roster);
+
+    assert teamRepository.findAll().size() == 0;
+    teamRepository.save(teamToSave);
+
+    teamToSave.setName("New Name");
+    TeamUpdateDTO teamDTO = new TeamUpdateDTO(teamToSave);
+
+    RequestBuilder request =
+        put("/team").contentType(MediaType.APPLICATION_JSON).content(teamDTO.toJson());
+    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+
+    List<Team> teamList = teamRepository.findAll();
+    assert teamList.size() == 1;
+    assert teamList.get(0).getName().equals("New Name");
+  }
+
+  @Test
+  public void getTeam_ThenSucceed() throws Exception {
+    Team teamToSave = new Team();
+    teamToSave.setName("Team 1");
+    teamToSave.setDescription("Bois");
+    teamToSave.setOwner(user);
+    teamToSave.setLeague(league);
+    Set<String> roster = new HashSet<>();
+    roster.add("eetar1");
+    teamToSave.setRoster(roster);
+    teamRepository.save(teamToSave);
+
+
+    RequestBuilder request = get("/team").contentType(MediaType.APPLICATION_JSON).param("id", "-1");
+    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+    TeamDTO[] userList =
+        new Gson().fromJson(result.getResponse().getContentAsString(), TeamDTO[].class);
+
+    assert teamRepository.findAll().size() == 1;
+    assert userList[0].getName().equals("Team 1");
   }
 
   @BeforeEach

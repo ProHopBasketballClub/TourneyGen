@@ -121,11 +121,11 @@ public class Team {
     this.league = league;
   }
 
-  public Match[] getMatches() {
+  public Set<Match> getMatches() {
     return matches;
   }
 
-  public void setMatches(Match[] matches) {
+  public void setMatches(Set<Match> matches) {
     this.matches = matches;
   }
 
