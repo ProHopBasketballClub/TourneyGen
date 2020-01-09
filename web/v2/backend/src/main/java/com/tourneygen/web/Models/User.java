@@ -2,11 +2,11 @@ package com.tourneygen.web.Models;
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.UserDTO;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
 public class User {
