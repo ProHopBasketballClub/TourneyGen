@@ -99,12 +99,12 @@ public class LeagueControllerTests {
   }
 
   @Test
-  public void deleteUser_ThenSucceed() throws Exception {
+  public void deleteLeague_ThenSucceed() throws Exception {
     User user = new User("eetar1", "a@b.c");
     user = userRepository.save(user);
     League league = new League("Yes", user, "R7", "Yes");
     leagueRepository.save(league);
-
+    assert leagueRepository.findAll().size() == 1;
     RequestBuilder request =
         delete("/league")
             .contentType(MediaType.APPLICATION_JSON)

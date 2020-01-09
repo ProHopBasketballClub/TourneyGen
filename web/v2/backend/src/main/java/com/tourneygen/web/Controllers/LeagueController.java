@@ -5,6 +5,7 @@ import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
+import com.tourneygen.web.Models.Services.LeagueService;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
@@ -17,11 +18,16 @@ public class LeagueController {
 
   private LeagueRepository leagueRepository;
   private UserRepository userRepository;
+  private LeagueService leagueService;
 
   @Autowired
-  public LeagueController(LeagueRepository leagueRepository, UserRepository userRepository) {
+  public LeagueController(
+      LeagueRepository leagueRepository,
+      UserRepository userRepository,
+      LeagueService leagueService) {
     this.leagueRepository = leagueRepository;
     this.userRepository = userRepository;
+    this.leagueService = leagueService;
   }
 
   @GetMapping(value = "/league")
@@ -62,7 +68,7 @@ public class LeagueController {
 
   @DeleteMapping(value = "/league")
   public String deleteLeague(@RequestParam(name = "id") long id) {
-    leagueRepository.deleteById(id);
+    leagueService.deleteLeague(leagueRepository.findById(id).orElseThrow());
     return "Successfully Deleted league with id " + id;
   }
 }
