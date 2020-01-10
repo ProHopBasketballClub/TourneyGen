@@ -1,5 +1,8 @@
 package com.tourneygen.web.Controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.MatchDTO;
 import com.tourneygen.web.Models.League;
@@ -10,6 +13,8 @@ import com.tourneygen.web.Models.Repositories.TeamRepository;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.Team;
 import com.tourneygen.web.Models.User;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +25,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
