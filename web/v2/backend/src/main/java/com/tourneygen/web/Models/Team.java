@@ -41,7 +41,11 @@ public class Team {
 
   @ManyToOne @JoinColumn @NotNull League league;
 
-  @OneToMany Set<Match> matches;
+  @OneToMany(mappedBy = "homeTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  Set<Match> homeMatches;
+
+  @OneToMany(mappedBy = "awayTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  Set<Match> awayMatches;
 
   public Team() {}
 
@@ -119,14 +123,6 @@ public class Team {
 
   public void setLeague(League league) {
     this.league = league;
-  }
-
-  public Set<Match> getMatches() {
-    return matches;
-  }
-
-  public void setMatches(Set<Match> matches) {
-    this.matches = matches;
   }
 
   public Long getId() {
