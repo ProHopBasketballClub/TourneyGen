@@ -42,10 +42,10 @@ public class Team {
   @ManyToOne @JoinColumn @NotNull League league;
 
   @OneToMany(mappedBy = "homeTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  Set<Match> homeMatches;
+  Set<Match> homeMatches = new HashSet<>();
 
   @OneToMany(mappedBy = "awayTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  Set<Match> awayMatches;
+  Set<Match> awayMatches = new HashSet<>();
 
   public Team() {}
 
