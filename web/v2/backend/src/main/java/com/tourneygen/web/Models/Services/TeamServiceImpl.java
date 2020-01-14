@@ -76,5 +76,4 @@ public class TeamServiceImpl implements TeamService {
     team.create(teamDTO, userRepository, leagueRepository);
     return new TeamDTO(teamRepository.save(team));
   }
-
 }

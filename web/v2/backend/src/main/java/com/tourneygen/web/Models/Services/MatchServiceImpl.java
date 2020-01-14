@@ -6,14 +6,12 @@ import com.tourneygen.web.Models.Match;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
 import com.tourneygen.web.Models.Repositories.MatchRepository;
 import com.tourneygen.web.Models.Repositories.TeamRepository;
+import com.tourneygen.web.Models.Team;
 import java.util.Collections;
 import java.util.List;
-
-import com.tourneygen.web.Models.Team;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class MatchServiceImpl implements MatchService {
