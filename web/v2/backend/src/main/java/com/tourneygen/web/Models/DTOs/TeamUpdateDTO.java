@@ -27,8 +27,6 @@ public class TeamUpdateDTO {
 
   private Long league;
 
-  private float rating;
-
   public Long getId() {
     return id;
   }
@@ -111,6 +109,5 @@ public class TeamUpdateDTO {
     this.roster = team.getRoster();
     this.losses = team.getLosses();
     this.wins = team.getWins();
-    this.rating = team.getRating();
   }
 }

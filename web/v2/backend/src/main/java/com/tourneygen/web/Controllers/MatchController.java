@@ -1,10 +1,14 @@
 package com.tourneygen.web.Controllers;
 
 import com.tourneygen.web.Models.DTOs.MatchDTO;
+import com.tourneygen.web.Models.DTOs.MatchReportDTO;
+import com.tourneygen.web.Models.Services.MatchConflictException;
 import com.tourneygen.web.Models.Services.MatchService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class MatchController {
@@ -21,7 +25,7 @@ public class MatchController {
   }
 
   @PostMapping("/match")
-  public MatchDTO createMatch(@RequestBody MatchDTO matchDTO) {
+  public MatchDTO createMatch(@Valid @RequestBody MatchDTO matchDTO) {
     return matchService.create(matchDTO);
   }
 
@@ -29,5 +33,10 @@ public class MatchController {
   public String deleteMatch(@RequestParam(name = "id") long id) {
     matchService.deleteMatch(id);
     return "Successfully deleted match with id " + id;
+  }
+
+  @PutMapping("/match/report")
+  public MatchReportDTO reportMatch(@Valid @RequestBody MatchReportDTO reportDTO) throws MatchConflictException {
+    return matchService.reportMatch(reportDTO);
   }
 }

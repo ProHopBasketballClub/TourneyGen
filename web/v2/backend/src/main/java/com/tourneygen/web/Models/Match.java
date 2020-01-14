@@ -33,7 +33,7 @@ public class Match {
 
   // TODO Add tournament field
 
-  private @ManyToOne @JoinColumn Team updatedBy;
+  private Long updatedBy;
 
   private String status = "In_Progress";
 
@@ -119,11 +119,11 @@ public class Match {
     this.awayScore = awayScore;
   }
 
-  public Team getUpdatedBy() {
+  public Long getUpdatedBy() {
     return updatedBy;
   }
 
-  public void setUpdatedBy(Team updatedBy) {
+  public void setUpdatedBy(Long updatedBy) {
     this.updatedBy = updatedBy;
   }
 

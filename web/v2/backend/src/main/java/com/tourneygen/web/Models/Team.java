@@ -28,10 +28,7 @@ public class Team {
   @Min(value = 0, message = "wins must be positive")
   private int losses = 0;
 
-  @Min(value = 0, message = "wins must be positive")
-  private int ties;
-
-  @NotNull private float rating = EloService.ELO_INITIAL_VALUE;
+  @NotNull private double rating = EloService.ELO_INITIAL_VALUE;
 
   @ManyToOne @JoinColumn private User owner;
 
@@ -77,19 +74,11 @@ public class Team {
     this.losses = losses;
   }
 
-  public int getTies() {
-    return ties;
-  }
-
-  public void setTies(int ties) {
-    this.ties = ties;
-  }
-
-  public float getRating() {
+  public double getRating() {
     return rating;
   }
 
-  public void setRating(float rating) {
+  public void setRating(double rating) {
     this.rating = rating;
   }
 
