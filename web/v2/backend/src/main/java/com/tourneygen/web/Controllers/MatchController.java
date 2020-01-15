@@ -34,6 +34,11 @@ public class MatchController {
     return "Successfully deleted match with id " + id;
   }
 
+  @PutMapping("/match/resolve")
+  public MatchReportDTO resolveConflict(@Valid @RequestBody MatchReportDTO reportDTO) {
+    return matchService.resolveConflict(reportDTO);
+  }
+
   @PutMapping("/match/report")
   public MatchReportDTO reportMatch(@Valid @RequestBody MatchReportDTO reportDTO)
       throws MatchConflictException {

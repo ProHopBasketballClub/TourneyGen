@@ -35,6 +35,9 @@ public class MatchServiceImpl implements MatchService {
 
   @Override
   public MatchDTO create(MatchDTO matchDTO) {
+    if (matchDTO.getHomeId().equals(matchDTO.getAwayId())) {
+      throw new IllegalArgumentException("A team cannot play itself");
+    }
     Match match = new Match();
     match.create(matchDTO, leagueRepository, teamRepository);
     match = matchRepository.save(match);
@@ -112,6 +115,52 @@ public class MatchServiceImpl implements MatchService {
     return reportDTO;
   }
 
+  @Override
+  public MatchReportDTO resolveConflict(MatchReportDTO reportDTO) {
+    Match match =
+        matchRepository
+            .findById(reportDTO.getMatchId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Match with id " + reportDTO.getMatchId() + " was not found"));
+    Team victor =
+        teamRepository
+            .findById(reportDTO.getVictorId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Team with id " + reportDTO.getVictorId() + " was not found"));
+
+    Team loser =
+        teamRepository
+            .findById(reportDTO.getLoserId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Team with id " + reportDTO.getLoserId() + " was not found"));
+
+    if (!reportDTO.getUpDatedBy().equals(match.getLeague().getOwner().getId())) {
+      throw new IllegalArgumentException("Only the league owner can resolve a conflict");
+    }
+    if (!match.getStatus().equals("In_Conflict")) {
+      throw new IllegalArgumentException(
+          "This match is not in a conflict that needs to be resolved");
+    }
+
+    match.setVictor(victor);
+    match.setLoser(loser);
+    match.setHomeScore(reportDTO.getHomeScore());
+    match.setAwayScore(reportDTO.getAwayScore());
+
+    updateTeamStats(victor, loser);
+
+    match.setStatus("Completed");
+    reportDTO.setStatus("Completed");
+    matchRepository.save(match);
+    return reportDTO;
+  }
+
   private void completionReport(Match match, Team victor, Team loser, MatchReportDTO reportDTO)
       throws MatchConflictException {
 
@@ -134,13 +183,7 @@ public class MatchServiceImpl implements MatchService {
       throw new MatchConflictException("The reported and stored scores are conflicted");
     }
 
-    // Update match counts
-    victor.setWins(victor.getWins() + 1);
-    loser.setLosses(victor.getLosses() + 1);
-
-    eloService.updateElos(victor, loser);
-    teamRepository.save(victor);
-    teamRepository.save(loser);
+    updateTeamStats(victor, loser);
 
     match.setStatus("Completed");
     reportDTO.setStatus("Completed");
@@ -156,5 +199,15 @@ public class MatchServiceImpl implements MatchService {
     match.setUpdatedBy(reportDTO.getUpDatedBy());
     matchRepository.save(match);
     reportDTO.setStatus("Pending_Report");
+  }
+
+  private void updateTeamStats(Team victor, Team loser) {
+    // Update match counts
+    victor.setWins(victor.getWins() + 1);
+    loser.setLosses(victor.getLosses() + 1);
+
+    eloService.updateElos(victor, loser);
+    teamRepository.save(victor);
+    teamRepository.save(loser);
   }
 }

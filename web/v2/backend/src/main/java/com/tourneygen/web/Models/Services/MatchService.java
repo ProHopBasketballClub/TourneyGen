@@ -13,4 +13,6 @@ public interface MatchService {
   void deleteMatch(long id);
 
   MatchReportDTO reportMatch(MatchReportDTO reportDTO) throws MatchConflictException;
+
+  MatchReportDTO resolveConflict(MatchReportDTO reportDTO);
 }

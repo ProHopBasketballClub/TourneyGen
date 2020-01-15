@@ -1,5 +1,6 @@
 package com.tourneygen.web.Controllers;
 
+import com.tourneygen.web.Models.Services.MatchConflictException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
@@ -57,6 +58,13 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     Map<String, String> json = new HashMap<>();
     json.put("error", ex.getLocalizedMessage());
     return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(MatchConflictException.class)
+  protected ResponseEntity<Object> handleMatchConflictException(MatchConflictException ex) {
+    Map<String, String> json = new HashMap<>();
+    json.put("error", ex.getLocalizedMessage());
+    return new ResponseEntity<>(json, new HttpHeaders(), HttpStatus.CONFLICT);
   }
 
   @Override

@@ -156,6 +156,54 @@ public class MatchControllerTests {
     match = matchRepository.findById(match.getId()).orElseThrow();
   }
 
+  @Test
+  public void conflictMatch_ThenResolveAndSucceed() throws Exception {
+    Match match = new Match();
+    match.setHomeTeam(homeTeam);
+    match.setAwayTeam(awayTeam);
+    match.setTitle("Yes");
+    match.setLeague(league);
+    matchRepository.save(match);
+    match.setTitle("Match2");
+    match.setId(null);
+    match = matchRepository.save(match);
+
+    MatchReportDTO reportDTO = new MatchReportDTO();
+
+    reportDTO.setMatchId(match.getId());
+    reportDTO.setVictorId(homeTeam.getId());
+    reportDTO.setLoserId(awayTeam.getId());
+    reportDTO.setHomeScore(20);
+    reportDTO.setAwayScore(1);
+    reportDTO.setUpDatedBy(homeTeam.getId());
+
+    RequestBuilder request =
+        put("/match/report").contentType(MediaType.APPLICATION_JSON).content(reportDTO.toJson());
+    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+    match = matchRepository.findById(match.getId()).orElseThrow();
+
+    reportDTO.setUpDatedBy(awayTeam.getId());
+    reportDTO.setAwayScore(2);
+    request =
+        put("/match/report").contentType(MediaType.APPLICATION_JSON).content(reportDTO.toJson());
+    result = mvc.perform(request).andExpect(status().isConflict()).andReturn();
+    match = matchRepository.findById(match.getId()).orElseThrow();
+
+    assert match.getStatus().equals("In_Conflict");
+    reportDTO.setUpDatedBy(match.getLeague().getOwner().getId());
+    request =
+        put("/match/resolve").contentType(MediaType.APPLICATION_JSON).content(reportDTO.toJson());
+    result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+
+    match = matchRepository.findById(match.getId()).orElseThrow();
+
+    assert match.getStatus().equals("Completed");
+    assert match.getAwayScore() == 2;
+    assert match.getHomeScore() == 20;
+    assert match.getVictor().equals(homeTeam);
+    assert match.getLoser().equals(awayTeam);
+  }
+
   @AfterEach
   private void cleanRepos() {
     leagueRepository.deleteAll();
