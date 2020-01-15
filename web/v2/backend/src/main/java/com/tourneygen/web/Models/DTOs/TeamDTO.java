@@ -41,9 +41,7 @@ public class TeamDTO {
 
   public static List<TeamDTO> findAll(List<Team> teamList) {
     ArrayList<TeamDTO> teamDTOS = new ArrayList<>();
-    for (Team team : teamList) {
-      teamDTOS.add(new TeamDTO(team));
-    }
+    teamList.forEach(team -> teamDTOS.add(new TeamDTO(team)));
     return teamDTOS;
   }
 
