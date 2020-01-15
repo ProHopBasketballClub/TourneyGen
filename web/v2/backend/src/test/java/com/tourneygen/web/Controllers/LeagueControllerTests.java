@@ -114,6 +114,15 @@ public class LeagueControllerTests {
     assert leagueRepository.findAll().size() == 0;
   }
 
+  @Test
+  public void cascadeDelete_ThenSucceed() {
+    User user = new User("eetar1", "a@b.c");
+    user = userRepository.save(user);
+    League league = new League("Yes", user, "R7", "Yes");
+    league = leagueRepository.save(league);
+    userRepository.deleteAll();
+  }
+
   @AfterEach
   private void cleanRepos() {
     leagueRepository.deleteAll();

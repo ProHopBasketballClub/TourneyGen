@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.LeagueDTO;
 import com.tourneygen.web.Models.DTOs.LeagueUpdateDTO;
 import com.tourneygen.web.Models.Repositories.UserRepository;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,7 +30,8 @@ public class League {
 
   @ManyToOne private Tournament[] tournaments;
 
-  @ManyToOne private Team[] teams;
+  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<Team> teams;
 
   public League() {}
 
@@ -40,11 +42,11 @@ public class League {
     this.description = description;
   }
 
-  public Team[] getTeams() {
+  public Set<Team> getTeams() {
     return teams;
   }
 
-  public void setTeams(Team[] teams) {
+  public void setTeams(Set<Team> teams) {
     this.teams = teams;
   }
 

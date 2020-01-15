@@ -29,6 +29,9 @@ public class User {
   @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<League> leagues;
 
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<Team> Teams;
+
   public User() {}
 
   // Test Constructor
@@ -90,5 +93,13 @@ public class User {
 
   public void setLeagues(Set<League> leagues) {
     this.leagues = leagues;
+  }
+
+  public Set<Team> getTeams() {
+    return Teams;
+  }
+
+  public void setTeams(Set<Team> teams) {
+    Teams = teams;
   }
 }
