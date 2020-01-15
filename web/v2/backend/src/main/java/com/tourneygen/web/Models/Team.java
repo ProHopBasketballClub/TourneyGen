@@ -38,6 +38,22 @@ public class Team {
 
   @ManyToOne @JoinColumn @NotNull League league;
 
+  public Set<Match> getHomeMatches() {
+    return homeMatches;
+  }
+
+  public void setHomeMatches(Set<Match> homeMatches) {
+    this.homeMatches = homeMatches;
+  }
+
+  public Set<Match> getAwayMatches() {
+    return awayMatches;
+  }
+
+  public void setAwayMatches(Set<Match> awayMatches) {
+    this.awayMatches = awayMatches;
+  }
+
   @OneToMany(mappedBy = "homeTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   Set<Match> homeMatches = new HashSet<>();
 

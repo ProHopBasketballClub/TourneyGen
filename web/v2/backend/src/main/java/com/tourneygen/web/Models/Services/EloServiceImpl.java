@@ -16,8 +16,8 @@ public class EloServiceImpl implements EloService {
     double loserScale =
         (1.0 / (1.0 + Math.pow(10, ((victor.getRating() - loser.getRating()) / DIVISOR))));
 
-    double newVictorElo = victor.getRating() + ELO_SCALE_CONST * (1 - victorScale);
-    double newLoserElo = loser.getRating() + ELO_SCALE_CONST * (0 - loserScale);
+    int newVictorElo = (int) (victor.getRating() + ELO_SCALE_CONST * (1 - victorScale));
+    int newLoserElo = (int) (loser.getRating() + ELO_SCALE_CONST * (0 - loserScale));
 
     victor.setRating(newVictorElo);
     loser.setRating(newLoserElo);
