@@ -31,7 +31,7 @@ public class Team {
   @Min(value = 0, message = "wins must be positive")
   private int ties;
 
-  @NotNull private float rating = EloService.ELO_INITIAL_VALUE;
+  @NotNull private int rating = EloService.ELO_INITIAL_VALUE;
 
   @ManyToOne @JoinColumn private User owner;
 
@@ -81,11 +81,11 @@ public class Team {
     this.ties = ties;
   }
 
-  public float getRating() {
+  public int getRating() {
     return rating;
   }
 
-  public void setRating(float rating) {
+  public void setRating(int rating) {
     this.rating = rating;
   }
 
