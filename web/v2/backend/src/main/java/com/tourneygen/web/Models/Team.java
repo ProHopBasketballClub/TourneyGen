@@ -74,7 +74,6 @@ public class Team {
     this.losses = losses;
   }
 
-
   public int getRating() {
     return rating;
   }
