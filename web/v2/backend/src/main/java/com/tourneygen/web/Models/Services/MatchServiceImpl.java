@@ -85,12 +85,12 @@ public class MatchServiceImpl implements MatchService {
                         "Team with id " + reportDTO.getLoserId() + " was not found"));
 
     if (!reportDTO.getVictorId().equals(match.getHomeTeam().getId())
-        || !reportDTO.getVictorId().equals(match.getAwayTeam().getId())) {
+        && !reportDTO.getVictorId().equals(match.getAwayTeam().getId())) {
       throw new IllegalArgumentException(
           "The reported victor was not part of match " + match.getId());
     }
     if (!reportDTO.getLoserId().equals(match.getHomeTeam().getId())
-        || !reportDTO.getLoserId().equals(match.getAwayTeam().getId())) {
+        && !reportDTO.getLoserId().equals(match.getAwayTeam().getId())) {
       throw new IllegalArgumentException(
           "The reported victor was not part of match " + match.getId());
     }

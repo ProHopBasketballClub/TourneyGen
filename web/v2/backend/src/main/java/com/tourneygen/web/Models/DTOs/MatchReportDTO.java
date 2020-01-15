@@ -1,5 +1,6 @@
 package com.tourneygen.web.Models.DTOs;
 
+import com.google.gson.Gson;
 import javax.validation.constraints.NotNull;
 
 public class MatchReportDTO {
@@ -73,5 +74,9 @@ public class MatchReportDTO {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this, MatchReportDTO.class);
   }
 }

@@ -158,4 +158,16 @@ public class Team {
                     () -> new EntityNotFoundException("League with id " + id + " was not found"));
     this.roster = teamUpdateDTO.getRoster() == null ? this.roster : teamUpdateDTO.getRoster();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (!(o instanceof Team)) {
+      return false;
+    }
+    Team team = (Team) o;
+    return this.id.equals(team.getId());
+  }
 }

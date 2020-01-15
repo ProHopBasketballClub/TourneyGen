@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.MatchDTO;
+import com.tourneygen.web.Models.DTOs.MatchReportDTO;
 import com.tourneygen.web.Models.League;
 import com.tourneygen.web.Models.Match;
 import com.tourneygen.web.Models.Repositories.LeagueRepository;
@@ -43,6 +44,37 @@ public class MatchControllerTests {
   private League league;
   private Team homeTeam;
   private Team awayTeam;
+
+  @BeforeEach
+  private void setup() {
+    User user = new User();
+    user.setEmail("a@b.c");
+    user.setDisplayName("Ethan");
+    user = userRepository.save(user);
+    league = new League();
+    league.setOwner(user);
+    league.setGame_type("R7");
+    league.setDescription("A");
+    league = leagueRepository.save(league);
+    Team team = new Team();
+    team.setName("Team 1");
+    team.setLeague(league);
+    team.setOwner(user);
+    Set<String> roster = new HashSet<>();
+    roster.add("eetar1");
+    team.setRoster(roster);
+    team.setDescription("Yes");
+    homeTeam = teamRepository.save(team);
+    Team team2 = new Team();
+    team2.setName("Team 2");
+    team2.setLeague(league);
+    team2.setOwner(user);
+    Set<String> roster2 = new HashSet<>();
+    roster.add("eetar2");
+    team2.setRoster(roster);
+    team2.setDescription("Yes");
+    awayTeam = teamRepository.save(team2);
+  }
 
   @Test
   public void createMatch_ThenSucceed() throws Exception {
@@ -85,28 +117,43 @@ public class MatchControllerTests {
     assert matches.length == 2;
   }
 
-  @BeforeEach
-  private void setup() {
-    User user = new User();
-    user.setEmail("a@b.c");
-    user.setDisplayName("Ethan");
-    user = userRepository.save(user);
-    league = new League();
-    league.setOwner(user);
-    league.setGame_type("R7");
-    league.setDescription("A");
-    league = leagueRepository.save(league);
-    Team team = new Team();
-    team.setName("Team 1");
-    team.setLeague(league);
-    team.setOwner(user);
-    Set<String> roster = new HashSet<>();
-    roster.add("eetar1");
-    team.setRoster(roster);
-    team.setDescription("Yes");
-    homeTeam = teamRepository.save(team);
-    team.setName("Team 2");
-    awayTeam = teamRepository.save(team);
+  @Test
+  public void completeMatch_ThenSucceed() throws Exception {
+    Match match = new Match();
+    match.setHomeTeam(homeTeam);
+    match.setAwayTeam(awayTeam);
+    match.setTitle("Yes");
+    match.setLeague(league);
+    matchRepository.save(match);
+    match.setTitle("Match2");
+    match.setId(null);
+    match = matchRepository.save(match);
+
+    MatchReportDTO reportDTO = new MatchReportDTO();
+
+    reportDTO.setMatchId(match.getId());
+    reportDTO.setVictorId(homeTeam.getId());
+    reportDTO.setLoserId(awayTeam.getId());
+    reportDTO.setHomeScore(20);
+    reportDTO.setAwayScore(1);
+    reportDTO.setUpDatedBy(homeTeam.getId());
+
+    RequestBuilder request =
+        put("/match/report").contentType(MediaType.APPLICATION_JSON).content(reportDTO.toJson());
+    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+    match = matchRepository.findById(match.getId()).orElseThrow();
+
+    assert match.getVictor().equals(homeTeam);
+    assert match.getLoser().equals(awayTeam);
+    assert match.getHomeScore() == 20;
+    assert match.getAwayScore() == 1;
+    assert match.getStatus().equals("Pending_Report");
+
+    reportDTO.setUpDatedBy(awayTeam.getId());
+    request =
+        put("/match/report").contentType(MediaType.APPLICATION_JSON).content(reportDTO.toJson());
+    result = mvc.perform(request).andExpect(status().isOk()).andReturn();
+    match = matchRepository.findById(match.getId()).orElseThrow();
   }
 
   @AfterEach
