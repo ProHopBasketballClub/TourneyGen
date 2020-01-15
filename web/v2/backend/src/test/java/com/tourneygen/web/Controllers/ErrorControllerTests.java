@@ -1,5 +1,9 @@
 package com.tourneygen.web.Controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,7 +44,7 @@ public class ErrorControllerTests {
   @Test
   public void missingId_404Error() throws Exception {
     RequestBuilder request =
-            delete("/user").contentType(MediaType.APPLICATION_JSON).param("id", "16");
+        delete("/user").contentType(MediaType.APPLICATION_JSON).param("id", "16");
     MvcResult result = mvc.perform(request).andExpect(status().isNotFound()).andReturn();
   }
 }

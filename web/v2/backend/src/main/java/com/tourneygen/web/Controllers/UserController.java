@@ -8,8 +8,6 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
@@ -26,7 +24,10 @@ public class UserController {
     return id < 0
         ? userRepository.findAll()
         : Collections.singletonList(
-            userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+            userRepository
+                .findById(id)
+                .orElseThrow(
+                    () -> new EntityNotFoundException("User with id " + id + " was not found")));
   }
 
   @PostMapping(value = "/user")
@@ -36,7 +37,13 @@ public class UserController {
 
   @PutMapping(value = "/user")
   public User updateUser(@Valid @RequestBody UserDTO userDTO) {
-    User user = userRepository.findById(userDTO.getId()).orElseThrow(EntityNotFoundException::new);
+    User user =
+        userRepository
+            .findById(userDTO.getId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "User with id " + userDTO.getId() + " was not found"));
     user.merge(userDTO);
     return userRepository.save(user);
   }

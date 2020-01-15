@@ -2,7 +2,7 @@ package com.tourneygen.web.Models;
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.UserDTO;
-
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ public class User {
   public static final int MAX_DISPLAY_NAME_LENGTH = 50;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Size(min = MIN_DISPLAY_NAME_LENGTH, max = MAX_DISPLAY_NAME_LENGTH)
@@ -25,6 +25,9 @@ public class User {
   @Email
   @NotBlank(message = "is required")
   private String email;
+
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<League> leagues;
 
   public User() {}
 
@@ -73,11 +76,19 @@ public class User {
   }
 
   public void merge(UserDTO userDTO) {
-    if (userDTO.getDisplayName() != null ) {
+    if (userDTO.getDisplayName() != null) {
       this.displayName = userDTO.getDisplayName();
     }
     if (userDTO.getEmail() != null) {
       this.email = userDTO.getEmail();
     }
+  }
+
+  public Set<League> getLeagues() {
+    return leagues;
+  }
+
+  public void setLeagues(Set<League> leagues) {
+    this.leagues = leagues;
   }
 }
