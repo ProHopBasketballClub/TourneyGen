@@ -21,7 +21,6 @@ pipeline {
     stage('Cleanup') {
       steps {
         sh 'npm run clean:frontend'
-        sh 'npm run clean:backend'
       }
     }
     stage('Master-Deploy') {
