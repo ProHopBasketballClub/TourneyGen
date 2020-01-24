@@ -5,6 +5,10 @@ RUN gradle build --no-daemon
 
 FROM openjdk:11-jre-slim
 
+ARG SWAGGER_USER
+
+ARG SWAGGER_PASSWORD
+
 EXPOSE 34345
 
 RUN mkdir /app

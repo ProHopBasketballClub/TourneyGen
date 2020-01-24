@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:frontend && npm run build:backend",
     "lintv2":"(cd web/v2/backend/ && ./gradlew spotlessApply)",
-    "build:backend": "docker build -t $IMAGE_TAG -f backendDockerfile .",
+    "build:backend": "docker build -t $IMAGE_TAG -f backendDockerfile --build-args SWAGGER_USER=$SWAGGER_USER SWAGGER_PASSWORD=$SWAGGER_PASSWORD .",
     "build:frontend": "(cd web/v1/frontend && tsc && pug -O env.js src)",
     "clean:frontend": "find web/v1/frontend/ -name '*.js' -type f -delete && find web/v1/frontend/ -name '*.html' -type f -delete",
     "lint": "./node_modules/.bin/tslint -c tslint.json $(find web/ -name '*.ts' -type f && find test/ -name '*.ts' -type f) --fix",
