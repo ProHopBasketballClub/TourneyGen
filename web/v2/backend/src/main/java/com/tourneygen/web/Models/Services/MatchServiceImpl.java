@@ -169,7 +169,7 @@ public class MatchServiceImpl implements MatchService {
           "This teams has already posted to this match please wait for the other team to update");
     }
 
-    // I only need to check one as the prior check handle the other
+    // This only needs to check one side as the prior check handles the other case
     if (!match.getVictor().getId().equals(reportDTO.getVictorId())) {
       match.setStatus("In_Conflict");
       matchRepository.save(match);

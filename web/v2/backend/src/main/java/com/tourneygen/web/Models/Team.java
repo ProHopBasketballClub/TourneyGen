@@ -184,6 +184,6 @@ public class Team {
       return false;
     }
     Team team = (Team) o;
-    return this.id.equals(team.getId());
+    return this.id.equals(team.getId()) && this.name.equals(team.getName());
   }
 }
