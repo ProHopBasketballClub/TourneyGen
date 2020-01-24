@@ -1,11 +1,14 @@
-FROM node:latest
-EXPOSE ${PORT}
+FROM gradle:6.0.1-jdk11 AS build
+COPY --chown=gradle:gradle web/v2/backend /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
 
-COPY package.json package.json
-RUN npm install
-RUN mkdir -p web/backend/
-COPY web/v1/backend/ web/v1/backend
+FROM openjdk:11-jre-slim
 
-RUN npm run build:backend
+EXPOSE 34345
 
-CMD ["node", "web/v1/backend/dist/"]
+RUN mkdir /app
+
+COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
