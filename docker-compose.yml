@@ -3,22 +3,32 @@ services:
   app:
     container_name: tourneygen_backend
     restart: unless-stopped
+    depends_on:
+        - db
     build:
       context: .
       dockerfile: backendDockerfile
+      args:
+          SWAGGER_USER: ${SWAGGER_USER}
+          SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
+          DB_CONNECTION_STRING: jdbc:mysql://db:3306/tourneygen?useSSL=FALSE&serverTimezone=UTC&allowPublicKeyRetrieval=true
+          MYSQL_PASSWORD: 123
+          MYSQL_USER: root
     ports:
       - "34345:34345"
     networks:
       docks:
         ipv4_address: 172.28.1.1
     links:
-      - mongo
+      - db
     environment:
-      DB_CONNECTION_STRING: 'mongodb://mongo'
       PORT: 34345
+
   app_frontend:
     container_name: tourneygen_frontend
     restart: unless-stopped
+    depends_on:
+        - app
     build:
       context: .
       dockerfile: frontendDockerfile
@@ -31,14 +41,20 @@ services:
       - app
     environment:
       PORT: 34346
-  mongo:
-    container_name: mongo
+
+  db:
+    container_name: mysql
     restart: unless-stopped
-    image: mongo:latest
+    image: mysql:8.0
+    environment:
+     MYSQL_DATABASE: tourneygen
+     MYSQL_USER: root
+     MYSQL_PASSWORD: 123
+     MYSQL_ROOT_PASSWORD: 123    
     volumes:
-      - mongoData:/data/db
+      - mysql_data:/var/lib/mysql
     ports:
-      - "27017:27017"
+      - "3306:3306"
     networks:
       docks:
         ipv4_address: 172.28.1.2
@@ -49,6 +65,6 @@ networks:
       config:
         - subnet: 172.28.0.0/16
 volumes:
-  mongoData:
+  mysql_data:
     external: true
 
