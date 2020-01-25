@@ -10,7 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  data:
+  datasource:
     url: ${DB_CONNECTION_STRING}
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}

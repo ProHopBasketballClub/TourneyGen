@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "users")
 public class User {
 
   public static final int MIN_DISPLAY_NAME_LENGTH = 4;
