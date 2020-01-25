@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "League")
 public class League {
   public static final int MAX_LEAGUE_NAME_SIZE = 50;
 

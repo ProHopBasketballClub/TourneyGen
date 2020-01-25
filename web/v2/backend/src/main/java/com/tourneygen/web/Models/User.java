@@ -27,7 +27,11 @@ public class User {
   @NotBlank(message = "is required")
   private String email;
 
-  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(
+      targetEntity = League.class,
+      mappedBy = "owner",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER)
   private Set<League> leagues;
 
   @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
