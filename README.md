@@ -3,24 +3,12 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/gh/seng350/seng350f19-project-team-3-9/branch/master/graph/badge.svg?token=DoKdk9BFej)](https://codecov.io/gh/seng350/seng350f19-project-team-3-9)
 
-# Team 3-9  -  SENG-350
-Hello, we're team 3-9. We're not really sure what the
-requirement to include 'you team's name' means, so 
-we will from now on be known as 'Panznir',
-a portmanteau of Mjolnir and Panzer, the only
-ideas we had for a team name.
-
-
-What is TourneyGen? It is primarily a sports league
-management website. What does that mean? Well basically, if you are
+# TourneyGen
+What is TourneyGen? It is primarily a league
+management service. What does that mean? Well basically, if you are
 in charge of a league (sports, e-sports, etc), then you can use our
 website to effectively manage the teams and tournaments hosted within
 your league! Sign up at [TourneyGen's website](http://tourneygen.theserverproject.com/)
-
-# Course info
-To avoid disrupting this file as well as seperatinng course 
-requirements from actual project, please go to the "milestones" 
-folder's base readme file to see course requirements.
 
 # Development Instructions
 Please note, these instructions are still a work-in-progress
