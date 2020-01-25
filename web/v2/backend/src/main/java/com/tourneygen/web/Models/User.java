@@ -2,6 +2,9 @@ package com.tourneygen.web.Models;
 
 import com.google.gson.Gson;
 import com.tourneygen.web.Models.DTOs.UserDTO;
+import com.tourneygen.web.Models.DTOs.UserUpdateDTO;
+import com.tourneygen.web.Models.Repositories.UserRepository;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -32,10 +35,10 @@ public class User {
       mappedBy = "owner",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER)
-  private Set<League> leagues;
+  private Set<League> leagues = new HashSet<>();
 
   @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private Set<Team> Teams;
+  private Set<Team> Teams = new HashSet<>();
 
   public User() {}
 
@@ -83,7 +86,8 @@ public class User {
     return new Gson().fromJson(data, User.class);
   }
 
-  public void merge(UserDTO userDTO) {
+  public void merge(UserUpdateDTO userDTO) {
+    this.id = userDTO.getId();
     if (userDTO.getDisplayName() != null) {
       this.displayName = userDTO.getDisplayName();
     }
@@ -106,5 +110,10 @@ public class User {
 
   public void setTeams(Set<Team> teams) {
     Teams = teams;
+  }
+
+  public void create(UserDTO userDTO, UserRepository userRepository) {
+    this.displayName = userDTO.getDisplayName();
+    this.email = userDTO.getEmail();
   }
 }
