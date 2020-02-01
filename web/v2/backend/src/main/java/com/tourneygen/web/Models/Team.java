@@ -36,23 +36,9 @@ public class Team {
 
   @NotBlank private String description;
 
-  @ManyToOne @JoinColumn @NotNull League league;
+  @ManyToOne @JoinColumn @NotNull private League league;
 
-  public Set<Match> getHomeMatches() {
-    return homeMatches;
-  }
-
-  public void setHomeMatches(Set<Match> homeMatches) {
-    this.homeMatches = homeMatches;
-  }
-
-  public Set<Match> getAwayMatches() {
-    return awayMatches;
-  }
-
-  public void setAwayMatches(Set<Match> awayMatches) {
-    this.awayMatches = awayMatches;
-  }
+  @OneToMany private Set<Match> matches;
 
   @OneToMany(mappedBy = "homeTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   Set<Match> homeMatches = new HashSet<>();
@@ -128,6 +114,22 @@ public class Team {
 
   public void setLeague(League league) {
     this.league = league;
+  }
+
+  public Set<Match> getHomeMatches() {
+    return homeMatches;
+  }
+
+  public void setHomeMatches(Set<Match> homeMatches) {
+    this.homeMatches = homeMatches;
+  }
+
+  public Set<Match> getAwayMatches() {
+    return awayMatches;
+  }
+
+  public void setAwayMatches(Set<Match> awayMatches) {
+    this.awayMatches = awayMatches;
   }
 
   public Long getId() {

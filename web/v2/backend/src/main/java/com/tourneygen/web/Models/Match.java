@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Matches")
 public class Match {
 
   @Id
