@@ -39,9 +39,9 @@ public class Team {
 
   @NotBlank private String description;
 
-  @ManyToOne @JoinColumn @NotNull League league;
+  @ManyToOne @JoinColumn @NotNull private League league;
 
-  @OneToMany Set<Match> matches;
+  @OneToMany private Set<Match> matches;
 
   public Team() {}
 

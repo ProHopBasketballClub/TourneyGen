@@ -1,11 +1,32 @@
-FROM node:latest
-EXPOSE ${PORT}
+FROM gradle:6.0.1-jdk11 AS build
 
-COPY package.json package.json
-RUN npm install
-RUN mkdir -p web/backend/
-COPY web/v1/backend/ web/v1/backend
+ARG SWAGGER_USER
+ARG SWAGGER_PASSWORD
 
-RUN npm run build:backend
+ENV SWAGGER_USER=${SWAGGER_USER}
+ENV SWAGGER_PASSWORD=${SWAGGER_PASSWORD}
+ENV DB_CONNECTION_STRING=jdbc:h2:mem:testdb
+COPY --chown=gradle:gradle web/v2/backend /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
 
-CMD ["node", "web/v1/backend/dist/"]
+FROM openjdk:11-jre-slim
+
+ARG SWAGGER_USER
+ARG SWAGGER_PASSWORD
+ARG DB_CONNECTION_STRING
+ENV DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+ENV SWAGGER_USER=${SWAGGER_USER}
+ENV SWAGGER_PASSWORD=${SWAGGER_PASSWORD}
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+EXPOSE 34345
+
+RUN mkdir /app
+
+COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
