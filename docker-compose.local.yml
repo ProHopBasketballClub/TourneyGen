@@ -9,10 +9,10 @@ services:
       context: .
       dockerfile: backendDockerfile
       args:
-          SWAGGER_USER: ${env.SWAGGER_USER}
-          SWAGGER_PASSWORD: ${env.SWAGGER_PASSWORD}
+          SWAGGER_USER: ${SWAGGER_USER}
+          SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
           DB_CONNECTION_STRING: jdbc:mysql://db:3306/tourneygen?useSSL=FALSE&serverTimezone=UTC&allowPublicKeyRetrieval=true
-          MYSQL_PASSWORD: ${env.MYSQL_PASSWORD}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
           MYSQL_USER: root
     ports:
       - "34345:34345"
@@ -50,8 +50,8 @@ services:
     environment:
      MYSQL_DATABASE: tourneygen
      MYSQL_USER: root
-     MYSQL_PASSWORD: ${env.MYSQL_PASSWORD}
-     MYSQL_ROOT_PASSWORD: ${env.MYSQL_PASSWORD}    
+     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+     MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}    
     volumes:
       - mysql_data:/var/lib/mysql
     ports:

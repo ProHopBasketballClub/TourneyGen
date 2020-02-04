@@ -9,6 +9,7 @@ pipeline {
         sh 'npm install'
         sh 'npm run build:frontend'
         sh 'npm run build:backend'
+        sh 'docker-compose build'
       }
     }
     stage('Test') {
