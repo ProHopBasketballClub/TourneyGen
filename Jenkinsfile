@@ -9,7 +9,7 @@ pipeline {
         sh 'npm install'
         sh 'npm run build:frontend'
         sh 'npm run build:backend'
-        sh 'docker-compose build'
+        sh 'echo $SWAWGGER_USER'
       }
     }
     stage('Test') {
