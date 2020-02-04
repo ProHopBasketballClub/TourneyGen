@@ -9,7 +9,7 @@ pipeline {
         sh 'npm install'
         sh 'npm run build:frontend'
         sh 'npm run build:backend'
-        sh 'echo $SWAWGGER_USER'
+        sh 'echo $SWAGGER_USER'
       }
     }
     stage('Test') {
