@@ -10,6 +10,7 @@ pipeline {
         sh 'npm run build:frontend'
         sh 'npm run build:backend'
         sh 'echo $SWAGGER_USER'
+        sh 'docker-compose build'
       }
     }
     stage('Test') {
