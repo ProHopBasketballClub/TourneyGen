@@ -27,7 +27,7 @@ pipeline {
     }
     stage('Master-Deploy') {
       when {
-        expression { env.BRANCH_NAME == 'master' }
+        expression { env.BRANCH_NAME == 'EnvFix' }
       }
       steps {
         sh 'sshpass -p $TOURNEYGENPASSWORD scp -r -oStrictHostKeyChecking=no $WORKSPACE/* tourneygen@$SERVER:$TOURNEYGENLOCATION/'
