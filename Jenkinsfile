@@ -9,7 +9,8 @@ pipeline {
         sh 'npm install'
         sh 'npm run build:frontend'
         sh 'npm run build:backend'
-        sh 'echo $SWAGGER_USER'
+        sh 'printf "MYSQL_PASSWORD=$MYSQL_PASSWORD\nSWAGGER_USER=$SWAGGER_USER\nSWAGGER_PASSWORD=$SWAGGER_PASSWORD\n" > .env'
+        sh 'cat .env'
         sh 'docker-compose build'
       }
     }
