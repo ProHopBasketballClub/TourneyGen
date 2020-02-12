@@ -28,7 +28,7 @@ pipeline {
     }
     stage('Master-Deploy') {
       when {
-        expression { env.BRANCH_NAME == 'EnvFix' }
+        expression { env.BRANCH_NAME == 'master' }
       }
       steps {
         
