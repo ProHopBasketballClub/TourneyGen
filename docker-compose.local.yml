@@ -1,0 +1,71 @@
+version: "3.3"
+services:
+  app:
+    container_name: tourneygen_backend
+    restart: unless-stopped
+    depends_on:
+        - db
+    build:
+      context: .
+      dockerfile: backendDockerfile
+      environment:
+          SWAGGER_USER: ${SWAGGER_USER}
+          SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
+          DB_CONNECTION_STRING: jdbc:mysql://db:3306/tourneygen?useSSL=FALSE&serverTimezone=UTC&allowPublicKeyRetrieval=true
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+          MYSQL_USER: root
+    ports:
+      - "34345:34345"
+    networks:
+      docks:
+        ipv4_address: 172.28.1.1
+    links:
+      - db
+    environment:
+      PORT: 34345
+
+  app_frontend:
+    container_name: tourneygen_frontend
+    restart: unless-stopped
+    depends_on:
+        - app
+    build:
+      context: .
+      dockerfile: frontendDockerfile
+    ports:
+      - "34346:34346"
+    networks:
+      docks:
+        ipv4_address: 172.28.1.3
+    links:
+      - app
+    environment:
+      PORT: 34346
+
+  db:
+    container_name: mysql
+    restart: unless-stopped
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+     MYSQL_DATABASE: tourneygen
+     MYSQL_USER: root
+     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+     MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}    
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "27017:3306"
+    networks:
+      docks:
+        ipv4_address: 172.28.1.2
+networks:
+  docks:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+volumes:
+  mysql_data:
+    external: true
+
