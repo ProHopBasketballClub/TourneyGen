@@ -198,3 +198,7 @@ package-lock.json
 
 #Ignore generated gradle files
 .gradle
+
+#Ignore the env file
+#DO NOT COMMIT THIS FILE IT CAN CONTAIN SECRETS
+.env
