@@ -4,6 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.tourneygen.web.Models.DTOs.UserDTO;
+import com.tourneygen.web.Models.DTOs.UserUpdateDTO;
 import com.tourneygen.web.Models.Repositories.UserRepository;
 import com.tourneygen.web.Models.User;
 import java.util.List;
@@ -27,9 +29,9 @@ public class UserControllerTests {
   @Test
   public void createUser_ThenSucceed() throws Exception {
     User user = new User("eetar1", "a@b.c");
-
+    UserDTO userDTO = new UserDTO(user);
     RequestBuilder request =
-        post("/user").contentType(MediaType.APPLICATION_JSON).content(user.toJson());
+        post("/user").contentType(MediaType.APPLICATION_JSON).content(userDTO.toJson());
     MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
 
     List<User> userList = userRepository.findAll();
@@ -41,9 +43,10 @@ public class UserControllerTests {
     User user = new User("eetar1", "a@b.c");
     user = userRepository.save(user);
     user.setDisplayName("eetar2");
+    UserUpdateDTO userUpdateDTO = new UserUpdateDTO(user);
 
     RequestBuilder request =
-        put("/user").contentType(MediaType.APPLICATION_JSON).content(user.toJson());
+        put("/user").contentType(MediaType.APPLICATION_JSON).content(userUpdateDTO.toJson());
     MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
 
     List<User> userList = userRepository.findAll();
@@ -63,20 +66,6 @@ public class UserControllerTests {
     MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
     User[] userList = new Gson().fromJson(result.getResponse().getContentAsString(), User[].class);
     assert userList.length == 2;
-  }
-
-  @Test
-  public void deleteUser_ThenSucceed() throws Exception {
-    User user = new User("eetar1", "a@b.c");
-    user = userRepository.save(user);
-
-    RequestBuilder request =
-        delete("/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .param("id", user.getId().toString());
-    MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
-
-    assert userRepository.findAll().size() == 0;
   }
 
   @AfterEach
