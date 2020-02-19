@@ -34,17 +34,17 @@ public class ErrorControllerTests {
     MvcResult result = mvc.perform(request).andExpect(status().isBadRequest()).andReturn();
   }
 
-  @Test
-  public void badId_404Error() throws Exception {
-    RequestBuilder request =
-        delete("/user").contentType(MediaType.APPLICATION_JSON).param("id", "-1");
-    MvcResult result = mvc.perform(request).andExpect(status().isNotFound()).andReturn();
-  }
-
-  @Test
-  public void missingId_404Error() throws Exception {
-    RequestBuilder request =
-        delete("/user").contentType(MediaType.APPLICATION_JSON).param("id", "16");
-    MvcResult result = mvc.perform(request).andExpect(status().isNotFound()).andReturn();
-  }
+  //  @Test
+  //  public void badId_404Error() throws Exception {
+  //    RequestBuilder request =
+  //        delete("/user").contentType(MediaType.APPLICATION_JSON).param("id", "-1");
+  //    MvcResult result = mvc.perform(request).andExpect(status().isNotFound()).andReturn();
+  //  }
+  //
+  //  @Test
+  //  public void missingId_404Error() throws Exception {
+  //    RequestBuilder request =
+  //        p("/user").contentType(MediaType.APPLICATION_JSON).param("id", "16");
+  //    MvcResult result = mvc.perform(request).andExpect(status().isNotFound()).andReturn();
+  //  }
 }
