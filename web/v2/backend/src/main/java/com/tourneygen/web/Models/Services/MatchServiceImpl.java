@@ -95,7 +95,7 @@ public class MatchServiceImpl implements MatchService {
     if (!reportDTO.getLoserId().equals(match.getHomeTeam().getId())
         && !reportDTO.getLoserId().equals(match.getAwayTeam().getId())) {
       throw new IllegalArgumentException(
-          "The reported victor was not part of match " + match.getId());
+          "The reported loser was not part of match " + match.getId());
     }
 
     switch (match.getStatus()) {
