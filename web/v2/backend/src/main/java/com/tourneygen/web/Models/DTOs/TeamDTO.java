@@ -26,6 +26,8 @@ public class TeamDTO {
 
   @NotNull private long league;
 
+  private int rating;
+
   public TeamDTO() {}
 
   public TeamDTO(Team team) {
@@ -37,6 +39,7 @@ public class TeamDTO {
     this.name = team.getName();
     this.description = team.getDescription();
     this.league = team.getLeague().getId();
+    this.rating = team.getRating();
   }
 
   public static List<TeamDTO> findAll(List<Team> teamList) {
@@ -115,5 +118,13 @@ public class TeamDTO {
 
   public static TeamDTO fromJson(String src) {
     return new Gson().fromJson(src, TeamDTO.class);
+  }
+
+  public int getRating() {
+    return rating;
+  }
+
+  public void setRating(int rating) {
+    this.rating = rating;
   }
 }

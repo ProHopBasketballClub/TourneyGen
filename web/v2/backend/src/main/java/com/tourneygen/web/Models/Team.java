@@ -28,9 +28,6 @@ public class Team {
   @Min(value = 0, message = "wins must be positive")
   private int losses = 0;
 
-  @Min(value = 0, message = "wins must be positive")
-  private int ties;
-
   @NotNull private int rating = EloService.ELO_INITIAL_VALUE;
 
   @ManyToOne @JoinColumn private User owner;
@@ -42,6 +39,12 @@ public class Team {
   @ManyToOne @JoinColumn @NotNull private League league;
 
   @OneToMany private Set<Match> matches;
+
+  @OneToMany(mappedBy = "homeTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  Set<Match> homeMatches = new HashSet<>();
+
+  @OneToMany(mappedBy = "awayTeam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  Set<Match> awayMatches = new HashSet<>();
 
   public Team() {}
 
@@ -71,14 +74,6 @@ public class Team {
 
   public void setLosses(int losses) {
     this.losses = losses;
-  }
-
-  public int getTies() {
-    return ties;
-  }
-
-  public void setTies(int ties) {
-    this.ties = ties;
   }
 
   public int getRating() {
@@ -121,12 +116,20 @@ public class Team {
     this.league = league;
   }
 
-  public Set<Match> getMatches() {
-    return matches;
+  public Set<Match> getHomeMatches() {
+    return homeMatches;
   }
 
-  public void setMatches(Set<Match> matches) {
-    this.matches = matches;
+  public void setHomeMatches(Set<Match> homeMatches) {
+    this.homeMatches = homeMatches;
+  }
+
+  public Set<Match> getAwayMatches() {
+    return awayMatches;
+  }
+
+  public void setAwayMatches(Set<Match> awayMatches) {
+    this.awayMatches = awayMatches;
   }
 
   public Long getId() {
@@ -172,5 +175,17 @@ public class Team {
                 .orElseThrow(
                     () -> new EntityNotFoundException("League with id " + id + " was not found"));
     this.roster = teamUpdateDTO.getRoster() == null ? this.roster : teamUpdateDTO.getRoster();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (!(o instanceof Team)) {
+      return false;
+    }
+    Team team = (Team) o;
+    return this.id.equals(team.getId()) && this.name.equals(team.getName());
   }
 }

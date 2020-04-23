@@ -122,7 +122,7 @@ public class TeamControllerTests {
     roster.add("eetar1");
     teamToSave.setRoster(roster);
     teamToSave = teamRepository.save(teamToSave);
-
+    assert teamRepository.findAll().size() == 1;
     RequestBuilder request =
         delete("/team")
             .contentType(MediaType.APPLICATION_JSON)

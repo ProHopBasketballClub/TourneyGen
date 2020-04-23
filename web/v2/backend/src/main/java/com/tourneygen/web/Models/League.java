@@ -34,6 +34,9 @@ public class League {
   @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<Team> teams;
 
+  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<Match> matches;
+
   public League() {}
 
   public League(String name, User owner, String game_type, String description) {

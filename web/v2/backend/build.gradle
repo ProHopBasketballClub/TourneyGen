@@ -7,7 +7,7 @@ plugins {
 
 group = 'com.TourneyGen'
 version = '1'
-sourceCompatibility = '8'
+sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
