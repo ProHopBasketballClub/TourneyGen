@@ -1,18 +1,14 @@
-FROM node:latest
-EXPOSE ${PORT}
+FROM node:10
 
-# Do general setup of container.
-COPY package.json package.json
+COPY web/v2/frontend/package.json ./
+COPY web/v2/frontend/package-lock.json ./
+COPY web/v2/frontend/src/. ./src
+COPY web/v2/frontend/public/. ./public
+
 RUN npm install
-RUN mkdir -p web/v1/frontend
-COPY web/v1/frontend/ web/v1/frontend
+RUN npm install react-scripts -g
 
-# Create args for and populate .env file.
-ARG ENVIRONMENT=docker
-ARG BACKEND_LOCATION=http://172.28.1.1:34345
-RUN printf "ENVIRONMENT=$ENVIRONMENT\nBACKEND_LOCATION=$BACKEND_LOCATION\n" > .env
+EXPOSE 3000
 
-# Build the frontend files.
-RUN npm run build:frontend
+CMD ["npm","start"]
 
-CMD ["npm", "run", "start:frontend"]
