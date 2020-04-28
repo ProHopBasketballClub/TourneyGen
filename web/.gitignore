@@ -2,4 +2,4 @@
 **/v1/**/*.js
 
 # Ignore all compiled html files that end up here.
-*.html
+**/v1/**/*.html
