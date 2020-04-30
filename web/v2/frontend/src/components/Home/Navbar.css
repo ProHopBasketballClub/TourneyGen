@@ -1,0 +1,133 @@
+
+.navbar{
+    position:fixed;
+    width: 100%;
+    background: #1D2832;
+    height: 64px;
+    top: 0;
+    left: 0;
+    padding: 0.5rem 0.5rem 0rem 0.5rem;
+}
+
+p, li {
+    color: #F2F2F2;
+}
+
+.navbar-navigation { 
+    display:flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+.navbar-navigation .spacer {
+    flex: 7 2;
+}
+
+#company-name {
+    font-size: 0.75rem;
+}
+
+#organization-name {
+    font-size: 1.5rem;
+}
+
+.org-section {
+    line-height: 1rem;
+    display: flex;
+    flex: 1 1;
+    height:100%;
+}
+
+.org-section p {
+    margin: 0;
+}
+
+.org-section-titles {
+    flex: 1;
+    margin: 0.5rem 0rem 0rem 0.5rem;
+}
+
+.navbar-organization-logo {
+    width: 3rem;
+    margin: 0 2rem;
+}
+
+.navbar-navigation-items {
+    margin: 0;
+    padding: 0;
+    display:flex;
+    color: #F2F2F2;
+    height:100%;
+}
+
+.tournaments-selector {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navbar-profile-selector {
+    color: #F2F2F2;
+    width: 5rem;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.navbar-profile-icon {
+    height: 3rem;
+    width: 3rem;
+}
+
+.navbar-profile-selector:hover {
+    color: #518E5A;
+}
+
+.navbar-profile-selector:active {
+    color: #518E5A;
+}
+
+.navbar-profile-selector:active .navbar-active-selector {
+    background-color: #518E5A;
+    visibility: visible;
+}
+
+.navbar-tournament-icon {
+    width: 2rem;
+    height: 2rem;
+    color: #F2F2F2;
+    margin-right: 1rem;
+}
+
+.navbar-active-selector {
+    width: 100%;
+    height: 0.3rem;
+    align-self: flex-end;
+    visibility: hidden;
+}
+
+.label-and-logo {
+    display:flex;
+    padding: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.tournaments-selector:hover .navbar-tournament-icon {
+    color: #518E5A;
+}
+
+.tournaments-selector:hover .label-and-logo{
+    color: #518E5A;
+}
+
+.tournaments-selector:active {
+    color: #518E5A;
+}
+
+.tournaments-selector:active .navbar-active-selector {
+    visibility: visible;
+    background-color: #518E5A;
+}
