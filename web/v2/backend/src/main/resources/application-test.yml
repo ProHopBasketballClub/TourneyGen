@@ -1,0 +1,19 @@
+server:
+  servlet:
+    context-path: "/api"
+  port: 34345
+
+spring:
+  jackson:
+    mapper:
+      accept_case_insensitive_properties: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:h2:mem:test
+    username: user
+    password: password
+  swagger:
+    user: user
+    password: password
