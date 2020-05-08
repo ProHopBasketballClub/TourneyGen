@@ -49,7 +49,6 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
      MYSQL_DATABASE: tourneygen
-     MYSQL_USER: root
      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}    
     volumes:
