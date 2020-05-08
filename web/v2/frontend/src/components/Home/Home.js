@@ -2,6 +2,7 @@ import React, {Component} from "react";
 
 import './Home.css'
 import Navbar from './Navbar'
+import TournamentBody from "./TournamentBody";
 
 export default class Home extends Component{
     
@@ -14,9 +15,7 @@ export default class Home extends Component{
         return (
             <div>
                 <Navbar /> 
-                <main style={{marginTop: '80px'}}>
-                    <p>This is the page content!</p>
-                </main>
+                <TournamentBody />
             </div>
         )
     }
