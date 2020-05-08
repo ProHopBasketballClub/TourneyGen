@@ -1,29 +1,122 @@
 .page-container {
-    background-color: #282c34;
-    color: #61dafb;
+    background-color: #1D2832;
+    color: #F2F2F2;
     height: 100%;
     width: 100%;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-background {
+    background-color: #518E5A;
+    width: 60%;
+    height: 100%;
+    right: -50px;
+    float: right;
+    transform: skewX(-5deg);
+    position: absolute;
+}
+
+.inner-container {
+    background-color: #273440;
+    color: #F2F2F2;
+    height: 80%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.5);
+}
+
+.logo-container{
+    height: 100%;
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.logo-wrapper{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.organization-logo{
+    width: 90%;
+    max-height: 100%;
+}
+
+.login-container{
+    height: 100%;
+    width: 55%;
+    position: relative;
 }
 
 .header {
     position: absolute;
-    top: 20%;
+    top: 5%;
     width: 100%;
+    text-align: center;
+}
+
+.container .description {
+    display: inline-block;
 }
 
 .login-group {
     position: absolute;
-    top: 40%;
-    width: 100%;
+    top: 30%;
+    left: 10%;
+    width: 80%;
+    background-color: #1D2832;
+    border-radius: 10px;
+    box-shadow: 0.5px 0.5px 3px 0.5px rgba(0, 0, 0, 0.5);
 }
 
 .input-wrapper {
     margin-top: 20px;
+    display: inline-block;
+}
+
+.my-auto {
+    text-align: center;
 }
 
 .submit-button-group {
     margin-top: 15px;
+    text-align: center;
 }
+
+.submit-btn {
+    display: inline-block;
+}
+
+.btn-primary:disabled{
+    background-color: #518E5A;
+    border-color: #518E5A;
+    display: inline-block;
+}
+
+.btn-primary:enabled{
+    background-color: #518E5A;
+    border-color: #518E5A;
+    display: inline-block;
+}
+
+a:hover{
+    color: #518E5A;
+}
+
+.help-links{
+    font-size: 12px;
+}
+
 
 
