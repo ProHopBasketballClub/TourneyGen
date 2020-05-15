@@ -5,6 +5,7 @@ import {BsPersonFill} from "react-icons/bs"
 import {FaTrophy} from "react-icons/fa"
 import { IconContext } from "react-icons"
 import ProHopLogo from "../../ProHop-ai.png"
+import { NavLink } from "react-router-dom"
 
 export default class Navbar extends Component { 
 
@@ -23,20 +24,24 @@ export default class Navbar extends Component {
                     </div>
 
                     <div className="navbar-navigation-items">
-                        <div className="tournaments-selector">
-                            <div className="label-and-logo">
-                                <IconContext.Provider value={{ className: 'navbar-tournament-icon'}}><FaTrophy /></IconContext.Provider>      
-                                Tournaments
+                        <NavLink to="/tournaments" activeClassName="tournament-active">
+                            <div className="tournaments-selector">
+                                <div className="label-and-logo">
+                                    <IconContext.Provider value={{ className: 'navbar-tournament-icon'}}><FaTrophy /></IconContext.Provider>      
+                                    Tournaments
+                                </div>
+                                <div className="navbar-active-selector-tournaments"></div>
                             </div>
-                            <div className="navbar-active-selector"></div>
-                        </div>
+                        </NavLink>
                     </div>
 
                     <div className="spacer"></div>
-                    <div className="navbar-profile-selector">
-                        <IconContext.Provider value={{ className: 'navbar-profile-icon'}}><BsPersonFill /></IconContext.Provider>
-                        <div className="navbar-active-selector"></div>
-                    </div>
+                    <NavLink to="/profile" activeClassName="profile-active">
+                        <div className="navbar-profile-selector">
+                            <IconContext.Provider value={{ className: 'navbar-profile-icon'}}><BsPersonFill /></IconContext.Provider>
+                            <div className="navbar-active-selector-profile"></div>
+                        </div>
+                    </NavLink>
                 </nav>
             </header>
         )

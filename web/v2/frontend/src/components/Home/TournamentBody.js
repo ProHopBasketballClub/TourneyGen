@@ -10,7 +10,7 @@ export default class TournamentBody extends Component {
             <body>
                 <TournamentSidebar/>
                 <div className={'main-content'}>
-                    <h3>Body</h3>
+                    {/* <h3>Body</h3> */}
                 </div>
             </body>
         )
