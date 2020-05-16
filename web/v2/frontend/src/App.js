@@ -4,8 +4,8 @@ import {BrowserRouter, Switch, Route, Link, Redirect} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Login from "./components/Login/Login";
 import SignUp from "./components/Login/SignUp";
-import Home from "./components/Home/Home"
 import Profile from "./components/Home/Profile"
+import Tournament from './components/Home/Tournament';
 
 function App() {
   return (<BrowserRouter>
@@ -18,7 +18,7 @@ function App() {
                   {/* Check if logged in, if no, redirect to login page, if yes, redirect to tournaments */}
                   <Redirect to={{pathname: '/sign-in'}}/>
                 </Route>
-                <Route path={'/tournaments'} component={Home}/>
+                <Route path={'/tournaments'} component={Tournament}/>
                 <Route path={'/profile'} component={Profile}/>
                 <Route path={'/sign-in'} component={Login}/>
                 <Route path={'/sign-up'} component={SignUp} />
