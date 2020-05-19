@@ -101,32 +101,27 @@ export default class Tournament extends Component {
         this.state = {}
     }
 
-
+    //probably need some logic for the params we want being passed into TournamentBody component...
+    //at the same time, might just make sense to call api b/c it'll need to get brackets anyways
     render() {
         return (
-            <div>
+            <div style={{height: '100%'}}>
                 <Navbar />
-                <TournamentSidebar currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData} />
-                <Switch>
-                    <Route path="/tournaments/:tournamentId">
-                        <TourneyBody />
-                    </Route>
-                </Switch>
+                <div className="page-body">
+                    <div className="tournament-sidebar-block">
+                        <TournamentSidebar currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData} />
+                    </div>
+                    <div className="tournament-body-block">
+                        <Switch>
+                            <Route path="/tournaments/:tournamentId">
+                                <TournamentBody currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData}/>
+                            </Route>
+                        </Switch>    
+                    </div>
+                </div>
             </div>
         )
     }
 
 
-}
-
-
-
-
-function TourneyBody() {
-    let { tournamentId } = useParams();
-    return (
-        <div>
-            <h1>tournament ID is : {tournamentId}</h1>
-        </div>
-    )
 }

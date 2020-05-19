@@ -42,7 +42,7 @@ p, li {
 .org-section {
     line-height: 1rem;
     display: flex;
-    flex: 1 1;
+    flex: 1.2 1;
     height:100%;
 }
 

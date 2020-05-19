@@ -1,0 +1,93 @@
+.tournament-body-info {
+    display:flex;
+    align-items: center;
+    height: 3.2rem;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #1D2832;
+    background-color: #273440;
+}
+
+.tournament-body-info .variable-text {
+    color: #518E5A;
+}
+
+.tournament-body-info div {
+    display:flex;
+    padding: 0 2em 0 2em;
+}
+
+.tournament-body-info div p {
+    margin: 0 .2em 0 .2em;
+}
+
+.tournament-body-info p {
+    font-size: 1.2em;
+    margin: 0;
+    /* padding: 1rem; */
+}
+
+.tournament-body-info .tournament-title {
+    font-size: 1.5em;
+    margin-left: 1em;
+    flex: 1;
+}
+
+.tournament-body-info #tournament-date {
+    margin-right: 2em;
+}
+
+.tournament-bracket-zone {
+    height: 100%;
+    flex: 1;
+    padding: 2rem;
+    background-color: #273440;
+}
+
+.tournament-body-block-2 {
+    display: flex;
+    flex-direction: column;
+    height:100%;
+}
+
+.bracket-block {
+    background-color: #1D2832;
+    height:100%;
+}
+
+.bracket-selectors {
+    display: flex;
+    background-color: #273440;
+}
+
+.bracket-selector-link {
+    background-color: #1D2832;
+    margin: 0 0.5rem 0 0.5rem;
+    height: 2rem;
+    width: 8rem; 
+    border-radius: 10px 10px 0 0;
+    border-bottom: 2px solid #273440;
+}
+
+.bracket-selectors p {
+    font-size: 1.2rem;
+    text-align: center;
+    
+}
+
+
+/* 
+this is temp just to show what it would look like to select one
+Before for the selections, I've used a div and coloured it green...
+realized I could maybe use borders instead and that's possibly easier
+Might try and switch over the other selectors
+*/
+
+#active-selector, #active-selector p {
+    color: #518E5A;
+    border-bottom: 4px solid #518E5A;
+}
+
+.bracket-window{
+    padding: 50px;
+}

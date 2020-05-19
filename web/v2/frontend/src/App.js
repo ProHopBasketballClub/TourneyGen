@@ -9,9 +9,9 @@ import Tournament from './components/Home/Tournament';
 
 function App() {
   return (<BrowserRouter>
-        <div style={{backgroundColor: '#282c34'}}>
-          <div className={'auth-wrapper'}>
-            <div className={'auth-inner'}>
+        <div style={{backgroundColor: '#282c34', height: '100%'}}>
+          <div className={'auth-wrapper'} style={{height: '100%'}}>
+            <div className={'auth-inner'} style={{height: '100%'}}>
               <Switch>
                 {/* <Route exact path={'/'} render={ props =>  <Login />} /> */}
                 <Route exact path={'/'}>
