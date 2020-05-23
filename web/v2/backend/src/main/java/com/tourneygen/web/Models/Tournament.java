@@ -14,9 +14,13 @@ public class Tournament {
 
   private String roundTime;
 
+  private String name;
+
   private String roundResetTime;
 
-  private Date date;
+  private Date startDate;
+
+  private Date endDate;
 
   public Long getId() {
     return id;
@@ -47,10 +51,26 @@ public class Tournament {
   }
 
   public Date getDate() {
-    return date;
+    return startDate;
   }
 
   public void setDate(Date date) {
-    this.date = date;
+    this.startDate = date;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Date getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 }

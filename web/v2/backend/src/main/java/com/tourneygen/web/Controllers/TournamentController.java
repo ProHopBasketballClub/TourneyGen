@@ -26,12 +26,12 @@ public class TournamentController {
     return tournamentRepository.findById(id).orElseThrow(EntityExistsException::new);
   }
 
-  @PostMapping("tournament/{id}")
+  @PostMapping("tournament/")
   public Tournament createTournament(@RequestBody Tournament tournament) {
     return tournamentRepository.save(tournament);
   }
 
-  @PutMapping("tournament/{id}")
+  @PutMapping("tournament/")
   public Tournament updateTournament(@RequestBody Tournament tournament) throws Exception {
 
     // Super bad error handling fix later with more constraints
@@ -41,7 +41,7 @@ public class TournamentController {
     return tournamentRepository.save(tournament);
   }
 
-  @DeleteMapping("tournament/{id}")
+  @DeleteMapping("tournament/")
   public String deleteTournament(@RequestBody Tournament tournament) {
     tournamentRepository.delete(tournament);
     return "Deleted tournament with id " + tournament.getId();
