@@ -4,8 +4,9 @@ import './Tournament.css'
 import Navbar from './Navbar'
 import TournamentBody from "./TournamentBody";
 import TournamentSidebar from "./TournamentSidebar";
-import TournamentSidebarItem from "./TournamentSidebarItem"
-import { Switch, Route, NavLink, useParams } from "react-router-dom";
+import TournamentSidebarItem from "./TournamentSidebarItem";
+import NewTournament from "./NewTournament";
+import { Switch, Route, NavLink, useParams, Redirect } from "react-router-dom";
 
 
 const players = [ //0-17
@@ -55,13 +56,28 @@ function createData(val) {
         accum.push({
             tournamentId: `${globalTournamentIndex}`,
             tournamentName: `${players[getRandomInt(0, 17)]} ${tournaments[getRandomInt(0, 13)]}`,
-            tournamentDateRange: 'May 15th - 30th' //yeah yeah it's boring, whatever
+            tournamentDateRange: 'May 15th - 30th', //yeah yeah it's boring, whatever
+            brackets: createBracketData(getRandomInt(1, 7))
         });
         globalTournamentIndex++;
     }
     return accum;
 }
 
+function createBracketData(val) {
+    let accum = []
+    for (let i = 1; i < val + 1; i++) {
+        accum.push({
+            bracketId: i
+        
+
+            // <NavLink to={`/tournaments/${tournamentId}/${i}`} activeClassName={'active-bracket-selector'} className="bracket-selector-link">
+            //     <p>Bracket {i}</p>
+            // </NavLink>,
+        });
+    }
+    return accum;
+}
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -77,18 +93,18 @@ const rawCurrentTournamentData = createData(getRandomInt(3, 15));
 
 const rawPastTournamentData = createData(getRandomInt(5, 10));
 
-rawCurrentTournamentData.map(({ tournamentId, tournamentName, tournamentDateRange }) => {
+rawCurrentTournamentData.map(({ tournamentId, tournamentName, tournamentDateRange, brackets }) => {
     currentTournamentData.push(
         <NavLink to={`/tournaments/${tournamentId}`} activeClassName="active-tournament-selector">
-            <TournamentSidebarItem tournamentId={tournamentId} tournamentName={tournamentName} tournamentDateRange={tournamentDateRange} />
+            <TournamentSidebarItem tournamentId={tournamentId} tournamentName={tournamentName} tournamentDateRange={tournamentDateRange} brackets={brackets}/>
         </NavLink>
     )
 })
 
-rawPastTournamentData.map(({ tournamentId, tournamentName, tournamentDateRange }) => {
+rawPastTournamentData.map(({ tournamentId, tournamentName, tournamentDateRange, brackets }) => {
     pastTournamentData.push(
         <NavLink to={`/tournaments/${tournamentId}`} activeClassName="active-tournament-selector">
-            <TournamentSidebarItem tournamentId={tournamentId} tournamentName={tournamentName} tournamentDateRange={tournamentDateRange} />
+            <TournamentSidebarItem tournamentId={tournamentId} tournamentName={tournamentName} tournamentDateRange={tournamentDateRange} brackets={brackets}/>
         </NavLink>
     )
 })
@@ -107,18 +123,23 @@ export default class Tournament extends Component {
         return (
             <div style={{height: '100%'}}>
                 <Navbar />
-                <div className="page-body">
-                    <div className="tournament-sidebar-block">
-                        <TournamentSidebar currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData} />
+                <Switch>
+                    <Route path="/tournaments/new">
+                        <NewTournament/>
+                    </Route>
+                    <div className="page-body">
+                        <div className="tournament-sidebar-block">
+                            <TournamentSidebar currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData} />
+                        </div>
+                        <div className="tournament-body-block">
+                            <Switch>
+                                <Route path="/tournaments/:tournamentId">
+                                    <TournamentBody currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData}/>
+                                </Route>
+                            </Switch>    
+                        </div>
                     </div>
-                    <div className="tournament-body-block">
-                        <Switch>
-                            <Route path="/tournaments/:tournamentId">
-                                <TournamentBody currentTournamentData={currentTournamentData} pastTournamentData={pastTournamentData}/>
-                            </Route>
-                        </Switch>    
-                    </div>
-                </div>
+                </Switch>
             </div>
         )
     }

@@ -1,45 +1,47 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink, Switch, Route } from "react-router-dom";
 import { Bracket, BracketGame, BracketGenerator} from 'react-tournament-bracket'
+import BracketBody from "./BracketBody";
 
-const gameObject = {
-    id: 1,
-    // the game name
-    name: 'GameName',
-    // optional: the label for the game within the bracket, e.g. Gold Finals, Silver Semi-Finals
-    bracketLabel: 'Gold Finals?',
-    // the unix timestamp of the game-will be transformed to a human-readable time using momentjs
-    scheduled: 10,
-    court: {
-      name: 'ExampleCourt',
-      venue: {
-        name: 'ExampleVenue'
-      }
-    },
-    sides: {
-      'home': {
-        score: {
-            score: 10
-        },
-        // seed?: 
-        team: {
-            id: 5,
-            name: 'TeamName'
-        }
-      },
-      'visitor': {
-          score: {
-              score: 20
-          },
-          team: {
-              id: 10,
-              name: 'OtherTeam'
-          }
-      }
 
-    }
-  }
+// const gameObject = {
+//     id: 1,
+//     // the game name
+//     name: 'GameName',
+//     // optional: the label for the game within the bracket, e.g. Gold Finals, Silver Semi-Finals
+//     bracketLabel: 'Gold Finals?',
+//     // the unix timestamp of the game-will be transformed to a human-readable time using momentjs
+//     scheduled: 10,
+//     court: {
+//       name: 'ExampleCourt',
+//       venue: {
+//         name: 'ExampleVenue'
+//       }
+//     },
+//     sides: {
+//       'home': {
+//         score: {
+//             score: 10
+//         },
+//         // seed?: 
+//         team: {
+//             id: 5,
+//             name: 'TeamName'
+//         }
+//       },
+//       'visitor': {
+//           score: {
+//               score: 20
+//           },
+//           team: {
+//               id: 10,
+//               name: 'OtherTeam'
+//           }
+//       }
 
+//     }
+//   }
+  
 export default function TournamentBody(props) {
     let { tournamentId } = useParams();
     const currentLength = props.currentTournamentData.length;
@@ -49,6 +51,13 @@ export default function TournamentBody(props) {
     } else {
         tournamentData = props.pastTournamentData[tournamentId - currentLength].props.children.props;
     }
+    const linkedBrackets = tournamentData.brackets.map(({bracketId}) => {
+        return (
+            <NavLink to={`/tournaments/${tournamentId}/${bracketId}`} activeClassName={'active-bracket-selector'} className="bracket-selector-link">
+                <p>Bracket {bracketId}</p>
+            </NavLink>
+        )
+    });
     return (
         <div className="tournament-body-block-2">
             <div className="tournament-body-info">
@@ -66,28 +75,18 @@ export default function TournamentBody(props) {
             <div className="tournament-bracket-zone">
                 <div className="bracket-block">
                     <div className="bracket-selectors">
-                        <div className="bracket-selector-link" id="active-selector"> 
-                            {/*these will be automatically generated one by one at some point*/}
-                            <p>Bracket 1</p>
-                        </div>
-                        <div className="bracket-selector-link">
-                            <p>Bracket 2</p>
-                        </div>
-                        <div className="bracket-selector-link">
-                            <p>Bracket 3</p>
-                        </div>
-                        <div className="bracket-selector-link">
-                            <p>Bracket 4</p>
-                        </div>
+                        {linkedBrackets}
                     </div>
                     <div className="bracket-window">
-                        <BracketGame game={gameObject} homeOnTop="true"/>
+                        <Switch>
+                            <Route path={`/tournaments/${tournamentId}/:bracketId`}>
+                                <BracketBody/>
+                            </Route>
+                        </Switch>   
+                        {/* <BracketGame game={gameObject} homeOnTop="true"/> */}
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     )
 }
