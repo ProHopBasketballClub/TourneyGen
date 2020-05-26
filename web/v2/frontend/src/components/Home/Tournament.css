@@ -1,0 +1,114 @@
+.full-page {
+    top:0;
+    left:0;
+    height:100%;
+    width: 100%;
+}
+
+html, .root {
+    height: 100%;
+}
+
+body {
+    /* margin-top: 64px; */
+    padding-top: 64px;
+    color: #f2f2f2;
+    background-color: #273440;
+}
+
+.page-body {
+    display: flex;
+    align-items: stretch;
+    height:100%;
+}
+
+
+.tournament-body-block {
+    flex: 8;
+}
+
+.tournament-sidebar-block {
+    flex: 1.2;
+    min-width: 150px;
+    background-color: #1d2832;
+
+}
+
+
+.sidebar{
+    background-color: #1D2832;
+    z-index: 1;
+    border-left-width: 1px;
+    border-left: #1D2832;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #1D2832;
+}
+
+h5.section{
+    width: 100%;
+    background-color: #273440;
+    padding: 10px;
+    margin: 0px;
+}
+
+.section{
+    /* width: 100%; */
+    display: flex;
+    flex-direction: column;
+}
+
+.tournament{
+    border-top: 1px solid #273440;
+    width: 100%;
+    height: 3.2rem;
+}
+
+.tournament-info{
+    float: left;
+    height: 100%;
+    padding-bottom: 2px;
+}
+
+.sidebar-selector{
+    float: right;
+    height: 100%;
+    width: 0.3rem;
+    background-color: #1D2832;
+}
+
+.tournament:active p{
+    color: #518E5A;
+}
+
+.tournament:active .sidebar-selector{
+    background-color: #518E5A;
+}
+
+.tournament p{
+    font-size: 1em;
+    margin-bottom: 1px;
+    padding-left: 5px;
+}
+
+.tournament:hover p{
+    color: #518E5A;
+}
+
+p.tournament-dates{
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.main-content{
+    margin-left: 25%;
+    background-color: #1D2832;
+}
+
+.active-tournament-selector .tournament p {
+    color: #518E5A;
+}
+
+.active-tournament-selector .sidebar-selector {
+    background-color: #518E5A;
+}

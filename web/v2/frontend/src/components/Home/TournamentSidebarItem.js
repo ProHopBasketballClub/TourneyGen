@@ -8,8 +8,8 @@ export default class TournamentSidebarItem extends Component {
         return (
             <div className={'tournament 1'}>
                 <div className={'tournament-info'}>
-                    <p className={'tournament-name'}>Steve Nash Cup</p>
-                    <p className={'tournament-dates'}>May 15th - May 30th</p>
+                    <p className={'tournament-name'}>{this.props.tournamentName}</p>
+                    <p className={'tournament-dates'}>{this.props.tournamentDateRange}</p>
                 </div>
                 <div className={'sidebar-selector'}>
                 </div>

@@ -1,3 +1,11 @@
+a {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
 
 .navbar{
     position:fixed;
@@ -15,7 +23,7 @@ p, li {
 
 .navbar-navigation { 
     display:flex;
-    align-items: center;
+    /* align-items: center; */
     height: 100%;
     width: 100%;
 }
@@ -34,7 +42,7 @@ p, li {
 .org-section {
     line-height: 1rem;
     display: flex;
-    flex: 1 1;
+    flex: 1.2 1;
     height:100%;
 }
 
@@ -53,11 +61,11 @@ p, li {
 }
 
 .navbar-navigation-items {
-    margin: 0;
+    margin: auto 0 0 0;
     padding: 0;
     display:flex;
     color: #F2F2F2;
-    height:100%;
+    height:auto;
 }
 
 .tournaments-selector {
@@ -68,7 +76,7 @@ p, li {
 
 .navbar-profile-selector {
     color: #F2F2F2;
-    width: 5rem;
+    width: 4rem;
     height: 100%;
     display:flex;
     flex-direction: column;
@@ -86,11 +94,11 @@ p, li {
     color: #518E5A;
 }
 
-.navbar-profile-selector:active {
+.profile-active .navbar-profile-selector {
     color: #518E5A;
 }
 
-.navbar-profile-selector:active .navbar-active-selector {
+.profile-active .navbar-active-selector-profile {
     background-color: #518E5A;
     visibility: visible;
 }
@@ -102,7 +110,14 @@ p, li {
     margin-right: 1rem;
 }
 
-.navbar-active-selector {
+.navbar-active-selector-tournaments {
+    width: 100%;
+    height: 0.3rem;
+    align-self: flex-end;
+    visibility: hidden;
+}
+
+.navbar-active-selector-profile {
     width: 100%;
     height: 0.3rem;
     align-self: flex-end;
@@ -123,11 +138,15 @@ p, li {
     color: #518E5A;
 }
 
-.tournaments-selector:active {
+.tournament-active .label-and-logo{
     color: #518E5A;
 }
 
-.tournaments-selector:active .navbar-active-selector {
+.tournament-active .navbar-tournament-icon{
+    color: #518E5A;
+}
+
+.tournament-active .navbar-active-selector-tournaments {
     visibility: visible;
-    background-color: #518E5A;
+    background-color: #518E5A
 }
