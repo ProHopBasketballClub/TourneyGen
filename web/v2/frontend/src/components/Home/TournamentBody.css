@@ -69,21 +69,17 @@
     border-bottom: 2px solid #273440;
 }
 
+.bracket-selector-link:hover p{
+    color: #518E5A;
+}
+
 .bracket-selectors p {
     font-size: 1.2rem;
     text-align: center;
     
 }
 
-
-/* 
-this is temp just to show what it would look like to select one
-Before for the selections, I've used a div and coloured it green...
-realized I could maybe use borders instead and that's possibly easier
-Might try and switch over the other selectors
-*/
-
-#active-selector, #active-selector p {
+.active-bracket-selector p{
     color: #518E5A;
     border-bottom: 4px solid #518E5A;
 }
@@ -91,3 +87,4 @@ Might try and switch over the other selectors
 .bracket-window{
     padding: 50px;
 }
+
