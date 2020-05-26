@@ -1,3 +1,11 @@
+html{
+    overflow: hidden;
+}
+
+body {
+    padding-top: 0px;
+}
+
 .page-container {
     background-color: #1D2832;
     color: #F2F2F2;
