@@ -16,12 +16,12 @@ public class TournamentController {
     this.tournamentRepository = tournamentRepository;
   }
 
-  @GetMapping("tournament/all")
+  @GetMapping("tournament/all/")
   public List<Tournament> findAll() {
     return tournamentRepository.findAll();
   }
 
-  @GetMapping("tournament/{id}")
+  @GetMapping("tournament/{id}/")
   public Tournament findById(@PathVariable("id") long id) {
     return tournamentRepository.findById(id).orElseThrow(EntityExistsException::new);
   }
